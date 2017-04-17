@@ -1,0 +1,35 @@
+.clearfix:before,
+.clearfix:after {
+  content: '';
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clear:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.text-left {
+  text-align: left!important;
+}
+.text-right {
+  text-align: right!important;
+}
+.text-center {
+  text-align: center!important;
+}
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+.text-align-both {
+  text-align: justify;
+  text-align: end;
+  /* 对于除了IE之外的浏览器用尾对齐覆盖之前的两端对齐方式 */
+  text-align-last: justify;
+  text-justify: distribute;
+}

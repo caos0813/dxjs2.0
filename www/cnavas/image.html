@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/plugins/h5/html2canvas-0.5.0-alpha1/dist/html2canvas.js"></script>
+	<meta charset="utf-8" />
+
+
+    <style>
+        .borderClip
+        {
+            border:solid 1px red;
+        }
+    </style>
+</head>
+<body>
+        <canvas id="cvs1"></canvas>
+        <div>
+
+
+            33333333333333
+        </div>
+
+    <div>
+
+
+        3333333
+    </div>
+    <script>
+        var _cvs1 = document.getElementById('cvs1');
+        _cvs1.width = 300;
+        _cvs1.height = 300;
+        var ctx = _cvs1.getContext('2d');
+        
+        ctx.fillRect(100, 100, 100, 100);
+
+        var preElement;
+
+        window.addEventListener('dblclick', function (e) {
+
+            if(preElement)
+            {
+                preElement.classList.remove('borderClip');
+
+                 html2canvas(preElement, {
+                    onrendered: function (canvas) {
+                        var url = canvas.toDataURL();
+                    
+                        //以下代码为下载此图片功能
+
+                        //var triggerDownload = document.createElement('a');
+
+                        //triggerDownload.setAttribute("href", url);
+                        //triggerDownload.setAttribute("download", "aa.png");
+                        //document.body.appendChild(triggerDownload);
+                        //triggerDownload.click();
+                        //document.body.removeChild(triggerDownload);
+                        //alert('aa');
+                    },
+                   // width: preElement.clientWidth,
+                   //  height:preElement.clientHeight
+                 });
+               
+            }
+        });
+        window.addEventListener('mousemove', function (e) {
+
+            var element = e.target;
+            if (element==preElement)
+            {
+                return;
+            }
+            if (preElement)
+            {
+                preElement.classList.remove('borderClip');
+                preElement = null;
+            }
+
+            if (element.nodeType != 1 && element.nodeType !=9)
+            {
+                return;
+            }
+            console.log('f:' + element.nodeType);
+
+            element.classList.add('borderClip')
+            preElement = element;
+        });
+    </script>
+</body>
+</html>

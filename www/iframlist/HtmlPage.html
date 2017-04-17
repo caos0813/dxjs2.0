@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+
+
+    <style>
+        #pageContainer
+        {
+            border:solid 1px red;
+            width:100%;
+            height:400px;
+        }
+    </style>
+    <script>
+
+        
+
+    </script>
+</head>
+<body>
+
+    <div id="p"></div>
+    <div id="pageContainer">
+
+
+    </div>
+
+    <button type="button" id="btnPPT">打开PPT</button>
+
+    <div class="pagecontent" >
+
+                <div>
+
+                    fdasfdsafsda
+                </div>
+    </div>
+    <script>
+        function cloneElement(elements)
+        {
+            var result=[];
+            Array.from(elements).forEach(function(d){
+                result.push(d.cloneNode(true));
+            });
+        return result
+        }
+        function loadIframeContent(src,callback)
+        {
+            var iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = src;
+            iframe.allowFullscreen = true;
+           
+            iframe.onload=function()
+            {
+                var doc = iframe.contentDocument;
+                var elements = doc.querySelectorAll('.pagecontent');    
+                callback(elements);
+                document.body.removeChild(iframe);
+            }
+
+            document.body.appendChild(iframe);
+
+ 
+        }   
+     
+        function allload(pages,callback)
+        {
+            var results = [];
+            if(pages.length<=0)
+            {
+                callback([]);
+                return;
+            }
+            function load() {
+                loadIframeContent(pages.shift(), function (elements) {
+                    results = results.concat(Array.from(elements));
+                    if (pages.length > 0) {
+                        load();
+                    } else {
+                        callback(results);
+                    }
+                });
+            }
+            load();
+        }
+        function fullScrren(element)
+        {
+            var doc =element|| document.documentElement;
+            if (doc.requestFullscreen) {
+                doc.requestFullscreen();
+            } else if (doc.webkitRequestFullscreen) {
+                doc.webkitRequestFullscreen();
+            } else if (doc.mozRequestFullScreen) {
+                doc.mozRequestFullScreen();
+            } else if (doc.msRequestFullscreen) {
+                doc.msRequestFullscreen();
+            }
+        }
+        function addContent(elemnts)
+        {
+           // document.getElementById('pageContainer').innerHTML = elemnts.join('');
+            for (var i = 0; i < elemnts.length; i++) {
+                document.getElementById('pageContainer').appendChild(elemnts[i]);
+            }
+        }
+        var pages = ['HtmlPage.html', 'HtmlPage2.html', 'HtmlPage3.html'];
+        function sleffullScrren()
+        {
+            fullScrren(document.getElementById('pageContainer'));
+        }
+        document.getElementById("btnPPT").addEventListener("click", function () {
+    
+            sleffullScrren();
+            allload(pages, function (elemnts) {
+                addContent(elemnts);
+
+                //setTimeout(function () {
+                //    fullScrren(document.getElementById('pageContainer'));
+                //}, 3000)
+
+            });
+        
+          //  fullScrren(document.getElementById('pageContainer'));
+        });
+
+    </script>
+</body>
+</html>

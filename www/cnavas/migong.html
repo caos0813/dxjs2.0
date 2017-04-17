@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body style="margin:0;">
+    <canvas id="foo" width="200" height="200" style="position: absolute; left: 851.5px; top: 101px;"></canvas>
+    <script>
+    Pointer = function(){
+      this.visited = []
+    }
+    Pointer.prototype = {
+      x: 0, y: 0,
+      w: 16, h: 16,
+      innerRadius: 10,
+      outerRadius: 90,
+
+      canMove : function() {
+        return this.canMoveX() || this.canMoveY()
+      },
+      canMoveX : function() {
+        var x = this.x
+        var y = this.y
+        var w = this.w
+        var h = this.h
+        var visited = this.visited
+        var cm1 = y*w+((w+x-1) % w)
+        var cp1 = y*w+((x+1) % w)
+        return !( visited[cm1] && visited[(cp1)] )
+      },
+      canMoveY : function() {
+        var x = this.x
+        var y = this.y
+        var w = this.w
+        var h = this.h
+        var visited = this.visited
+        var c = y*w+x
+        return !( (y == 0 || visited[c-w]) && (y == (h-1) || visited[c+w]) )
+      },
+      drawX : function(ctx, step) {
+        var x = this.x
+        var y = this.y
+        var w = this.w
+        var h = this.h
+        var visited = this.visited
+        var new_x = (w + x + step) % w
+        var c = y*h+new_x
+        if (visited[c]) return false
+        var r_h = (this.outerRadius - this.innerRadius)
+        var i_r = this.innerRadius
+        var cur_r = i_r + (y/h)*r_h
+        var x_r = (x/w) * Math.PI * 2
+        var nx_r = (new_x/w) * Math.PI * 2
+
+        ctx.beginPath()
+        ctx.arc(0,0, cur_r, x_r, nx_r, (step > 0 ? 0 : 1))
+        ctx.stroke()
+
+        this.visited[c] = true
+        this.x = new_x
+        return true
+      },
+      drawY : function(ctx, step) {
+        var x = this.x
+        var y = this.y
+        var w = this.w
+        var h = this.h
+        var visited = this.visited
+        var new_y = y + step
+        var c = new_y*h+x
+        if (new_y < 0 || new_y == h || visited[c]) return false
+        var r_h = (this.outerRadius - this.innerRadius)
+        var i_r = this.innerRadius
+        var cur_r = i_r + (y/h)*r_h
+        var new_r = i_r + (new_y/h)*r_h
+        var x_r = (x/w) * Math.PI * 2
+
+        ctx.beginPath()
+        ctx.moveTo( Math.cos(x_r)*cur_r, Math.sin(x_r)*cur_r )
+        ctx.lineTo( Math.cos(x_r)*new_r, Math.sin(x_r)*new_r )
+        ctx.stroke()
+
+        this.visited[c] = true
+        this.y = new_y
+        return true
+      }
+    }
+
+    function drawStuff(c){
+      c.lineWidth = 2
+      var p = Foo.pointer
+      for (var j = 0; j < 10; j++) {
+        if (!p.canMove()) {
+          var nx = parseInt(Math.random() * p.w)
+          var ny = parseInt(Math.random() * p.h)
+          if (true || !p.visited[ny * p.w + nx]) {
+            p.x = nx
+            p.y = ny
+            p.visited[ny * p.w + nx] = true
+          }
+        }
+        if (p.canMoveX() && Math.random() < 0.6) {
+          dir = (Math.random()-0.5 < 0 ? -1 : 1)
+          p.drawX(c, dir) || p.drawX(c, -dir)
+          return
+        }
+        if (p.canMoveY() && Math.random() < 0.3) {
+          var dir = (Math.random()-0.5 < 0 ? -1 : 1)
+          if (!p.drawY(c, dir)) {
+            dir = -dir
+            p.drawY(c,dir)
+          }
+          if (Math.random() > 0.5) p.drawY(c,dir)
+          return
+        }
+      }
+    }
+
+    function noCrash() {
+      var c = Foo.ctx
+      Foo.iter += 1
+      if (Foo.iter > 250) return;
+      if (Foo.iter > 150) return
+      c.save()
+      c.translate(100, 100)
+      drawStuff(c)
+      c.restore()
+    }
+
+    function clear() {
+      Foo.iter = 0
+      Foo.pointer = new Pointer()
+      var p = Foo.pointer
+      p.x = parseInt(Math.random() * p.w)
+      p.visited[p.x] = true
+      Foo.ctx.clearRect(0,0,200,200)
+    }
+    var e = document.getElementById("foo")
+    Foo = e
+    Foo.iter = 0
+    Foo.ctx = e.getContext("2d")
+    Foo.onclick = clear
+    clear()
+    e.style.left = document.body.clientWidth/2-100
+    e.style.top = document.body.clientHeight/2-100
+    setInterval(noCrash, 16)
+
+    window.onresize = function(ev){
+      e.style.left = document.body.clientWidth/2-100
+      e.style.top = document.body.clientHeight/2-100
+      noCrash()
+    }
+    </script>
+
+
+
+
+
+</body>
+</html>

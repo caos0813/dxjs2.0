@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="../../scripts/tools/lodash/lodash-4.13.1.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="masa.js"></script>
+</head>
+<body>
+
+    <div id="divlist"></div>
+    <script>
+
+        var Collection = Masa.Class.extend({
+            constructor: function (models, defaultModel) {
+                this.defaultModel = defaultModel || {};
+                this.list = [];
+                if (_.isArray(models)) {
+                    this._initModels(models);
+                }
+                this.initailize.apply(this, arguments);
+
+            },
+            initailize: function () {
+                var that = this;
+                that._modelHandler = function () {
+                    that.change('model', arguments);
+                }
+            },
+            _parseModel: function (model) {
+                if (!(model instanceof Masa.Model)) {
+                    model = new Masa.Model(_.defaultsDeep(model, this.defaultModel), true);
+                }
+                model.set('_modelId', _.uniqueId('moduleid'), true);
+                model.off('change', this._modelHandler);
+                model.on('change', this._modelHandler);
+                return model;
+            },
+            find: function (callback)
+            {
+                return _.find(this.getArray(),callback);
+            },
+            findByModelId: function (modelId)
+            {
+                return this.find(function (d) { return d._modelId == modelId; });
+            },
+            change: function (name, args) {
+                this.trigger('change', name, args);
+            },
+            _parseModels: function (values) {
+                var result = [], i = 0, len = values.length;
+                for (; i < len; i++) {
+                    result.push(this._parseModel(values[i]));
+                }
+                return result;
+            },
+            _initModels: function (models) {
+                models.forEach(function (m) {
+                    this.push(m);
+                }, this);
+            },
+            _parseValues: function (name, values) {
+                var that = this;
+                switch (name) {
+                    case "push":
+                    case "unshift":
+                        values = that._parseModels(values);
+                        break;
+                    case "splice":
+                        values = _.toArray(values);
+                        values= _.concat(values[0], values[1], this._parseModels(values.slice(2)));
+                        break;
+                }
+                return values;
+            },
+            getArray: function () {
+                return this.list;
+            },
+            forEach: function (callback) {
+                return _.each(this.getArray(), callback);
+            },
+            _set: function (name, args) {
+                var values = this._parseValues(name, args);
+                var result = this.list[name].apply(this.list, values)
+                this.trigger(name, values);
+                this.change(name, values);
+                return result;
+            },
+            push: function () {
+                return this._set('push', arguments);
+            },
+            shift: function () {
+                return this._set('shift', arguments);
+            },
+            unshift: function () {
+                return this._set('unshift', arguments);
+            },
+            splice: function () {
+                return this._set('splice', arguments);
+            },
+            sort: function () {
+                return this._set('sort', arguments);
+            },
+            pop: function () {
+                return this._set('pop', arguments);
+            },
+            reverse: function () {
+                return this._set('reverse', arguments);
+            }
+
+
+        });
+        Collection.mixin(Masa.Events);
+
+
+
+        var _Model = new Masa.Model({
+                list:[]
+        });
+
+        var _Collection = new Collection([{
+            title:"aaaa"
+        }, {
+            title: "bbbb"
+        }, {
+            title: "cccc"
+        }], {
+            title: "aaa",
+            type: 1,
+            age: "121",
+            data:{name:"fd"}
+        });
+        _Collection.on('change', function (key, value) {
+            $('#divlist').html('');
+            this.forEach(function (d,index) {
+
+                $('#divlist').append('<div>' + index + "、" + d.get('title')+'</div>');
+            });
+            console.log("key:" + key + ",value:" + value);
+        });
+
+        _Model.on('change', function (key, value) {
+
+
+            console.log("key:"+key+",value:"+value);
+        });
+     
+    </script>
+</body>
+</html>

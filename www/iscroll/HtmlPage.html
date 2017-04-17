@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/lib/zepto/zepto.min.js"></script>
+
+    <script src="../../scripts/plugins/iscroll/iscroll-probe.js"></script>
+    <link href="../../scripts/mobile/SUI-Mobile-dev/dist/css/sm.min.css" rel="stylesheet" />
+	<meta charset="utf-8" />
+</head>
+<body>
+
+    <div class="dx-iscroll" id="wrapper">
+            
+        <div class="dx-scroller">
+            <div id="pullDown">
+                <span class="pullDownIcon"></span><span class="pullDownLabel">下拉刷新...</span>
+            </div>
+            <div class="list-block media-list">
+                <ul>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">安装申请</div>
+                                    <div class="item-after">08-14</div>
+                                </div>
+                                <div class="item-subtitle">张三申请</div>
+                                <div class="item-text">已提交</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">安装申请</div>
+                                    <div class="item-after">08-14</div>
+                                </div>
+                                <div class="item-subtitle">张三申请</div>
+                                <div class="item-text">已提交</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">安装申请</div>
+                                    <div class="item-after">08-14</div>
+                                </div>
+                                <div class="item-subtitle">张三申请</div>
+                                <div class="item-text">已提交</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">安装申请</div>
+                                    <div class="item-after">08-14</div>
+                                </div>
+                                <div class="item-subtitle">张三申请</div>
+                                <div class="item-text">已提交</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">安装申请</div>
+                                    <div class="item-after">08-14</div>
+                                </div>
+                                <div class="item-subtitle">张三申请</div>
+                                <div class="item-text">已提交</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">安装申请</div>
+                                    <div class="item-after">08-14</div>
+                                </div>
+                                <div class="item-subtitle">张三申请</div>
+                                <div class="item-text">已提交</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">安装申请</div>
+                                    <div class="item-after">08-14</div>
+                                </div>
+                                <div class="item-subtitle">张三申请</div>
+                                <div class="item-text">已提交</div>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+   
+
+
+            <div id="pullUp">
+                <span class="pullUpIcon"></span><span class="pullUpLabel">上拉加载更多...</span>
+            </div>
+        </div>
+
+    </div>
+
+    <style>
+
+        .dx-iscroll
+        {
+          position:absolute;
+          top:0px;
+          left:0px;
+          overflow:hidden;
+          width:100%;
+          height:600px;
+        }
+
+.dx-scroller {
+	position:absolute; z-index:1;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	width:100%;
+	padding:0;
+}
+.dx-iscroll .list-block{
+    margin:0px;
+}
+
+
+
+/**
+ *
+ * Pull down styles
+ *
+ */
+#pullDown, #pullUp {
+	background:#fff;
+	height:40px;
+	line-height:40px;
+	padding:5px 10px;
+	border-bottom:1px solid #ccc;
+	font-weight:bold;
+	font-size:14px;
+	color:#888;
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon  {
+	display:block; float:left;
+	width:40px; height:40px;
+	background:url(pull-icon@2x.png) 0 0 no-repeat;
+	-webkit-background-size:40px 80px; background-size:40px 80px;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:250ms;	
+}
+#pullDown .pullDownIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+#pullUp .pullUpIcon  {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullDown.flip .pullDownIcon {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullUp.flip .pullUpIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+
+#pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon {
+	background-position:0 100%;
+	-webkit-transform:rotate(0deg) translateZ(0);
+	-webkit-transition-duration:0ms;
+
+	-webkit-animation-name:loading;
+	-webkit-animation-duration:2s;
+	-webkit-animation-iteration-count:infinite;
+	-webkit-animation-timing-function:linear;
+}
+
+@-webkit-keyframes loading {
+	from { -webkit-transform:rotate(0deg) translateZ(0); }
+	to { -webkit-transform:rotate(360deg) translateZ(0); }
+}
+
+
+    </style>
+    <script>
+       
+
+        function pullDownAction() {
+
+            setTimeout(function () {
+                myScroll.refresh();
+            }, 3000)
+        }
+
+        function pullUpAction() {
+
+            setTimeout(function () {
+                myScroll.refresh();
+            }, 3000)
+        }
+
+        pullDownEl = document.getElementById('pullDown');
+        pullDownOffset = pullDownEl.offsetHeight;
+        pullUpEl = document.getElementById('pullUp');
+        pullUpOffset = pullUpEl.offsetHeight;
+
+        myScroll = new IScroll('#wrapper', {
+            snap:'li',
+            scrollbars: true,
+            mouseWheel: true,
+            momentum:false,
+            interactiveScrollbars: false,
+            shrinkScrollbars: 'scale',
+            bounce: true,//边界反弹  
+            momentum:true,// 允许有惯性滑动  
+            fadeScrollbars: true,
+            probeType: 2,
+            startY:-40
+
+        });
+        var pullUDown = $("#pullUDown");
+        var pullUDown = $("#pullUp");
+        myScroll.on("scrollEnd", function (e) {
+
+         
+            if (pullDownEl.className.match('flip')) {
+                pullDownEl.className = 'loading';
+                pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';
+                myScroll.scrollTo(0, -40)
+                pullDownAction();
+            } else if (pullUpEl.className.match('flip')) {
+                pullUpEl.className = 'loading';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = 'Loading...';
+                pullUpAction();
+                myScroll.scrollTo(0, -40)
+            }
+            console.log('scrollEnd');
+        });
+        myScroll.on("scrollStart", function (e) {
+            console.log('scrollStart');
+       
+        });
+        myScroll.on("scroll", function (e) {
+            if (this.y > 20 && !pullDownEl.className.match('flip')) {
+                pullDownEl.className = 'flip';
+                pullDownEl.querySelector('.pullDownLabel').innerHTML = '松开刷新...';
+                this.minScrollY = 0;
+            } else if (this.y < 20 && pullDownEl.className.match('flip')) {
+                pullDownEl.className = '';
+                pullDownEl.querySelector('.pullDownLabel').innerHTML = '下拉刷新...';
+
+
+            } else if (this.y < (this.maxScrollY - 20) && !pullUpEl.className.match('flip')) {
+                pullUpEl.className = 'flip';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = '松开刷新...';
+                this.maxScrollY = this.maxScrollY;
+            } else if (this.y > (this.maxScrollY + 20) && pullUpEl.className.match('flip')) {
+                pullUpEl.className = '';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = '上拉加载更多...';
+                this.maxScrollY = pullUpOffset;
+            }
+
+            console.log('scroll');
+        });
+
+        myScroll.on("refresh", function () {
+
+            if (pullDownEl.className.match('loading')) {
+                pullDownEl.className = '';
+                pullDownEl.querySelector('.pullDownLabel').innerHTML = '下拉刷新...';
+            } else if (pullUpEl.className.match('loading')) {
+                pullUpEl.className = '';
+                pullUpEl.querySelector('.pullUpLabel').innerHTML = '上拉加载更多...';
+            }
+            console.log("refresh:" + this.y);
+      });
+    </script>
+</body>
+</html>

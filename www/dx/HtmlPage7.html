@@ -1,0 +1,376 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+
+	<meta charset="utf-8" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.js"></script>
+    <script src="../../scripts/tools/lodash/lodash-4.13.1.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="masa.js"></script>
+    <script src="../../scripts/chart/echarts3.min.js"></script>
+
+    <style>
+        .cleandate
+        {
+            border:solid 1px #edeaea;
+            box-shadow:0px 0px 2px 2px #edeaea;
+            width:400px;
+            font-family:'Microsoft YaHei';
+                   background-color: #fff;
+                   position:absolute;
+                   top:0px;
+                   left:0px;
+                   display:none;
+                   padding:0px 0px 5px;
+        }
+        .cleandate>table{
+            width:100%;
+            border-collapse: collapse;
+        }
+     .cleandate>table>thead>tr:first-child td {
+        color: #fff;
+        background-color: #08d222;
+        height: 30px;
+    }
+      .cleandate>table>thead>tr:last-child {
+   
+        height: 30px;
+        text-align:center;
+        width:14.28%;
+    }
+         .cleandate>table>tbody >tr td{
+   
+            height: 20px;
+            text-align:center;
+            width:14.28%;
+            color:#000000;
+            cursor:pointer;
+        }
+        .cleandate>table>tbody >tr td.date:hover
+        {
+            outline:solid 1px #08d222;
+        }
+      .cleandate .disabled
+      {
+         color:#dedada;
+         cursor:no-drop;
+      }
+       .cleandate .othermonth
+      {
+         color:#dedada;
+      }
+      .cleandate .selected
+      {
+          background-color:#08d222;
+          color:#fff;
+      }
+        .cleandate .current
+      {
+          background-color:#08d222;
+          color:#fff;
+      }
+        .previous-month,.next-month
+        {
+            cursor:pointer;
+        }
+      
+    </style>
+</head>
+<body>
+
+
+    <div id="divcontainer">
+
+        <div >
+
+            <select>
+                <template v-for="(key,value) in list">
+                    <option v-bind:value="key" >{{value}}</option>
+                </template>
+ 
+            </select>
+        </div>
+       
+    </div>
+
+    <input  type="text"  id="date" />
+
+
+    <div class="cleandate" id="cleandate">
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="2" align="center"><span class="previous-month" data-command="onPreviousMonth"><<</span></td>
+                    <td colspan="3" align="center"><span class="year" >2017</span>年<span class="month" >1</span>月</td>
+                    <td colspan="2" align="center"><span class="next-month" data-command="onNextMonth">>></span></td>
+                </tr>
+                <tr>
+                    <td>日</td>
+                    <td>一</td>
+                    <td>二</td>
+                    <td>三</td>
+                    <td>四</td>
+                    <td>五</td>
+                    <td>六</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="disabled">1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td class="selected">4</td>
+                    <td class="current">5</td>
+                    <td >6</td>
+                    <td>7</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<script>
+
+    var model = new Vue({
+        el: "#divcontainer",
+        data: {
+            list: {
+                'name': "李三",
+                '${name}': "李四"
+            }
+        }
+    });
+
+    var CleanDate = function (options){
+        this.dateWrapper = $('#cleandate');
+        this.options = $.extend({
+            format: 'yyyy-MM-dd',
+            onChange: function () { }
+        }, options);
+        this.init();
+    }
+    CleanDate.MonthDayNum = ['', 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    CleanDate.prototype.getMonthDayNum=function(date)
+    {
+        var day = CleanDate.MonthDayNum[date.getMonth() + 1];
+        return this.isLeapYear(date.getFullYear()) ? day + 1 : day;
+    }
+    CleanDate.prototype.isLeapYear = function (year)
+    {
+        return year%4==0&&year%100!=0||year%400==0;
+    }
+    CleanDate.prototype.init = function ()
+    {
+
+        //   var 1月31天，2月29天，3月31天，4月30天，5月31天，6月30天，7月31天，8月31天，9月30天，10月31天，11月30天，12月31天。\
+        this.todayDate = new Date();
+        this.currentDate = new Date();
+        this.dataSource = [];
+        this.dateWrapper.on('click', '[data-command]', $.proxy(this.onCommand, this));
+        this.drawCalendar(this.currentDate);
+        this.setCurrentDateTitle();
+
+    }
+    CleanDate.prototype.setCurrentDateTitle = function () {
+        this.setYear(this.formatDate(this.currentDate, 'yyyy'));
+        this.setMonth(this.formatDate(this.currentDate, 'MM'));
+    }
+    CleanDate.prototype.onPreviousMonth = function ()
+    {
+        this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+        this.drawCalendar(this.currentDate);
+        this.setCurrentDateTitle();
+    }
+    CleanDate.prototype.onNextMonth = function () {
+        this.currentDate.setMonth(this.currentDate.getMonth() +1);
+        this.drawCalendar(this.currentDate);
+        this.setCurrentDateTitle();
+    }
+    CleanDate.prototype.onCommand=function(e)
+    {
+        var name = e.target.getAttribute('data-command'), handler = this[name];
+        if (name && handler && typeof handler == 'function')
+        {
+            handler.call(this,e);
+        }
+    }
+    CleanDate.prototype.formatDate= function (date,format) {
+        var year = date.getFullYear(),
+        month = date.getMonth() + 1,
+        d = date.getDate(),
+        week = date.getDay();
+        var dateformats = {
+            'yyyy': String(year),
+            'MM': (String(month).length == 1 ? '0' : '') + month,
+            'dd': (String(d).length == 1 ? '0' : '') + d,
+        };
+        return format.replace(/(\w+)/g, function (s,$1) {
+            return dateformats[$1];
+        });
+    }
+
+    CleanDate.prototype.formatDateObj=function(date)
+    {
+        var year = date.getFullYear(),
+        month = date.getMonth() + 1,
+        d = date.getDate(),
+        week = date.getDay();
+        return {
+            year: year,
+            month: month,
+            date: d,
+            week: week,
+            dayNum: this.getMonthDayNum(date)
+        };
+    }
+    CleanDate.prototype.getFirstWeek = function (date) {
+        var wdate = this.parseDate(date);
+        wdate.setDate(1);
+        return wdate.getDay();
+    }
+
+    CleanDate.prototype.setMonth=function(month)
+    {
+        this.dateWrapper.find('.month').text(month);
+    }
+    CleanDate.prototype.setYear= function (year) {
+        this.dateWrapper.find('.year').text(year);
+    }
+    CleanDate.prototype.drawCalendar = function (drawDate)
+    {
+        var that = this,
+         todayDateObj=that.formatDateObj(that.todayDate),
+         currentDate = that.currentDate,
+         drawDateObj = that.formatDateObj(drawDate),
+         previousMonth = that.formatDateObj(that.differDate(drawDate, 0)),
+         nextMonth = that.formatDateObj(that.differDate(drawDate, 32)),
+         firstWeek = that.getFirstWeek(drawDate),
+         dateWrapper = that.dateWrapper,
+         tbody = dateWrapper.find('tbody')[0],
+         i = 0, j = 0, d = 1, rowCount = 6, cellCount = 7, row, cell, nd = 1, pd = previousMonth.dayNum - firstWeek+1,datevalue;
+        while (tbody.rows.length) {
+            tbody.deleteRow(0);
+        }
+        for (; i < rowCount; i++) {
+            row = tbody.insertRow();
+            for (j = 0; j < cellCount; j++) {
+                cell = row.insertCell();
+
+                  
+                   if (i == 0 && firstWeek <= j || i != 0 && d <= drawDateObj.dayNum) {
+                        datevalue = drawDateObj.year + "-" + drawDateObj.month + '-' + d;
+                        cell.innerText = String(d);
+                        cell.className = "date" + (drawDateObj.year == todayDateObj.year&&drawDateObj.month==todayDateObj.month&&d==todayDateObj.date?' current':'');
+                        d++;
+                    }else if(i==0)
+                    {
+                        datevalue = previousMonth.year + "-" + previousMonth.month + '-' + pd;
+                        cell.innerText = String(pd);
+                        cell.className = "date othermonth";
+                        pd++;
+                    } else {
+                        datevalue = nextMonth.year + "-" + nextMonth.month + '-' + nd;
+                        cell.innerText = String(nd);
+                        cell.className = "date othermonth";
+                        nd++;
+                    }
+                    cell.setAttribute('data-value', datevalue);
+                    cell.setAttribute('data-command', 'onChangeDate');
+            }
+        }
+
+    }
+    CleanDate.prototype.onChangeDate = function (e)
+    {
+        var value = e.target.getAttribute('data-value');
+        value = this.formatDate(this.parseDate(value), this.options.format);
+        this.options.onChange && this.options.onChange.call(this, value);
+    }
+    CleanDate.prototype.differDate = function (date,day) {
+        var result = this.parseDate(date);
+        result.setDate(day);
+        return result;
+    }
+    CleanDate.prototype.parseDate = function (date) {
+        var year, month, d,strdates,result;
+        if (typeof date=="string")
+        {
+            strdates = date.split(/[^\d]/g);
+            year = parseInt(strdates[0]);
+            month = parseInt(strdates[1])-1;
+            d = parseInt(strdates[2]);
+            result = new Date(year, month, d);
+        } else {
+            result = new Date(date.getTime());
+        }    
+        return result;
+    }
+    CleanDate.prototype.getYear = function () {
+        return parseInt(this.dateWrapper.find('.year').attr('data-value'));
+    }
+    CleanDate.prototype.getMonth = function () {
+        return parseInt(this.dateWrapper.find('.month').attr('data-value'));
+    }
+
+    CleanDate.prototype.getCurrentDate = function () {
+        var date = new Date(this.getYear(), this.getMonth() - 1, this.currentDate);
+        return date;
+    }
+    CleanDate.prototype.setCurrentDate = function (currentDate) {
+        var date = new Date(this.getYear(), this.getMonth() - 1, this.currentDate);
+        return date;
+    }
+
+    CleanDate.prototype.selectDate = function (e) {
+        var element = $(e.target), value = element.attr('data-value');
+        
+    }
+    CleanDate.prototype.setPosition=function(position)
+    {
+        var top = position.top, left = position.left;
+        this.dateWrapper.css({
+            left:left,
+            top:top
+        });
+    }
+    CleanDate.prototype.open=function(position)
+    {
+        this.dateWrapper.show();
+    }
+    CleanDate.prototype.close = function () {
+        this.dateWrapper.hide();
+    }
+
+
+
+
+
+    var _CleanDate = new CleanDate({
+        onChange:function(value)
+        {
+            $('#date').val(value);
+        }
+    });
+    $('#date').on('focus', function () {
+
+        var offset = $(this).offset();
+        _CleanDate.setPosition({
+            left: offset.left,
+            top: offset.top + 30
+        });
+        _CleanDate.open();
+    });
+    $('#date').on('blur', function () {
+
+
+    //    _CleanDate.close();
+    });
+</script>
+
+</body>
+</html>

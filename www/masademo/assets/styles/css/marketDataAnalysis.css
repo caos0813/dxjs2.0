@@ -1,0 +1,241 @@
+.clearfix:before,
+.clearfix:after {
+  content: '';
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clear:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.text-left {
+  text-align: left!important;
+}
+.text-right {
+  text-align: right!important;
+}
+.text-center {
+  text-align: center!important;
+}
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+.text-align-both {
+  text-align: justify;
+  text-align: end;
+  /* 对于除了IE之外的浏览器用尾对齐覆盖之前的两端对齐方式 */
+  text-align-last: justify;
+  text-justify: distribute;
+}
+.chart-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  background-image: url(https://dummyimage.com/600x400/000000/0011ff&text=+);
+}
+:root .chart-placeholder {
+  filter: none\9;
+}
+.chart-placeholder:before {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  color: #2a3a77;
+  transform: translate(-50%, -50%);
+}
+.chart-placeholder:before {
+  content: 'chart占位符，有chart时候移除chart-placeholder样式，绑定chart的div需要设置高度。';
+}
+.map-background,
+.map-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  opacity: 0.3;
+  filter: alpha(opacity=30);
+  background-image: url(https://dummyimage.com/600x400/000000/0011ff&text=+);
+}
+:root .map-background,
+:root .map-placeholder {
+  filter: none\9;
+}
+.map-background:before,
+.map-placeholder:before {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  color: #2a3a77;
+  transform: translate(-50%, -50%);
+}
+.map-background:before,
+.map-placeholder:before {
+  content: '地图占位符，有地图时候移除map-placeholder样式或者map-background样式，绑定地图的div需要设置高度。';
+}
+.index-aside-content.compare-content {
+  width: 320px;
+}
+.index-aside-content.compare-content .a-box {
+  width: 300px;
+}
+.index-aside-content.compare-content .index-aside-content-switch {
+  width: 300px;
+}
+.compare-list li {
+  margin-top: 10px;
+}
+.compare-list li p {
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  background: #1d3960;
+  text-align: center;
+}
+.compare-list li p i {
+  position: absolute;
+  top: 1px;
+  right: 30px;
+  cursor: pointer;
+}
+.btn-compare {
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  margin-top: 10px;
+  background: #2c70ad;
+  color: #fff;
+  text-align: center;
+}
+.clear-compare-box {
+  display: inline-block;
+}
+.clear-compare-box p {
+  display: inline-block;
+  margin: 0 10px 0 20px;
+  color: #e75059;
+}
+.map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.map > div {
+  height: 100%;
+}
+.deal-rank-box {
+  position: absolute;
+  width: 380px;
+}
+.deal-rank-box .deal-rank-content {
+  padding: 14px 20px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-top {
+  font-size: 12px;
+  text-align: right;
+}
+.deal-rank-box .deal-rank-content .deal-rank-top b {
+  display: inline-block;
+  width: 8px;
+  height: 26px;
+  margin: 0 8px 0 30px;
+  border-radius: 4px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list {
+  font-size: 12px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list h3 {
+  font-size: 12px;
+  font-weight: 400;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul {
+  padding-bottom: 10px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul li {
+  position: relative;
+  margin-top: 15px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul li .deal-rank-name {
+  position: absolute;
+  left: 0;
+  width: 44px;
+  text-align: right;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul li .deal-rank-bar {
+  margin: 0 50px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul li .deal-rank-bar p {
+  margin-bottom: 4px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul li .deal-rank-bar p span {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul li .deal-rank-number {
+  position: absolute;
+  top: -5px;
+  right: 0;
+  text-align: right;
+}
+.deal-rank-box .deal-rank-content .deal-rank-list ul li .deal-rank-number p {
+  line-height: 14px;
+  font-size: 10px;
+}
+.deal-rank-box .color-count {
+  background: #40c9d5;
+}
+.deal-rank-box .color-money {
+  background: #3aa6fa;
+}
+.single-cue {
+  position: absolute;
+  width: 95px;
+  cursor: pointer;
+}
+.single-cue .cue-price {
+  display: inline-block;
+  width: 95px;
+  height: 35px;
+  line-height: 35px;
+  background: #17c4bb;
+  text-align: center;
+}
+.single-cue .cue-price:after {
+  position: absolute;
+  top: 35px;
+  left: 37px;
+  content: '';
+  border: 10px solid transparent;
+  border-top-color: #17c4bb;
+}
+.single-cue .cue-price:hover + .cue-name {
+  width: 800px;
+}
+.single-cue .cue-name {
+  position: absolute;
+  top: 0;
+  left: 95px;
+  width: 0;
+  height: 35px;
+  line-height: 35px;
+  overflow: hidden;
+  transition: all .5s;
+}
+.single-cue .cue-name p {
+  display: inline-block;
+  padding: 0 20px;
+  background: #08a199;
+}

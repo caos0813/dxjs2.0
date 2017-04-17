@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/mvvm/vue/vue.js"></script>
+	<meta charset="utf-8" />
+    <style>
+        .red
+        {
+            background-color:red;
+        }
+        .blue
+        {
+            background-color:blue;
+        }
+        .selected{
+            background-color:#fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <commp v-for="item in list" :item="item"  :index="$index" @click="onItem(item)" :selected-index="selectedIndex"></commp>
+        <input  type="text" v-model="name"/>
+    </div>
+<script>
+    var commp2 = Vue.extend({
+
+        props: ['item'],
+        template: '<div style="color:red" class="aa">{{item[0]}} {{color}}</div>'
+    });
+    var commp3 = Vue.extend({
+        props: ['item', 'color'],
+        template: '<div style="color:green" class="aa">{{item[0]}} {{color}}</div>'
+    });
+    var commp = Vue.extend({
+        data:function()
+        {
+            return {
+                colors: ['red', 'blue'],
+                selectedClass: "selected",
+                isSelected:function()
+                {
+                    return this.selectedIndex == this.index;
+                }
+            }
+        },
+        methods: {
+            color: function (index)
+            {
+                return this.colors[index%2];
+            }
+        },
+        props: ['index', 'item', 'selectedIndex'],
+        template: '<div :class="{\'selected\':isSelected()}"><commp2 :item="item" :class="color(index)"  ></commp2></div>'
+    });
+    Vue.component('commp', commp);
+    Vue.component('commp2', commp2);
+    Vue.component('commp3', commp3);
+   var view= new Vue({
+        el: '#app',
+        data: {
+            selectedIndex:0,
+            list: [['李大在'], ['李三'], ['李三'], ['李三'], ['李大在'], ['李三'], ['李三'], ['李三'], ['李大在'], ['李三'], ['李三'], ['李三'], ['李大在'], ['李三'], ['李三'], ['李三']]
+        },
+        methods: {
+            onItem:function(index)
+            {
+                alert(index);
+            }
+        }
+    })
+</script>
+</body>
+</html>

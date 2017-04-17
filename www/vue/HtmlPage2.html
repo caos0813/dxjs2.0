@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <style>
+        table{
+            width:500px;
+            background-color:rgba(11, 117, 194, 0.45);
+           
+
+        }
+
+        table tr{
+            height:30px;
+        }
+ 
+        table tbody tr:first-child td{
+            color:red;
+            
+        }
+        #div
+        {
+
+            height:190px;
+            overflow:hidden;
+
+           
+            
+        }
+
+
+    </style>
+</head>
+<body>
+
+ <table>
+        <thead>
+            <tr><td>名称</td><td>年龄</td></tr>
+        </thead>
+ </table>
+<div id="div">
+    <table id="tbList">
+        <tbody></tbody>
+    </table>
+</div>
+
+
+   <div id="divAnimate" style="position:absolute;background-color:red;width:100px;height:100px;left:0px;top:0px">
+
+   </div>
+
+    <script>
+        // left top   width height  opacity  margin-top
+        ////**              ***//
+        //var eltbList = document.getElementById("tbList");
+        //var data = [],index=0;
+        //for(var i=0;i<600;i++)
+        //{
+        //    data.push({name:"李三"+i,age:i});
+        //}
+
+        //function bindData(count)
+        //{
+        //    var row, cell,cell2;
+        //    for (; index < count; index++)
+        //    {
+        //        row = eltbList.tBodies[0].insertRow();
+        //        row.className = 'traaa';
+        //        cell = row.insertCell();
+        //        cell2 = row.insertCell();
+        //        cell.innerHTML = data[index].name;
+        //        cell2.innerHTML = data[index].age;
+        //    }
+        //    var row = eltbList.tBodies[0].rows,len=row.length;
+                
+          
+        //}
+        //bindData(100);
+        //var eldiv = document.getElementById("div"),scrollTop=0,isStop=false;
+        //function scrollDiv()
+        //{
+        //    if (isStop)
+        //    {
+        //        return;
+        //    }
+        //    scrollTop+=1;
+        //    eldiv.scrollTop = scrollTop;
+        //    requestAnimationFrame(scrollDiv);
+        //}
+        //window.requestAnimationFrame(scrollDiv);
+        //document.getElementById("div").addEventListener('mouseover', function () {
+        //    isStop = true;
+        //});
+          
+        var sp=function(p)
+        {
+            return Math.pow(p,9);
+        }
+
+        function animate(element,style,value,time)
+        {
+            var c = Date.now(), ovalue = parseInt(element.style[style]);
+
+            function start()
+            {
+                var t = Date.now(), spe = (t - c) / time;
+                console.log("tiem:"+(t-c));
+                if (spe<1)
+                {
+                    element.style[style] = ovalue + sp(spe) * value + "px";
+                    window.requestAnimationFrame(start);
+                }else
+                {
+                    element.style[style] = ovalue + value + 'px';
+                }
+            }
+            window.requestAnimationFrame(start);
+
+        }
+        animate(document.getElementById("divAnimate"), 'left', 500, 4000);
+             animate(document.getElementById("divAnimate"),'top',500,4000);
+    </script>
+</body>
+</html>

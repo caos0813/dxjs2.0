@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="masa.js"></script>
+    <style>
+        .dragContainer ul
+        {
+             width:300px;
+            margin:0px;
+            padding:0px;
+            list-style:none;
+            border:solid 1px #0094ff;
+        }
+         .dragContainer ul li
+         {
+             height:30px;
+             line-height:30px;
+             background-color:#00ff90;
+             border-top:solid 1px #fff;
+
+         }
+                  .dragContainer ul li:first-child{
+                              border-top:solid 0px #fff;
+                  }
+                  .dragContainer2
+                  {
+                        border:solid 1px #0094ff;
+                  }
+         .dragContainer2 ul
+         {
+             width:300px;
+                     margin:10px 0px 0px;
+            padding:0px;
+             min-height:100px;
+              border:solid 1px #0094ff;
+         }
+         .enter{
+                  border:solid 1px #ff0000;
+         }
+    </style>
+</head>
+<body>
+
+    <div class="dragContainer">
+        <ul>
+            <li>11111111111111111111</li>
+            <li>22222222222222222222</li>
+            <li>33333333333333333333</li>
+        </ul>
+
+    </div>
+    <div class="dragContainer2">
+        <ul>
+
+            </ul>
+      </div>
+
+    <script>
+        Masa.ui.extendWidget('Drag', {
+            options: {
+                targetSource: null,
+                targetFilter: null,
+                dragTarget: null
+
+            },
+            events: ['onDragStart', 'onDragEnd', 'onDrag', 'onDrop', 'onDragEnter', 'onDragLeave'],
+            initialize: function (element, options) {
+                this.__super__.initialize.call(this, options);
+                var that = this;
+                options = that.options;
+                that.wrapper = $(element);
+                that.targetSource = $(options.targetSource);
+                that._initEvents();
+            },
+            _initEvents: function () {
+                Masa._.bindAll(this, '_downHandler', '_dragstartHandler', '_dragendHandler', '_dragHandler', '_dragenterHandler', '_dragleaveHandler', '_dropHandler', '_dragoverHandler');
+
+                this._document = $(document);
+                this.delegateEvents(this.wrapper, "mousedown", this.options.dragTarget, this._downHandler);
+                this.delegateEvents(this.wrapper, "dragstart", this.options.dragTarget, this._dragstartHandler);
+                this.delegateEvents(this.wrapper, "dragend", this.options.dragTarget, this._dragendHandler);
+                this.delegateEvents(this.wrapper, "drag", this.options.dragTarget, this._dragHandler);
+                this.delegateEvents(this.targetSource, "dragenter", this.options.targetFilter, this._dragenterHandler);
+                this.delegateEvents(this.targetSource, "dragleave", this.options.targetFilter, this._dragleaveHandler);
+                this.delegateEvents(this.targetSource, "dragover", this.options.targetFilter, this._dragoverHandler);
+                this.delegateEvents(this.targetSource, "drop", this.options.targetFilter, this._dropHandler);
+            },
+            _downHandler: function (e) {
+                var element = e.currentTarget;
+                if (element.getAttribute('draggable') !== true) {
+                    element.setAttribute('draggable', true);
+                }
+            },
+            _dragstartHandler: function (e) {
+                var that = this;
+
+                that.trigger('onDragStart', e);
+            },
+            _dragendHandler: function (e) {
+                var that = this;
+                that.trigger('onDragEnd', e);
+            },
+            _dragHandler: function (e) {
+                var that = this;
+
+                that.trigger('onDrag', e);
+            },
+            _dragenterHandler: function (e) {
+                var that = this, position;
+                that.trigger('onDragEnter', e);
+            },
+            _dragleaveHandler: function (e) {
+                var that = this;
+                that.trigger('onDragLeave', e);
+            },
+            _dragoverHandler: function (e) {
+                console.log('_dragoverHandler');
+                e.preventDefault();
+            },
+            _dropHandler: function (e) {
+                var that = this;
+                that.trigger('onDrop', e);
+            }
+
+        });
+
+        var _Drag = Masa.ui.createWidget('Drag', '.dragContainer', {
+            dragTarget: "li",
+            targetSource: ".dragContainer2",
+            onDragStart:function()
+            {
+
+            },
+            onDragEnd:function()
+            {
+
+            },
+            onDrop: function () {
+                alert('fd');
+            },
+            onDragEnter:function(e)
+            {
+                console.log('aaaaaaaaaaaaaa');
+                e.currentTarget.classList.add('enter');
+            },
+            onDragLeave:function(e)
+            {
+                console.log('bbbbbbbbbbbbbb');
+                e.currentTarget.classList.remove('enter');
+            }
+        });
+
+
+    </script>
+</body>
+</html>

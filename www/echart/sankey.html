@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="../../scripts/chart/echarts3.min.js"></script>
+    <meta charset="utf-8" />
+    <script>
+        var require = function () { }
+    </script>
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <div id="chart" style="height:500px"></div>
+
+
+    <script>
+        var dataType = ["", "个肤美容", "健康", "商旅出行", "娱乐", "家居", "工作", "影音", "房产", "手机工具", "教育", "母婴", "汽车", "生活", "社交", "网购", "资讯", "通讯", "金融理财", "阅读"];
+        var options = {
+            grid: {
+                top: '8%',
+                bottom: '8%'
+            },
+            legend: {
+                left: '45%',
+                top: '2%',
+                data: ['条件一','条件二'],
+                textStyle: { color: '#fff' }
+            },
+            tooltip: {
+                padding: 10,
+                backgroundColor: '#222',
+                borderColor: '#777',
+                borderWidth: 1,
+                formatter: function (obj) {
+                    var value = obj.value;
+                    return obj.seriesName + ":" + value[2];
+                }
+            },
+            xAxis: {
+                splitNumber:20,
+                splitLine: { lineStyle: { type: 'dashed', color: 'rgba(30,144,255,0.6)' } },
+                axisLine: { lineStyle: { color: 'rgba(255,255,255,0.6)' } },
+                axisTick: { show: false },
+                axisLabel: {
+                    textStyle: { color: 'rgb(255,255,255)' },
+                    formatter: function (val, index) {
+                        return dataType[index];
+                    }
+                }
+            },
+            yAxis: {
+                max: 3,
+                splitNumber: 3,
+                splitLine: { lineStyle: { type: 'dashed', color: 'rgba(30,144,255,0.6)' } },
+                axisLine: { lineStyle: { color: 'rgba(255,255,255,0.5)' } },
+                axisTick: { show: false },
+                axisLabel: { show: false }
+            },
+            backgroundColor: 'rgba(31,39,70,0.8)',
+            series: [{
+                name:'条件一',
+                data: [[1, 1, 10], [2, 1, 154], [3, 1, 455], [4, 1, 65], [5, 1, 107], [6, 1, 324], [7, 1, 469], [8, 1, 79], [9, 1, 397], [10, 1, 183], [11, 1, 36], [12, 1, 65], [13, 1, 454], [14, 1, 334], [15, 1, 430], [16, 1, 356], [17, 1, 496], [18, 1, 402], [19, 1, 279]],
+                type: 'scatter',
+                symbolSize: function (val) {
+                    var value = String(val[2]), size;
+                    size = Number(value) *0.3;
+                    return Math.max(size, 50);
+                },
+                label: {
+                    emphasis: {
+                        show: true,
+                        formatter: function (param) {
+                            return param.data[2];
+                        },
+                        position: 'top'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+
+                        opacity: 0.8,
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0
+                    }
+                }
+            },
+            {
+                name: '条件二',
+                data: [[1,2,10],[2,2,154],[3,2,455],[4,2,65],[5,2,107],[6,2,324],[7,2,469],[8,2,79],[9,2,397],[10,2,183],[11,2,36],[12,2,65],[13,2,454],[14,2,334],[15,2,430],[16,2,356],[17,2,496],[18,2,402],[19,2,279]],
+                type: 'scatter',
+                symbolSize: function (val) {
+                    var value = String(val[2]), size;
+                    size = Number(value) * 0.3;
+                    return Math.max(size, 50);
+                },
+                label: {
+                    emphasis: {
+                        show: true,
+                        formatter: function (param) {
+                            return param.data.name;
+                        },
+                        position: 'top'
+                    }
+                },
+                itemStyle: {
+                    normal: {
+
+                        opacity: 0.8,
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0
+                    }
+                }
+            }
+
+            ]
+        
+        };
+
+        var chart = echarts.init(document.getElementById('chart'));
+        chart.setOption(options);
+    </script>
+</body>
+</html>

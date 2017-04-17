@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <style>
+        .af
+        {
+            transform
+        }
+    </style>
+</head>
+<body>
+    <input  type="text" id="txtText"  />
+
+    <div id="container" style="width:300px;height:100px;border:solid 1px red">
+
+        <input  type="text"/>
+    </div>
+    <script>
+
+        //document.getElementById('container').addEventListener('focus', function (e) {
+
+        //    console.log('focusin');
+        //});
+
+        // 限制
+        document.getElementById('txtText').addEventListener("input", function (e) {
+           console.log('input');
+           // e.preventDefault();
+        });
+        document.getElementById('txtText').addEventListener("textInput", function (e) {
+            console.log('textInput:'+e.target.value);
+             e.preventDefault();
+        });
+      //  document.getElementById('txtText').addEventListener("keyup", function (e) {
+      //    //  console.log('keyup');
+      //  //    e.preventDefault();
+      //  });
+      //  document.getElementById('txtText').addEventListener("keypress", function (e) {
+      //  //    console.log('keypress:'+e.target.value);
+      //      //   e.preventDefault();
+      //      console.log('keypress-charCode :' + e.charCode);
+      //      console.log('keypress-keyCode:' + e.keyCode);
+      //  });
+      //  document.getElementById('txtText').addEventListener("keydown", function (e) {
+      //      console.log('key:' + e.key);
+      //      console.log('which:' + e.which);
+      //      console.log('keyCode:' + e.keyCode);
+      //      console.log('charCode :' + e.charCode);
+      //      console.log('keyIdentifier :' + e.keyIdentifier);
+           
+      //      var element = e.target, orgText = element.value, strs = Array.from(orgText), start = element.selectionStart, end = element.selectionEnd;
+      //      strs.splice(start, end - start, e.key);
+
+      //      console.log('selectionStart :' + start);
+      //      console.log('selectionEnd :' + end);
+      //      console.log(strs.join(''));
+
+      //   //   console.log(orgText);
+
+
+      ////     e.preventDefault();
+      //   //   e.stopPropagation();
+      //   //   e.stopImmediatePropagation();
+      //  });
+    </script>
+</body>
+</html>

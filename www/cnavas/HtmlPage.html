@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+    <canvas id="cvs1">
+
+    </canvas>
+
+    <script>
+        var cvs = document.getElementById('cvs1');
+        cvs.width = 1800;
+        cvs.height = 600;
+        var ctx = cvs.getContext('2d');
+
+        var xy = [100,100,500,30];
+        ctx.strokeStyle = 'blue';
+        ctx.strokeRect.apply(ctx, xy);
+
+      
+        var eventdata = {};
+        cvs.addEventListener('mousedown', function (e) {
+            if (e.button != 0)
+            {
+                return;
+            }
+            var point = getTarget(e);
+            if (point)
+            {
+                eventdata.pageX = e.offsetX;
+                eventdata.startX = point.xy2[0];
+                e.preventDefault();
+                document.addEventListener('mousemove', cMove);
+                document.addEventListener('mouseup', cUp);
+            }
+           
+        });
+        var _Point = new Point();
+        function Point()
+        {
+            this.xy2 = [120, 100, 20, 30];
+            ctx.fillStyle = 'blue';
+            ctx.fillRect.apply(ctx, this.xy2);
+        }
+        Point.prototype.setPosition=function(x)
+        {
+
+
+            x = Math.max(x, xy[0]);
+             x = Math.min(x, xy[0] + xy[2]-20);
+           
+             ctx.clearRect(101, 101, 498, 28);
+            this.xy2[0] = x;
+
+            ctx.beginPath();
+            ctx.fillStyle = 'blue';
+            ctx.fillRect.apply(ctx, this.xy2);
+        }
+
+        function boundary(data,x,y)
+        {
+            if(x>=data[0]&&x<=(data[0]+data[2])&&y>=data[1]&&y<=(data[1]+data[3]))
+            {
+                return true;
+            }
+            return false;
+        }
+        function getTarget(e)
+        {
+            var pageY = e.offsetY, pageX = e.offsetX;
+            if (boundary(_Point.xy2, pageX, pageY))
+            {
+                return _Point;
+            }
+            return null;
+        }
+        function cMove(e)
+        {
+            var pageX = eventdata.startX + (e.pageX - eventdata.pageX);
+            console.log(pageX);
+            _Point.setPosition(pageX);
+        }
+        function cUp()
+        {
+            document.removeEventListener('mousemove', cMove);
+            document.removeEventListener('mouseup', cUp);
+        }
+
+    </script>
+</body>
+</html>

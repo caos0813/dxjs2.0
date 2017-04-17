@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/plugins/iscroll/iscroll-4/src/iscroll.js"></script>
+    <script src="../../scripts/lib/zepto/zepto.min.js"></script>
+    <link href="../../scripts/mobile/SUI-Mobile-dev/dist/css/sm.min.css" rel="stylesheet" />
+	<meta charset="utf-8" />
+
+    <style>
+.dx-iscroll {
+	position:relative; z-index:1;
+	width:100%;
+	overflow:auto;
+}
+ .dx-iscroll .list-block li a
+ {
+        width:100%;
+ }
+.dx-pullDown, .dx-pullUp {
+	background-color:transparent;
+	height:40px;
+	line-height:40px;
+	padding:5px 10px;
+	font-weight:bold;
+	font-size:14px;
+	color:#888;
+}
+.dx-pullDown .pullDownIcon, .dx-pullUp .pullUpIcon  {
+	display:block; float:left;
+	width:40px; height:40px;
+	background:url(pull-icon@2x.png) 0 0 no-repeat;
+	-webkit-background-size:40px 80px; background-size:40px 80px;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:250ms;	
+}
+.dx-pullDown .pullDownIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+.dx-pullUp .pullUpIcon  {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+.dx-pullDown.flip .pullDownIcon {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+.dx-pullUp.flip .pullUpIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+
+.dx-pullDown.loading .pullDownIcon, .dx-pullUp.loading .pullUpIcon {
+	background-position:0 100%;
+	-webkit-transform:rotate(0deg) translateZ(0);
+	-webkit-transition-duration:0ms;
+
+	-webkit-animation-name:loading;
+	-webkit-animation-duration:2s;
+	-webkit-animation-iteration-count:infinite;
+	-webkit-animation-timing-function:linear;
+}
+
+@-webkit-keyframes loading {
+	from { -webkit-transform:rotate(0deg) translateZ(0); }
+	to { -webkit-transform:rotate(360deg) translateZ(0); }
+}
+    </style>
+</head>
+<body>
+
+            <div class="list-block media-list" style="margin:0px" id="list">
+
+            <ul>
+                <li>
+                    <a href="#" class="item-link item-content" >
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">安装申请</div>
+                                <div class="item-after">08-14</div>
+                            </div>
+                            <div class="item-subtitle">张三申请</div>
+                            <div class="item-text">已提交</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">安装申请</div>
+                                <div class="item-after">08-14</div>
+                            </div>
+                            <div class="item-subtitle">张三申请</div>
+                            <div class="item-text">已提交</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">安装申请</div>
+                                <div class="item-after">08-14</div>
+                            </div>
+                            <div class="item-subtitle">张三申请</div>
+                            <div class="item-text">已提交</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">安装申请</div>
+                                <div class="item-after">08-14</div>
+                            </div>
+                            <div class="item-subtitle">张三申请</div>
+                            <div class="item-text">已提交</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">安装申请</div>
+                                <div class="item-after">08-14</div>
+                            </div>
+                            <div class="item-subtitle">张三申请</div>
+                            <div class="item-text">已提交</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">安装申请</div>
+                                <div class="item-after">08-14</div>
+                            </div>
+                            <div class="item-subtitle">张三申请</div>
+                            <div class="item-text">已提交</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">安装申请</div>
+                                <div class="item-after">08-14</div>
+                            </div>
+                            <div class="item-subtitle">张三申请</div>
+                            <div class="item-text">已提交</div>
+                        </div>
+                    </a>
+                </li>
+
+            </ul>
+               </div>
+      
+
+
+
+    <script type="text/javascript">
+
+var myScroll,
+	pullDownEl, pullDownOffset,
+	pullUpEl, pullUpOffset,
+	generatedCount = 0;
+
+function pullDownAction () {
+	setTimeout(function () {	// <-- Simulate network congestion, remove setTimeout from production!
+
+
+		myScroll.refresh();		// Remember to refresh when contents are loaded (ie: on ajax completion)
+	}, 1000);	// <-- Simulate network congestion, remove setTimeout from production!
+}
+
+function pullUpAction () {
+	setTimeout(function () {	// <-- Simulate network congestion, remove setTimeout from production!
+
+		myScroll.refresh();		// Remember to refresh when contents are loaded (ie: on ajax completion)
+	}, 1000);	// <-- Simulate network congestion, remove setTimeout from production!
+}
+
+var MasaScroll=function(element,options)
+{
+    this.options = $.extend({},this.options,options);
+    this.init(element);
+
+}
+MasaScroll.prototype = {
+    constructor: MasaScroll,
+    options: {
+        height:'auto',
+        pullDown: '下拉刷新...',
+        refresh: '松开刷新...',
+        loading:'加载中...',
+        upDown: '上拉加载更多...',
+        maxScrollY:20
+    },
+    init: function (element)
+    {
+        element = $(element);
+        var wrapper = $('<div class="dx-iscroll"><div class="dx-iscroller"></div></div>'),scroller,pullDown,pullUp,options=this.options;     
+        element.wrap(wrapper);
+        pullDown = $(' <div class="dx-pullDown"><span class="pullDownIcon"></span><span class="pullDownLabel">' + options.pullDown+ '</span></div>');
+        pullUp = $(' <div class="dx-pullUp"><span class="pullUpIcon"></span><span class="pullUpLabel">' + options.upDown + '</span></div>');
+        scroller = wrapper.children('.dx-iscroller');
+        scroller.prepend(pullDown);
+        scroller.append(pullUp);
+        if (options.height == 'auto')
+        {
+            wrapper.height($(window).height());
+        }
+        this.pullDown = pullDown;
+        this.pullUp = pullUp;
+        this.wrapper = wrapper;
+        this.initScroll();
+    },
+    refresh:function()
+    {
+        this.myScroll.refresh();
+    },
+    pullDownAction:function()
+    {
+        this.options.pullDownAction && this.options.pullDownAction.call(this);
+    },
+    pullUpAction:function()
+    {
+        this.options.pullUpAction && this.options.pullUpAction.call(this);
+    },
+    initScroll:function()
+    {
+        var that=this,pullDownEl = this.pullDown, pullUpEl = this.pullUp, options = this.options, maxScrollY = options.maxScrollY,
+            pullDownOffset = pullDownEl[0].offsetHeight, pullUpOffset = pullUpEl[0].offsetHeight
+            ;
+        this.myScroll = new iScroll(this.wrapper[0], {
+            useTransition: true,
+            topOffset: pullDownOffset,
+            onRefresh: function () {
+                if (pullDownEl.hasClass('loading')) {
+                    pullDownEl.removeClass('loading');
+                    pullDownEl.children('.pullDownLabel').html(options.pullDown);
+                } else if (pullUpEl.hasClass('loading')) {
+                    pullUpEl.removeClass('loading');
+                    pullUpEl.children('.pullUpLabel').html(options.upDown);
+                }
+            },
+            onScrollMove: function () {
+                if (this.y > maxScrollY && !pullDownEl.hasClass('flip')) {
+                    pullDownEl.addClass('flip');
+                    pullDownEl.children('.pullDownLabel').html(options.refresh);
+                    this.minScrollY = 0;
+                } else if (this.y < maxScrollY && pullDownEl.hasClass('flip')) {
+                    pullDownEl.removeClass('flip');
+                    pullDownEl.children('.pullDownLabel').html(options.pullDown);
+                    this.minScrollY = -pullDownOffset;
+                } else if (this.y < (this.maxScrollY - maxScrollY) && !pullUpEl.hasClass('flip')) {
+                    pullUpEl.addClass('flip');
+                    pullUpEl.children('.pullUpLabel').html(options.refresh);
+                    this.maxScrollY = this.maxScrollY;
+                } else if (this.y > (this.maxScrollY + maxScrollY) && pullUpEl.hasClass('flip')) {
+                    pullUpEl.removeClass('flip');
+                    pullUpEl.children('.pullUpLabel').html(options.upDown);
+                    this.maxScrollY = pullUpOffset;
+                }
+            },
+            onScrollEnd: function () {
+                if (pullDownEl.hasClass('flip')) {
+                    pullDownEl.removeClass('flip').addClass('loading');
+                    pullDownEl.children('.pullDownLabel').html(options.loading);
+                    that.pullDownAction();	// Execute custom function (ajax call?)
+                } else if (pullUpEl.hasClass('flip')) {
+                    pullUpEl.removeClass('flip').addClass('loading');
+                    pullUpEl.children('.pullUpLabel').html(options.loading);
+                    that.pullUpAction();	// Execute custom function (ajax call?)
+                }
+            }
+        });
+    }
+};
+
+var a = new MasaScroll('#list', {
+    pullDownAction:function()
+    {
+        var that = this;
+        setTimeout(function () {
+            that.refresh();
+        }, 3000);
+    },
+    pullUpAction:function()
+    {
+        this.refresh();
+    }
+});
+
+function loaded() {
+	pullDownEl = document.querySelector('.dx-pullDown');
+	pullDownOffset = pullDownEl.offsetHeight;
+	pullUpEl = document.querySelector('.dx-pullUp');
+	pullUpOffset = pullUpEl.offsetHeight;
+
+
+
+
+	myScroll = new iScroll('wrapper', {
+	    useTransition: true,
+	    topOffset: pullDownOffset,
+	    onRefresh: function () {
+	        if (pullDownEl.className.match('loading')) {
+	            pullDownEl.className = '';
+	            pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+	        } else if (pullUpEl.className.match('loading')) {
+	            pullUpEl.className = '';
+	            pullUpEl.querySelector('.pullUpLabel').innerHTML = 'Pull up to load more...';
+	        }
+	    },
+	    onScrollMove: function () {
+	        if (this.y > 5 && !pullDownEl.className.match('flip')) {
+	            pullDownEl.className = 'flip';
+	            pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Release to refresh...';
+	            this.minScrollY = 0;
+	        } else if (this.y < 5 && pullDownEl.className.match('flip')) {
+	            pullDownEl.className = '';
+	            pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+	            this.minScrollY = -pullDownOffset;
+	        } else if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+	            pullUpEl.className = 'flip';
+	            pullUpEl.querySelector('.pullUpLabel').innerHTML = 'Release to refresh...';
+	            this.maxScrollY = this.maxScrollY;
+	        } else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
+	            pullUpEl.className = '';
+	            pullUpEl.querySelector('.pullUpLabel').innerHTML = 'Pull up to load more...';
+	            this.maxScrollY = pullUpOffset;
+	        }
+	    },
+	    onScrollEnd: function () {
+	        if (pullDownEl.className.match('flip')) {
+	            pullDownEl.className = 'loading';
+	            pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';
+	            pullDownAction();	// Execute custom function (ajax call?)
+	        } else if (pullUpEl.className.match('flip')) {
+	            pullUpEl.className = 'loading';
+	            pullUpEl.querySelector('.pullUpLabel').innerHTML = 'Loading...';
+	            pullUpAction();	// Execute custom function (ajax call?)
+	        }
+	    }
+	});
+
+}
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+//document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
+    </script>
+</body>
+</html>

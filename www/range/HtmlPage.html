@@ -1,0 +1,484 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="http://localhost:58763/scripts2/tools/lodash/lodash-4.13.1.js"></script>
+
+    <script src="../../scripts/lib/jquery/jquery-3.1.js"></script>
+
+    <script src="../../scripts/mvvm/vue/2.0/vue.js"></script>
+	<meta charset="utf-8" />
+
+    <style>
+       body{
+           background-color:#21415a;
+       }
+        .range-wrapper
+        {
+            width:100%;
+            box-sizing:border-box;
+        }
+         .range-wrapper .range-header
+        {
+            position:relative;
+            height:25px;
+        }
+        .range-wrapper .range-container
+        {
+            position:relative;
+            height:30px;
+        }
+         .range-wrapper .range-header .range-text
+        {
+            position:absolute;
+          
+            color:#fff;
+            font-size:14px;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .range-wrapper .range-process
+        {
+               position:absolute;
+               top:0px;
+               left:0px;
+               width:100%;
+                          
+        }
+        .range-linegap{
+            height:5px;
+            border-radius:4px;
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:100%;
+        }
+          .range-wrapper .range-process.range-blue
+        {
+              z-index:3;
+                          
+        }
+         .range-wrapper .range-process.range-gray
+        {
+              z-index:2;
+                          
+        }
+          .range-wrapper .range-process .range-lines
+        {
+            position:absolute;
+        }
+
+        .range-wrapper .range-process .range-lines .range-line
+        {
+             height:5px;
+             position:absolute;
+             top:0px;
+        }
+         .range-wrapper .range-process.range-blue .range-line
+        {
+             background-color:#0094ff;
+        }
+       .range-wrapper .range-process.range-gray .range-line
+        {
+             background-color:#cac7c7;
+        }
+        .range-wrapper .range-process .range-btns
+         {
+         }
+          .range-wrapper .range-process.range-blue .range-btns .range-btn
+         {
+                         border:solid 2px #0094ff;
+                         background-color:#21415a;
+         }
+           .range-wrapper .range-process.range-blue .range-btns .range-btn::after
+         {
+                        background-color:#0094ff;
+
+         }
+           .range-wrapper .range-process.range-gray .range-btns .range-btn
+         {
+                         border:solid 2px #cac7c7;
+                         background-color:#21415a;
+         }
+               .range-wrapper .range-process.range-gray .range-btns .range-btn::after
+         {
+                         background-color:#cac7c7;
+         }
+          .range-wrapper .range-btn
+         {
+                 width:14px;
+                 height:14px;   
+                 border-radius:45px;
+                 position:absolute;
+                 top:0px;
+                 z-index:3;
+                 top:-50%;
+                 margin-top:-5px; 
+                 left:0px;
+                cursor:pointer;
+         }
+             .range-wrapper .range-btn::after
+         {
+                 content:'';
+                 border:0px;
+                 width:10px;
+                 height:10px;
+                 border-radius:45px;
+                 position:absolute;
+                 top:50%;
+                 margin-top:-5px;
+                 left:50%;
+                 margin-left:-5px;
+         }
+          /*.range-text-container
+        {
+            padding:5px 0px;
+        }
+        .range-text
+        {
+            color:#fff;
+            font-size:14px;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        .range-btn-container
+        {
+            position:relative;
+          
+        }
+        .range-line
+        {
+            height:5px;
+            border-radius:4px;
+        }
+        .range-gray
+        {
+            background-color:#e5e5e5;
+
+        }
+        .range-blue
+        {
+            background-color:#0094ff;
+        }
+        .range-btn{
+                   width:14px;
+                   height:14px;
+                   background-color:transparent;
+                 border:solid 2px #0094ff;
+                 border-radius:45px;
+                 position:absolute;
+                 top:0px;
+                 z-index:3;
+                 top:-50%;
+                 margin-top:-5px;
+                 background-color:#21415a;
+                 left:0px;
+  
+                cursor:pointer;
+        }
+        .range-btn::after{
+                 content:'';
+                 border:0px;
+                 width:10px;
+                 height:10px;
+                 border-radius:45px;
+                 background-color:#0094ff;
+                 position:absolute;
+                 top:50%;
+                 margin-top:-5px;
+                 left:50%;
+                 margin-left:-5px;
+            }*/
+
+    </style>
+</head>
+<body>
+
+    <div style="border:solid 1px red;width:300px;height:300px;" id="divTest"></div>
+
+
+       <div id="rangeS" style="width:800px;margin-left:100px"></div>
+
+
+
+
+
+
+    <div class="range-wrapper" id="template" style="display:none">
+        <div class="range-header">
+            <span class="range-text">60平</span>
+            <span class="range-text" style="left:180px">180平</span>
+            <span class="range-text" style="left:360px">360平</span>
+        </div>
+       <div class="range-container">
+           <div class="range-process range-blue">
+               <div class="range-lines">
+                   <span class="range-line" style="width:100px;"></span>
+               </div>
+               <div class="range-btns">
+                   <span class="range-btn" style="left:0px;"></span>
+                   <span class="range-btn" style="left:180px;"></span>
+                   <span class="range-btn" style="left:360px;"></span>
+               </div>
+           </div>
+           <div class="range-process range-gray">
+               <div class="range-lines">
+                   <span class="range-line" style="width:100px;"></span>
+               </div>
+               <div class="range-btns">
+                   <span class="range-btn" style="left:0px;"></span>
+                   <span class="range-btn" style="left:180px;"></span>
+                   <span class="range-btn" style="left:360px;"></span>
+               </div>
+           </div>
+       </div> 
+    </div> 
+    <script>
+
+
+
+        (function () {
+
+            var defaultOptions = {
+                min:60,
+                max: 300,
+                step:1,
+                width: 400,
+                splits: []
+            };
+            var DxRange = function (element, options) {
+                element = $(element);
+                var that = this;
+                that.wrapper = element;
+                that.options=options = $.extend({}, defaultOptions, options);
+                that.init();
+                that._initEvents();
+                that._render();
+            }
+            DxRange.prototype.init=function()
+            {
+                var that = this, wrapper = that.wrapper, header = $('<div class="range-header"></div>').appendTo(wrapper), container = $('<div class="range-container"></div>').appendTo(wrapper), blueProcess, grayProcess;
+                that.wrapper.addClass('range-wrapper');
+
+                blueProcess = $('<div class="range-process range-blue">  <div class="range-lines"></div><div class="range-btns"></div></div>').appendTo(container);
+                grayProcess = $('<div class="range-process range-gray"><div class="range-lines"></div> <div class="range-btns"></div></div>').appendTo(container);
+                that._onRangeChange = that.options.onRangeChange || $.noop;
+                that._onRangeMove = that.options.onRangeMove || $.noop;
+                that._blueProcess = blueProcess;
+                that._grayProcess = grayProcess;
+                
+               
+            }
+            DxRange.prototype._createText = function (text,left,options) {
+                var text = $(' <span class="range-text"></span>').text(text), top=0, width = options.width || 'auto';
+                if (options.offset)
+                {
+                    left = left + options.offset[0];
+                    top = options.offset[1];
+                }              
+                text.css({ left: left + "px", top: top + "px", width: width });
+                return text;
+            }
+   
+            DxRange.prototype._createSplit = function (index,x,options) {
+                var text = $('<span class="range-btn"> </span>');
+                text.attr('data-value', options.value).attr('data-position',x).attr('data-index',index);
+                text.css({ left: x + "px"});
+                return text;
+            }
+            DxRange.prototype._createLine = function (x, width) {
+                var text = $('<span class="range-line"></span>');
+                text.css({ left: (x + 18) + "px", width: (width - 18) + "px" });
+                return text;
+            }
+
+            DxRange.prototype._initEvents=function()
+            {
+                this._blueProcess.on('mousedown.dxrange', '.range-btn', $.proxy(this._onDown, this));
+
+            }
+            DxRange.prototype._getDefaultData=function(element)
+            {
+                if (element.length <= 0)
+                {
+                    return null;
+                }
+                var value = Number(element.attr('data-value')),
+                    position = Number(element.attr('data-position')),
+                    left = parseFloat(element.css('left')),
+                        index = Number(element.attr('data-index'));
+                return {
+                    element:element,
+                    value: value,
+                    position: position,
+                    left: left,
+                    index:index
+                };
+            }
+            DxRange.prototype._onDown = function (e) {
+                var that = this, element = $(e.currentTarget), value = element.attr('data-value');
+                console.log('_onDown' + e.pageX);
+                if(e.button!=0)
+                {
+                    return;
+                }
+                that._eventData = {
+                    prev: that._getDefaultData(element.prev('.range-btn')),
+                    current: that._getDefaultData(element),
+                    next: that._getDefaultData(element.next('.range-btn')),
+                    x: e.pageX,
+                    y: e.pageY,
+                    splitBtnWidth: element.outerWidth()
+                };
+                $(window).on('mousemove.docdxrange', $.proxy(this._onMove, this));
+                $(window).on('mouseup.docdxrange', $.proxy(this._onUp, this));
+                e.preventDefault();
+            }
+            DxRange.prototype._onUp = function (e) {
+                if (e.button != 0) {
+                    return;
+                }
+                console.log('_onUp');
+                $(window).off('.docdxrange');
+                if (this._eventData.nvalue) {
+                    this._onRangeChange(this._eventData.nvalue);
+                }
+            }
+            DxRange.prototype._onMove = function (e) {
+                var that = this, pageX = e.pageX,
+                    eventData = that._eventData,
+                    current = eventData.current,
+                    maxCount = that._maxCount,
+                    splitW = that._splitW,
+                    maxWidth = that._width,
+                    minWidth = 0,
+                    splitBtnWidth = eventData.splitBtnWidth,
+                    left,
+                    startX = eventData.x,
+                    w = that._width / 100,
+                    step = that.options.step,
+                    next = eventData.next,
+                    prev = eventData.prev,
+                    minOffset=0,
+                    maxOffset=0,
+                    moveStatus=pageX<startX?-1:pageX==startX?0:1;
+                if (current.element && moveStatus!=0)
+                {
+
+                    var nvalue, value=current.value, maxValue, mstep, offset = pageX - startX, maxOffset2 =splitW - splitBtnWidth, stepX, maxStep;
+                    if (moveStatus == -1 && prev) {
+                        maxValue = current.value - prev.value;
+                    } else if (moveStatus == 1 && next) {
+                        maxValue = next.value - current.value;
+                    } else if (moveStatus == 1) {
+                        maxValue = current.value - prev.value;
+
+                    } else if (moveStatus == -1) {
+                        maxValue = next.value - current.value;
+                    }
+                    maxValue = maxValue - step;
+                    maxStep = parseInt(maxValue / step);
+                    stepX = parseFloat(maxOffset2 / maxStep);
+                     
+                    minOffset = prev == null ? current.position : (prev.left < prev.position ? prev.position : prev.left) + splitBtnWidth;
+                    maxOffset = next == null ? current.position : (next.left > next.position?next.position:next.left) - splitBtnWidth;
+                    left = current.left + (pageX - startX);             
+                     if (left < minOffset)
+                     {
+                         left = minOffset;
+                     }
+                     else if (left > maxOffset) {
+                         left = maxOffset;
+                     }
+                     var currentStep = parseInt((current.position - left) / stepX), nvalueStep = currentStep * step, nvalue = value - nvalueStep;
+
+                     console.log("currentStep:" + currentStep + ",maxStep:" + maxStep + ",nvalue:" + nvalue + ",current.position:" + current.position + ",left:" + left + ",stepX:" + stepX);
+                     if (left >= minOffset && left <= maxOffset) {
+                         current.element.css({ left: left + 'px' });
+                         eventData.nvalue = nvalue;
+                     }
+                  
+                }
+
+            }
+            DxRange.prototype._render = function (text)
+            {
+                var that = this,
+                    width = that.wrapper.width(),
+                    texts = [],
+                    lines = [],
+                    grays = [],
+                    blues = [],
+                    graylines = [],
+                    options = that.options,
+                    text,
+                    line,
+                    sbtn,
+                    splits = options.splits,
+                    i = 0,
+                    splitsLen=splits.length,
+                    len = splitsLen-1,
+                    splitValue, left, top, splitW = parseInt(width / len);
+                for (; i <=len;i++)
+                {            
+                    splitValue = splits[i];
+                    left = i * splitW;
+                    text = that._createText(splitValue.title, left,splitValue);                
+                    texts.push(text);
+                    sbtn = that._createSplit(i,left, splitValue);
+                    blues.push(sbtn);
+                    grays.push(sbtn.clone());
+                    if(i<len){
+                        line = that._createLine(left, splitW);
+                        lines.push(line);
+                        graylines.push(line.clone());
+                    }
+               
+                }
+                that._width = width;
+                that._maxCount = splitsLen
+                that._splitW= splitW;
+                that.wrapper.children('.range-header').append(texts);
+                that._blueProcess.children('.range-lines').append(lines);
+                that._blueProcess.children('.range-btns').append(blues);
+                that._grayProcess.children('.range-btns').append(grays);
+                that._grayProcess.children('.range-lines').append(graylines);
+            }
+ 
+            var _DxRange = new DxRange('#rangeS', {
+                step: 1,
+                splits: [
+                    { value: 60, title: "60平", offset: [-15,0]},
+                    { value: 80, title: "80平", offset: [-15, 0] },
+                    { value: 100, title: "100平", offset: [-20, 0] },
+                    { value: 150, title: "150平", offset: [-20, 0] },
+                    { value: 200, title: "200平", offset: [-20, 0] },
+                    { value: 250, title: "250平", offset: [-20, 0] },
+                    { value: 300, title: "300平", offset: [-20, 0],width:'80px'}
+                ],
+                onRangeChange: function (value)
+                {
+                    console.log("onRangeChange:" + value);
+                },
+                onRangeMove: function () {
+
+                }
+            });
+
+
+            $('#divTest').on('mousedown', function (e) {
+                var keyCode = e.keyCode;
+                console.log("mousedown:"+keyCode);
+            });
+            $('#divTest').on('mouseup', function (e) {
+                var keyCode = e.keyCode;
+                console.log("mouseup:"+keyCode);
+            });
+        }());
+  
+
+
+
+    </script>
+</body>
+</html>

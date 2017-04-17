@@ -1,0 +1,893 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../../scripts/lib/jquery/jquery-3.1.js"></script>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+
+
+    <script>
+
+
+     
+            //Util
+            // 
+            var OBJECT_CORE = {}, ARRAY_CORE = [], hasOwn=Object.hasOwnProperty,toString=OBJECT_CORE.toString,getProto=Object.getPrototypeOf;
+            var Util = {
+                isFunction: function (value) {
+                    return typeof value == "function";
+                },
+                isBoolean:function(value)
+                {
+                    return typeof value=="boolean";
+                },
+                isObject: function (value) {
+                    return toString.call(value) == '[object Object]' || Util.isFunction(value);
+                },
+                isObjectLike: function (value) {
+                    return toString.call(value) == '[object Object]';
+                },
+                isArray:function(value)
+                {
+                    return toString.call(value) == '[object Array]';
+                },
+                isPlainObject:function(value)
+                {
+                    if (!Util.isObjectLike(value))
+                    {
+                        return false;
+                    }
+                    var proto = Util.getProto(value);
+                    if(!proto)
+                    {
+                        return true;
+                    }
+                    return Util.hasOwn(proto, "constructor") && Util.toFuncString(proto.constructor) == Util.toFuncString(Object);                 
+                },
+                isUndefined: function (value)
+                {
+                    return typeof value == 'undefined';
+                },
+                getProto:function(target)
+                {
+                    return getProto(target);
+                },
+                hasOwn: function (target,property) {
+                    return hasOwn.call(target, property);
+                },
+                toFuncString: function (value)
+                {
+                    return Function.prototype.toString.call(value);
+                },
+                extend: function () {
+                    var target = arguments[0], deep = false, i = 1, len = arguments.length, name, copy, src, source;
+                    if (len == 1)
+                    {
+                        i = 0;
+                        target = this;
+                    }
+                    if (Util.isBoolean(target))
+                    {
+                        deep = target;
+                        target = arguments[1];
+                        i = 2;
+                    }                  
+                    while (i<len)
+                    {
+                        source = arguments[i++];
+                        if (!Util.isObject(source))
+                        {
+                            continue;
+                        }
+                        for(name in source)
+                        {
+                            copy = source[name];
+                            src = target[name];
+                            if (deep && Util.isArray(copy))
+                            {
+                                copy = Util.extend(deep, src || [], copy);
+                            }else if (deep && Util.isObject(copy)) {
+                                copy = Util.extend(deep, src || {}, copy);
+                            }
+                            if (!Util.isUndefined(copy))
+                            {
+                                target[name] = copy;
+                            }
+                        }
+                    }
+                    return target;
+                },
+                create: function(proto)
+                {
+                    var base = new Function();
+                    base.prototype = proto;
+                    return new base();
+                },
+                noop: function () { },
+                slice:function(value,start,end)
+                {
+                    return ARRAY_CORE.slice.call(value,start,end);
+                },
+                forEach:function(value,callback,thisArg)
+                {
+                    if (value == null || typeof value != "object") {
+                        return false;
+                    }
+                    var len = value.length,i=0;
+                    if (!Util.isUndefined(len))
+                    {
+                        for(;i<len;i++)
+                        {
+                            callback.call(thisArg||this,value[i],i,value);
+                        }
+                    } else {
+                        for(var name in value)
+                        {
+                            callback.call(thisArg||this,value[name],name,value);
+                        }
+                    }
+                },
+                some:function(value,callback,thisArg)
+                {
+                    if (value == null || typeof value != "object") {
+                        return false;
+                    }
+                    var len = value.length, i = 0,result;
+                    if (!Util.isUndefined(len)) {
+                        for (; i < len; i++) {
+                            result = callback.call(thisArg || this, value[i], i, value);
+                            if(result===true)
+                            {
+                                return true;
+                            }
+                        }
+                    } else {
+                        for (var name in value) {
+                            result = callback.call(thisArg || this, value[name], name, value);
+                            if (result === true) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                },
+                map: function (collection, iteratee)
+                {
+                    var result = [];
+                    this.forEach(collection, function () {
+                        var resultValue = iteratee.apply(this, arguments);
+                        result.push(resultValue);
+                    });
+                    return result;
+                },
+                indexOf:function(target,callback,thisArg)
+                {
+                    var index = -1;
+                    Util.some(target, function (value, i, list) {
+                        var result = callback.call(this,value, i, list);
+                        if(result===true)
+                        {
+                            index = i;
+                            return true;
+                        }
+                    }, thisArg);
+                    return index;
+                },
+                findIndex: function (target, callback, thisArg)
+                {
+                    return this.indexOf(target, callback, thisArg);
+                },
+                remove: function (array, callback, thisArg) {
+                    return this.forEach(array.slice(), function (value, i, list) {
+                        var result = callback.call(this,value, i, list);
+                        if (result === true) {
+                            array.splice(i, 1);
+                        }
+                    }, thisArg);
+                },
+                after:function(n,func)
+                {
+                    return function()
+                    {
+                        --n== 0 && func.apply(this, arguments);
+                    }
+                },
+                before:function(n,func)
+                {
+                    return function()
+                    {
+                        n-->0 && func.apply(this, arguments);
+                    }
+                },
+                once: function (func) {
+                    return this.after(1, func);
+                },
+                flatten: function (array)
+                {
+                    return this.flattenDepth(array,1);
+                },
+                flattenDeep:function()
+                {
+                    return this.flattenDepth(array, 100);
+                },
+                flattenDepth: function (array, depth)
+                {
+                    if (this.isUndefined(depth))
+                    {
+                        depth = 1;
+                    }
+                    if (depth == 0)
+                    {
+                        return array;
+                    }
+                    var result = [];
+                    var _flattenDepth=function(value,depth)
+                    {
+                        if (Util.isArray(value) && depth>0)
+                        {
+                            result = result.concat(Util.flattenDepth(value, depth - 1));
+                        }else
+                        {
+                            result.push(value);
+                        }
+                    }
+                    this.forEach(array, function (value) {
+                        _flattenDepth(value, depth);
+                    });
+                    return result;
+                },
+                flatMapDeep: function (collection, iteratee)
+                {
+                    iteratee = iteratee||function()
+                    {
+
+                    }
+                    return this.map(collection, function (value) {
+
+                    })
+                },
+                keys: (function () {
+                    if(Object.keys)
+                    {
+                        return Object.keys;
+                    }
+                    return function(objs)
+                    {
+                        return Util.map(objs, function (value,name) {
+                            if (objs.hasOwnProperty(name)) {
+                                return name;
+                            }
+                        });
+                    }
+                }())
+            };
+
+            Util.Promise=(function()
+            {
+                var DXPromise = function (resolver) {
+                    var that = this, argsData = [], callbacks = {}, state = "Pending", noop = function () { };
+                    var setState = function (argState) {
+                        if (state != 'Pending') {
+                            return;
+                        }
+                        state = argState;
+                    }
+                    var addListener = function (name, handler) {
+                        if (typeof handler != 'function') {
+                            handler = noop;
+                        }
+                        var list = callbacks[name] = callbacks[name] || [];
+                        list.push(handler);
+                        emitListener();
+                    }
+                    var emitListener = function (argState) {
+                        var name = argState || state;
+                        var list = callbacks[name] = callbacks[name] || [];
+                        while (list.length) {
+                            list.shift().apply(this, argsData);
+                        }
+                    }
+                    var partial = function (callback) {
+                        var partialArgs = Array.prototype.slice.call(arguments, 1);
+                        return function () {
+                            var args = Array.prototype.slice.call(arguments);
+                            callback.apply(this, partialArgs.concat(args));
+                        }
+                    }
+
+                    var resolverDecorate = function (state) {
+                        argsData = Array.prototype.slice.call(arguments, 1);
+                        var newPromise = argsData[0];
+                        if (state == "Resolved" && newPromise instanceof DXPromise) {
+                            newPromise.then(resolve, reject);
+                            return;
+                        }
+                        setState(state);
+                        emitListener();
+                    }
+                    this.then = function (sucess, fail) {
+                        sucess = sucess || noop;
+                        fail = fail || noop;
+                        return new DXPromise(function (newResolve, newReject) {
+                            var sucessCallback = function () {
+                                try {
+                                    var result = sucess.apply(this, arguments);
+                                    if (result && result instanceof DXPromise) {
+                                        result.then(newResolve, newReject);
+                                    } else {
+                                        newResolve.apply(this, arguments);
+                                    }
+                                } catch (e) {
+                                    newReject(e);
+                                }
+                            }
+                            var failCallback = function () {
+                                try {
+                                    var result = fail.apply(this, arguments);
+                                } finally {
+                                    newReject.apply(this, arguments);
+                                }
+                            }
+                            addDone(sucessCallback);
+                            addFail(failCallback);
+                        });
+                    }
+                    this.catch = function (fail) {
+                        return this.then(null, fail);
+                    }
+                    var resolve = partial(resolverDecorate, "Resolved");
+                    var reject = partial(resolverDecorate, "Rejected");
+                    var addDone = partial(addListener, "Resolved");
+                    var addFail = partial(addListener, "Rejected");
+                    try {
+                        resolver.call(this, resolve, reject);
+                    } catch (e) {
+                        reject(e);
+                    }
+                }
+                DXPromise.reject = function (promise) {
+                    if (promise instanceof DXPromise) {
+                        return promise;
+                    }
+                    if (promise.then) {
+                        return new DXPromise(promise.then);
+                    } else {
+                        return new DXPromise(function (resolve, reject) {
+                            reject(promise);
+                        });
+                    }
+                }
+                DXPromise.resolve = function (promise) {
+                    if (promise instanceof DXPromise) {
+                        return promise;
+                    }
+                    if (promise.then) {
+                        return new DXPromise(promise.then);
+                    } else {
+                        return new DXPromise(function (resolve) {
+                            resolve(promise);
+                        });
+                    }
+                }
+                DXPromise.all = function () {
+                    var promiseList = Util.flatten(arguments);
+                    return new DXPromise(function (resolve, reject) {
+                        var argList = [];
+                        var success = Util.after(promiseList.length, function () {
+                            resolve.apply(this, argList);
+                        });
+                        var fail = Util.once(function () {
+                            reject.apply(this, arguments);
+                        });
+                        var successArgs = function () {
+                            argList.push(Util.slice(arguments));
+                            success();
+                        }
+                        while (promiseList.length) {
+                            DXPromise.resolve(promiseList.shift()).then(successArgs).catch(fail);
+                        }
+
+                    });
+                }
+                DXPromise.race = function () {
+                    var promiseList = Util.flatten(arguments);
+                    return new DXPromise(function (resolve, reject) {
+                        var success = Util.once(function () {
+                            resolve.apply(this, arguments);
+                        });
+                        var fail = Util.once(function () {
+                            reject.apply(this, arguments);
+                        });
+                        while (promiseList.length) {
+                            DXPromise.resolve(promiseList.shift()).then(success).catch(fail);
+                        }
+
+                    });
+                }
+                return DXPromise;
+            })();
+
+            // 类
+            var Class=(function () {
+                var ClassLists = {}, noop = Util.noop;
+                var Class = function (className, classBody) {
+                    if (Util.hasOwn(ClassLists,className))
+                    {                        
+                        return getInstance(className,Util.slice(arguments,1));
+                    }
+                    var proto;
+                    if (Util.isFunction(classBody)) {
+                        proto = classBody();
+                    } else {
+                        proto = classBody;
+                    }
+                    return registerClass(className, proto);
+                }
+                var registerClass = function (className,proto)
+                {
+                    var subClass = proto.constructor || function () {};
+                    subClass.prototype = Util.create(proto);
+                    subClass.prototype.constructor = subClass;
+                    subClass.inherit = inherit;
+                    subClass.extend = exntend;
+                    ClassLists[className] = subClass;
+                    return subClass;
+                }
+                var exntend = function ()
+                {
+                    Util.extend.apply(this.prototype, arguments);
+                    return this;
+                }
+                var getInstance = function (className, args)
+                {
+                    var subClass = getClass(className), len = args.length;
+                    switch(len)
+                    {
+                        case 0:
+                            return new subClass();
+                        case 1:
+                            return new subClass(args[0]);
+                        case 2:
+                            return new subClass(args[0], args[1]);
+                        case 3:
+                            return new subClass(args[0], args[1], args[2]);
+                        case 4:
+                            return new subClass(args[0], args[1], args[2], args[3]);
+                        case 5:
+                            return new subClass(args[0], args[1], args[2], args[3], args[4]);
+                        case 6:
+                            return new subClass(args[0], args[1], args[2], args[3], args[4], args[5]);
+                        case 7:
+                            return new subClass(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                        case 8:
+                            return new subClass(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+                        default:
+                            return new subClass();
+                    }
+                }
+                var getClass=function(className)
+                {
+                    if (!Util.hasOwn(ClassLists,className))
+                    {
+                        throw new Error("该类不存在");
+                    }
+                    return ClassLists[className];
+                }
+                var getClassProto = function (target) {
+                    return Util.getProto(target.prototype);
+                }
+                var inherit = function (className) {                    
+                    var that = this, proto = getClassProto(that), parentClass = getClass(className), parentProto = parentClass.prototype;
+                    Util.extend(that.prototype, parentProto, proto);
+                    that.prototype.super = parentClass;
+                    return that;
+                }           
+                return Class; 
+            })();
+
+            // 延迟对象    
+            Class("Deferred", function () {
+
+                return {
+                    constructor:function()
+                    {
+
+                    }
+                };
+            });
+            Class("Observer", {
+                constructor: function () {
+                    this.events = {};
+                },
+                on: function (eventName, handler, context, one) {
+                    var that = this, events = that.events, list = events[eventName] || (events[eventName]=[]);                  
+                    if (Util.isObject(eventName))
+                    {
+                        for (var name in eventName)
+                        {
+                            that.on(name, eventName[name], context, one);
+                        }
+                        return;
+                    }
+                    list.push({
+                        handler: handler,
+                        context: context || that,
+                        one:!!one
+                    });
+                },
+                once: function (eventName, handler, context)
+                {
+                    this.on(eventName, handler, context, true);
+                },
+                remove:function(eventName,handler)
+                {
+                    var that = this, events = that.events, list = events[eventName] || [];
+                    if (!handler)
+                    {
+                        events[eventName] = [];
+                        return;
+                    }
+                    Util.remove(list, function (e) {
+                        return e.handler == handler;
+                    })
+                },
+                _triggerHandler: function (eventName)
+                {
+                    var that = this,result, events = that.events, orgList = events[eventName] || [], list = orgList.slice(), handler, len = list.length, i = 0, args = Util.slice(arguments, 1);
+                    for (; i < len; i++) {
+                        result == list[i].handler.apply(list[i].context, args);
+                        if (list[i].one) {
+                            orgList.splice(i, 1);
+                        }
+                    }
+                    return result;
+                },
+                trigger: function (eventName) {
+                    var args = [eventName].concat(Util.slice(arguments, 1)), result = false;
+                    result = this._triggerHandler.apply(this, args);
+                    if (result) {
+                        args.unshift("*");
+                        this._triggerHandler.apply(this, args);
+                    }
+                    return result;
+                }
+            });
+            Class("Parent", {
+                constructor: function (name, age)
+                {
+                    this.name = name || "未定义";
+                    this.age = age || "未定义";
+                },
+                show:function()
+                {
+                    console.log("名称:"+this.name+",年龄:"+this.age);
+                },
+                empty:function(){}
+            });
+            Class("Child", {
+                constructor: function (name, age) {
+                    this.super(name, age);
+                    this.observer = Class("Observer");
+                },
+                show: function () {
+                    console.log("1名称:" + this.name + ",1年龄:" + this.age);
+                }
+            }).inherit("Parent").extend({
+                show:function()
+                {
+                    console.log("2名称:" + this.name + ",2年龄:" + this.age);
+                }
+            });
+            var _Child = Class("Child", "李三", 18);
+            _Child.show();
+         
+
+            Util.Callbacks=(function () {
+     
+                var parseFlags = function (flags)
+                {
+                    flags = flags || '';
+                    var result = {
+                        once: false,
+                        memory: false,
+                        unique: false,
+                        stopOnFalse: false
+                    };
+                    if(Util.isObject(flags))
+                    {
+                        result = Util.extend(result, flags);
+                    } else {                    
+                       Util.forEach(flags.split(' '), function (name) {
+                           result[name] = true;
+                       });
+                    }
+                    return result;
+                }
+                /*
+                 once: 确保这个回调列表只执行（ .fire() ）一次(像一个递延 Deferred).
+                 memory: 保持以前的值，将添加到这个列表的后面的最新的值立即执行调用任何回调 (像一个递延 Deferred).
+                 unique: 确保一次只能添加一个回调(所以在列表中没有重复的回调).
+                 stopOnFalse: 当一个回调返回false 时中断调用
+                 **/
+
+                var StateFactory=function()
+                {
+
+                }
+                StateFactory.prototype.add=function()
+                {
+
+                }
+  
+
+
+                var Callbacks = function (flags)
+                {
+                    flags = parseFlags(flags);
+                    var once = flags.once,
+                        memory = flags.memory,
+                        unique = flags.unique,
+                    stopOnFalse = flags.stopOnFalse,
+                    fired,
+                    locked,
+                    context=null,
+                    fireArgs=[],
+                    list = [],
+                    add=function(handler)
+                    {
+                        if (!unique || unique && list.indexOf(handler) == -1)
+                        {
+                            list.push(handler);
+                        }
+                    },
+                    fire=function()
+                    {
+                        if (once && fired)
+                        {
+                            return;
+                        }
+                        var i = 0, len = list.length, result, argLen = fireArgs.length;
+                        while (argLen--) {
+                            for (; i < len; i++) {
+                                result = list[i].apply(context, fireArgs[argLen]);
+                                if (stopOnFalse && result == false) {
+                                    break;
+                                }
+                            }
+                        }
+                        fired = true;
+                    },
+                    self = {
+                        add:function()
+                        {
+                            if (fired) {
+                                return;
+                            }
+                            var callbacks = Util.flatten(arguments), len = callbacks.length,i=0;
+                            for (; i < len;i++)
+                            {
+                                add(callbacks[i]);
+                            }
+                            return this;
+                        },
+                        fire:function()
+                        {
+                            fireArgs.push(Util.slice(arguments));
+                            fire();
+                        },
+                        fired: function ()
+                        {
+                            return fired;
+                        },
+                        fireWith:function(args,context)
+                        {
+                            fireArgs.push(args);
+                            fire();
+                        },
+                        disable:function()
+                        {
+
+                        },
+                        disabled:function()
+                        {
+
+                        },
+                        empty:function()
+                        {
+
+                        },
+                        has:function()
+                        {
+
+                        },
+                        lock:function()
+                        {
+
+                        },
+                        locked:function()
+                        {
+
+                        }
+
+
+                    };
+                    return self;
+                }
+                //回调列表中添加一个回调或回调的集合。
+                Callbacks.prototype.add = function (callbacks)
+                {
+
+                }
+                //禁用回调列表中的回调
+                Callbacks.prototype.disable = function () {
+
+                }
+                //确定回调列表是否已被禁用。
+                Callbacks.prototype.disabled = function () {
+
+                }
+                //从列表中删除所有的回调.。
+                Callbacks.prototype.empty = function () {
+
+                }
+                //用给定的参数调用所有的回调.。
+                Callbacks.prototype.fire = function () {
+
+                }
+                //访问给定的上下文和参数列表中的所有回调。
+                Callbacks.prototype.fired = function () {
+
+                }
+                //访问给定的上下文和参数列表中的所有回调。。
+                Callbacks.prototype.fireWith = function () {
+
+                }
+
+                //确定列表中是否提供一个回调。。
+                Callbacks.prototype.has = function () {
+
+                }
+                //确定回调列表是否已被锁定。。。
+                Callbacks.prototype.locked = function () {
+
+                }
+
+                //从回调列表中的删除一个回调或回调集合。。。。
+                Callbacks.prototype.remove = function () {
+
+                }
+                return Callbacks;
+ 
+            }());
+
+            var SA=function()
+            {
+                this.age = 129;
+            }
+            SA.prototype.data = '111111';
+            
+            var sa = new SA();
+
+
+
+            var _callBack = Util.Callbacks('once');
+
+            function _callBack1(name) {
+                console.log('1111111111:'+name);
+            }
+            function _callBack2(name) {
+                console.log('222222222:'+name);
+            }
+            function _callBack3(name) {
+                console.log('333333333:' + name);
+            }
+            _callBack.add(_callBack1);
+            _callBack.add(_callBack2);
+            _callBack.fire('李三')
+            _callBack.add(_callBack3);
+
+            _callBack.fire('李四')
+
+            //var DXPromise = Util.Promise;
+            
+            //var _promise = new DXPromise(function (resolve, reject) {
+
+            //    resolve(2);
+
+            //});
+            //_promise.then(function () {
+            //    console.log('成功');
+            //    return new DXPromise(function (resolve) {
+            //        setTimeout(function () {
+            //            resolve(4);
+            //        }, 1000)
+            //    });
+            //}).then(function () {
+            //    console.log('成功2');
+            //}).catch(function () {
+            //    console.log('异常');
+            //});
+
+            //var _promiseAll = DXPromise.all(['aaa', {
+            //    then: function (resolve)
+            //    {
+            //        setTimeout(function () {
+            //            resolve('bbbbb');
+            //        }, 2000);
+            //    }
+            //}, {
+            //    then: function (resolve) {
+            //        setTimeout(function () {
+            //            resolve('cccccc');
+            //        }, 3000);
+            //    }
+            //}]);
+            //_promiseAll.then(function (arg,arg2,arg3) {
+
+            //    console.log(arg[0]);
+            //    console.log(arg2[0]);
+            //    console.log(arg3[0]);
+            //});
+
+            //var _promiseRace = DXPromise.race([{
+            //    then: function (resolve) {
+            //        setTimeout(function () {
+            //            resolve('bbbbb');
+            //        }, 2000);
+            //    }
+            //}, {
+            //    then: function (resolve, reject) {
+            //        setTimeout(function () {
+            //            reject('cccccc');
+            //        },1000);
+            //    }
+            //}]);
+            //_promiseRace.then(function (name) {
+            //    console.log(name); 
+            //}).catch(function (name) {
+            //    console.log('失败:'+name);
+            //});
+
+
+            //var _DXPromise = new DXPromise(function (resolve, reject) {
+            //    reject('哈哈');
+            //});
+            //_DXPromise.then(function (value) {
+            //    console.log('成功:'+value);
+            //},function (value) {
+            //    console.log('失败:'+value);
+            //}).catch(function (e) {
+            //    console.log('异常:' + e);
+            //});
+            
+        
+
+
+
+            //var _DXPromise2 = new DXPromise(function (resolve, reject) {
+            //    resolve(_DXPromise);
+            //});
+            //_DXPromise.then(function (value) {
+            //    console.log('成功2:' + value);
+            //    return new DXPromise(function (resolve, reject) {
+            //        reject('李三失败');
+            //    });
+            //}, function (value) {
+
+            //    console.log('失败2:' + value);
+            //}).then(function (value) {
+            //    console.log(value);
+            //}, function (value) {
+            //    console.log(value);
+            //});
+
+       
+          
+        
+    </script>
+</body>
+</html>

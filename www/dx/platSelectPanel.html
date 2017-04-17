@@ -1,0 +1,482 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="all.css" rel="stylesheet" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="masa.js"></script>
+    <meta charset="utf-8" />
+
+
+    <style>
+    
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <h4>{{title}}</h4>
+        <div class="filter-box" style="display:block">
+            <div class="filter">
+                <!-- B filter groups -->
+                <div class="filter-groups">
+                    <!-- B row -->
+                    <div class="filter-row">
+                        <div class="filter-head">汇总方式</div>
+                        <div class="filter-body">
+                            <span class="check-box"><label><input type="radio" name="radio1">汇总方式</label></span>
+                        </div>
+                    </div>
+                    <!-- E row -->
+                    <!-- B row -->
+                    <div class="filter-row">
+                        <div class="filter-head">时间范围</div>
+                        <div class="filter-body">
+                            <div class="calendar-box">
+                                <div class="calendar"><input type="text" placeholder="请选择开始时间"></div>
+                                <span class="help-margin">至</span>
+                                <div class="calendar"><input type="text" placeholder="请选择结束时间"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- E row -->
+                    <!-- B row -->
+                    <div class="filter-row">
+                        <div class="filter-head">房屋属性</div>
+                        <div class="filter-body">
+                            <span class="check-box"><label><input type="radio" name="radio1">新房</label></span>
+                            <span class="check-box"><label><input type="radio" name="radio1">二手房</label></span>
+                        </div>
+                    </div>
+                    <!-- E row -->
+                    <!-- B row -->
+                    <masa-districtplat></masa-districtplat>
+                    <!-- E filter-children -->
+                    <!-- B finder row -->
+                    <!-- E finder row -->
+                </div>
+                <!-- E filter groups -->
+                <!-- B more -->
+                <div class="filter-more-switch">－隐藏更多条件</div>
+                <!-- E more -->
+                <!-- B row groups -->
+                <div class="filter-groups" style="display:none;">
+                    <div class="filter-row">
+                        <div class="filter-head">行政区</div>
+                        <div class="filter-body">
+                            <span class="check-box"><label><input type="checkbox">全部</label></span>
+                            <span class="check-box"><label><input type="checkbox">内环内</label></span>
+                            <span class="check-box"><label><input type="checkbox">内中环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">外郊环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">郊环以外</label></span>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-head">环线</div>
+                        <div class="filter-body">
+                            <span class="check-box"><label><input type="checkbox">全部</label></span>
+                            <span class="check-box"><label><input type="checkbox">内环内</label></span>
+                            <span class="check-box"><label><input type="checkbox">内中环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">外郊环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">郊环以外</label></span>
+                        </div>
+                    </div>
+                    <div class="filter-row bg">
+                        <div class="filter-head">板块</div>
+                        <div class="filter-body">
+                            <span class="check-box"><label><input type="checkbox">全部</label></span>
+                            <span class="check-box"><label><input type="checkbox">内环内</label></span>
+                            <span class="check-box"><label><input type="checkbox">内中环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">外郊环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">郊环以外</label></span>
+                        </div>
+                    </div>
+                    <div class="filter-row bg">
+                        <div class="filter-head">物业</div>
+                        <div class="filter-body">
+                            <span class="check-box"><label><input type="checkbox">全部</label></span>
+                            <span class="check-box"><label><input type="checkbox">内环内</label></span>
+                            <span class="check-box"><label><input type="checkbox">内中环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">外郊环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">郊环以外</label></span>
+                        </div>
+                    </div>
+                    <div class="filter-row bg">
+                        <div class="filter-head">房型</div>
+                        <div class="filter-body">
+                            <span class="check-box"><label><input type="checkbox">全部</label></span>
+                            <span class="check-box"><label><input type="checkbox">内环内</label></span>
+                            <span class="check-box"><label><input type="checkbox">内中环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">外郊环间</label></span>
+                            <span class="check-box"><label><input type="checkbox">郊环以外</label></span>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-head">面积</div>
+                        <div class="filter-body">
+                            <input type="text" class="form-input"><span class="help-margin">至</span><input type="text" class="form-input"><span class="help-margin">平方米</span>
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-head">面积</div>
+                        <div class="filter-body">
+                            <div class="select">
+                                <select name="" id="">
+                                    <option value="">请选择</option>
+                                    <option value="">请选择</option>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- E row groups -->
+            </div>
+            <div class="filter-bottom-btn">
+                <button type="button" class="btn btn-primary js-filter-btn">确 认</button>
+                <button type="button" class="btn btn-warning js-cancel-btn">取 消</button>
+            </div>
+            <div class="btn-close-filter"><i class="iconfont icon-angle-double-up"></i></div>
+        </div>
+
+
+
+
+
+    </div>
+   
+
+        <script type="text/template" id="component">
+            <div class="masa-components">
+
+                <div v-if="items.length>0">
+                    <span class="check-box" v-for="(item,index) in items"><label><input type="checkbox" v-bind:value="item.value" v-bind:checked="item.checked"><b>{{item.text}}</b></label></span>
+                </div>
+                <div v-else="isLoadComplete" v-html="loadtext"></div>
+            </div>
+        </script>
+    <script type="text/template" id="component2">
+        <div class="masa-components">
+
+            <div class="filter-row">
+                <div class="filter-head">行政区域</div>
+                <div class="filter-body hidden-check-box ">
+                    <masa-checkboxlist ref="districtCheckbox" v-bind:source="districtSource" v-bind:selected-value="districtValues" v-bind:default-labels="[{id:'',name:'全部'}]" value-field="id" text-field="name"></masa-checkboxlist>
+                </div>
+            </div>
+            <!-- E row -->
+            <!-- B filter-children -->
+            <div class="filter-children" v-show="showPlat">           
+                  <p>
+                      <masa-checkboxlist ref="platCheckbox"  v-bind:auto-bind="false" v-bind:source="platSource" v-bind:selected-value="platValues" v-bind:default-labels="[{id:'',name:'全部'}]" value-field="id" text-field="name"></masa-checkboxlist>
+                  </p>
+             
+            </div>
+            <div class="filter-row finder" >
+                <div class="filter-head">当前选择</div>
+                <div class="filter-body hidden-check-box button-checkbox">
+                    <!-- 隐藏checkbox -->
+                    <template v-for="item in selectLabels">
+                        <span class="check-box remove-onelabel-dx" v-bind:data-value="item.value" v-bind:data-level="item.level"><label v-bind:title="item.title">{{item.text}}</label></span>
+                    </template>
+           
+                    <a href="javascript:void(0)" class="clear-all">清除全部</a>
+                </div>
+            </div>
+        </div>
+    </script>
+    <style>
+        .filter-row .filter-body.hidden-check-box .check-box .checked + b {
+    color: #3aa6fa;
+    text-decoration: underline;
+}
+        .filter-row .filter-body.hidden-check-box .check-box input:checked + b {
+            color: #fff;
+            text-decoration: none;
+        }
+        .filter-children p .check-box input:checked + b {
+ color: #fff;
+            text-decoration: none;
+}
+    </style>
+        <script>
+
+
+            var component = {
+                template: $('#component').html(),
+                data: function () {
+                    return {
+                        loadtext: "正在加载中...",
+                        initValue: this.selectedValue.slice(),
+                        values: this.selectedValue.slice(),
+                        items: []
+                    };
+                },
+                computed: {
+
+                },
+                watch: {},
+                methods: {
+                    filter: function () {
+                        return true;
+                    },
+                    toggleValue: function (value) {
+                        var item = Masa._.find(this.items, function (d) { return d.value == value; });
+                        if (item) {
+                            item.checked = !item.checked;
+                        }
+                        this.getCheckedValues();
+                    },
+                    checkedValue: function (value) {
+                        var item = Masa._.find(this.items, function (d) { return d.value == value; });
+                        if (item) {
+                            item.checked = true;
+                        }
+                        this.getCheckedValues();
+                    },
+                    unCheckedValue: function (value) {
+                        var item = Masa._.find(this.items, function (d) { return d.value == value; });
+                        if (item) {
+                            item.checked = false;
+                        }
+                        this.getCheckedValues();
+                    },
+                    getCheckedValues: function () {
+                        this.values = Masa._.map(Masa._.filter(this.items, { checked: true }), "value");
+                        return this.values;
+                    },
+                    unCheckedAll: function (filter) {
+                        filter = filter || this.filter;
+                        Masa._.each(this.items, function (d) { if (filter(d)) { d.checked = false; } });
+                        this.getCheckedValues();
+                    },
+                    checkedAll: function (filter) {
+                        filter = filter || this.filter;
+                        Masa._.each(this.items, function (d) { if (filter(d)) { d.checked = true; } });
+                        this.getCheckedValues();
+                    },
+                    showDefaultData: function () {
+                        var that = this, items = [], edata = that.defaultLabels;
+                        Masa._.each(edata, function (d) {
+                            var item = {};
+                            item.value = d[that.valueField];
+                            item.text = d[that.textField];
+                            item.orgData = d;
+                            item.checked = selectedAll ? true : that.initValue.length ? Masa._.every(that.initValue, function (v) { return v == item.value; }) : false;
+                            items.push(item);
+                        });
+                        that.items = items;
+                        that.getCheckedValues();
+                    },
+                    read: function (data) {
+                        var that = this;
+                        that.items = [];
+                        that.values = that.initValue.slice();
+                        that.loadtext = "正在加载中....";
+                        that.source.read(data);
+                    }
+                },
+                props: {
+                    source: Masa.DataSource,
+                    autoBind: {
+                        type: Boolean,
+                        default: true
+                    },
+                    defaultLabels: {
+                        type: Array,
+                        default: function () {
+                            return [];
+                        }
+                    },
+                    valueField: {
+                        type: String,
+                        default: "value"
+                    },
+                    selectedValue: {
+                        type: Array,
+                        default: function () {
+                            return [];
+                        }
+                    },
+                    textField: {
+                        type: String,
+                        default: "text"
+                    },
+                    selectedAll: {
+                        type: Boolean,
+                        default: false
+                    }
+                },
+                beforeCreate: function () { },
+                created: function () { },
+                mounted: function () {
+                    var that = this, selectedAll = that.selectedAll;
+                    that.source.then(function (data) {
+                        if (data.length <= 0) {
+                            that.laodtext = '';
+                            return;
+                        }
+                        var items = [], edata = that.defaultLabels.concat(data);
+                        Masa._.each(edata, function (d) {
+                            var item = {};
+                            item.value = d[that.valueField];
+                            item.text = d[that.textField];
+                            item.orgData = d;
+                            item.checked = selectedAll ? true : that.initValue.length?Masa._.every(that.initValue, function (v) { return v == item.value; }):false;
+                            items.push(item);
+                        });
+                        that.items = items;
+                        that.getCheckedValues();
+                        that.$emit('refresh');
+                    }, function () {
+                        that.loadtext = '加载数据失败,请刷新!<a href="javascript:void(0)" class="refreshLoad" style="color:#0dd78a">点击刷新</a>';
+                        that.$emit('fail');
+                    });
+                    if (that.autoBind) {
+                        that.source.read();
+                    }
+                    $(that.$el).on('change', ':checkbox', function () {
+                        that.toggleValue(this.value);
+                        that.$emit('change', this.checked, this.value);
+                    });
+                    $(that.$el).on('click', 'a.refreshLoad', function () {
+                        that.loadtext = '正在加载中...';
+                        setTimeout(function () {
+                            that.source.read();
+                        }, 1000);
+                    });
+                },
+                destroyed: function () {
+                    $(this.$el).off();
+                }
+            };
+            Masa.Vue.component('masa-checkboxlist', component);
+
+            ///            'district': 'sys/dict/district?cityId=1', //行政区
+           // 'plate': 'sys/dict/plate', //板块
+            var component2 = {
+                template: $('#component2').html(),
+                data: function data() {
+                    return {
+                        districtSource: Masa.DataSource({
+                            transport: {
+                                name: "*",
+                                url: "http://172.18.84.65:8808/masa/a/sys/dict/district?cityId=1"
+                            }
+                        }),
+                        platSource: Masa.DataSource({
+                            transport: {
+                                name: "*",
+                                url: "http://172.18.84.65:8808/masa/a/sys/dict/plate",
+                                data: {
+                                    districtId: ''
+                                }
+                            }
+                        }),
+                        districtValues: [''],
+                        platValues: [],
+                        selectLabels: [],
+                        showPlat: false,
+                        showSelectPanel:false
+                    };
+                },
+                computed: {},
+                watch: {},
+                methods: {
+                    bindCheckboxEvent: function bindCheckboxEvent(name, filedname) {
+                        var that = this;
+                        that.$refs[name].$watch('values', function (value) {
+                            that[filedname] = Masa._.filter(value, function (v) {
+                                return v != '';
+                            });                     
+                            that.refreshLabels();
+                        });
+                        that.$refs[name].$on('change', function (checked, value) {
+                            if (value == '' && checked) {
+                                that.$refs[name].unCheckedAll(function (v) {  return v.value != ''; });
+                            } else if (value != '' && checked ) {
+                                that.$refs[name].unCheckedValue('');
+                            }
+                            that.$refs[name].$emit('select', checked, value);
+                        });
+                    },
+                    refreshLabels:function()
+                    {
+                        var that = this;
+                        var newLabels = [];
+                 
+                       newLabels = Masa._.map(Masa._.filter(that.$refs.districtCheckbox.items, { checked: true }), function (d) {
+                                return { text: d.text, value: d.value, level: 1,title:"行政区" };
+                       });
+                       newLabels = Masa._.concat(newLabels, Masa._.map(Masa._.filter(that.$refs.platCheckbox.items, { checked: true }), function (d) {
+                           return { text: d.value == '' ? d.text + '(板块)' : d.text, value: d.value, level: 2, title: "板块区" };
+                       }));
+                       that.selectLabels = newLabels;
+                       that.showSelectPanel = newLabels.length > 0;
+                    }
+                },
+                props: {},
+                beforeCreate: function beforeCreate() { },
+                created: function created() { },
+                mounted: function mounted() {
+                    var that = this;
+                    that.bindCheckboxEvent("districtCheckbox", "districtValues");
+                    that.bindCheckboxEvent("platCheckbox", "platValues");
+                    that.$refs.platCheckbox.$on('fail', function () {
+                        that.showPlat = false;
+                    });
+                    that.$refs.platCheckbox.$on('refresh', function () {
+                        that.showPlat = true;
+                    });
+                    that.platSource.options.parseData=function(d)
+                    {
+
+                    }
+                    that.$refs.districtCheckbox.$on("select", function (checked, value) {
+                        that.showPlat = true;
+                        if (this.values.length > 0) {
+                            that.platSource.read({
+                                districtId: this.values.join(',')
+                            });
+                        } else {
+                            that.$refs.platCheckbox.unCheckedAll();
+                            that.showPlat = false;
+                        }
+                    });
+                    $(that.$el).on('click', '.clear-all', function () {
+                        that.$refs.districtCheckbox.unCheckedAll();
+                        that.$refs.districtCheckbox.$emit('change', false, '');
+                    });
+                    $(that.$el).on('click', '.remove-onelabel-dx', function (e) {
+                        var value = e.currentTarget.getAttribute('data-value'), level = e.currentTarget.getAttribute('data-level');;
+                        if (level == 1) {
+                            that.$refs.districtCheckbox.unCheckedValue(value);
+                        }
+                        else if (level == 2)
+                        {
+                            that.$refs.platCheckbox.unCheckedValue(value);
+                        }
+                   
+                    });
+            
+                },
+                destroyed: function destroyed() { }
+            };
+            Masa.Vue.component('masa-districtplat', component2);
+            var view = new Vue({
+                data:{title:"实例"},
+                el: "#content"
+            });
+
+         
+
+        
+        </script>
+</body>
+</html>

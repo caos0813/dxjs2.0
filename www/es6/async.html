@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <script>
+  
+        var getName=function()
+        {
+            return new Promise(function(resolve,reject){
+            
+                setTimeout(function(){
+                    resolve('bbbbbbb');
+                },1000)
+            });
+        }
+     async function getBase() {
+       var name=await getName();
+       console.log(name);
+        return 'aaaa';
+    }
+
+    getBase().then(function(name){
+
+    console.log(name);
+
+    });
+
+
+    function _asyncToGenerator(fn) {
+        return function () { 
+            var gen = fn.apply(this, arguments);
+            return new Promise(function (resolve, reject) {
+                function step(key, arg) 
+                {
+                    try {
+                        var info = gen[key](arg);
+                        var value = info.value; 
+                    } catch (error) { 
+                        reject(error); 
+                        return; 
+                    } 
+                    if (info.done) {
+                        resolve(value);
+                    } else { 
+                        return Promise.resolve(value).then(function (value) { 
+                            step("next", value);
+                        },
+                        function (err) { 
+                            step("throw", err); }); 
+                    } 
+                } 
+                return step("next"); }); 
+        };
+    }
+
+
+
+
+    </script>
+</body>
+</html>

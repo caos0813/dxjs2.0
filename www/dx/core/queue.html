@@ -1,0 +1,738 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <script>
+
+        // 栈
+        var Stack=function()
+        {
+            this.items = [];
+        }
+        Stack.prototype.push = function (value)
+        {
+           return this.items.push(value);
+        }
+        Stack.prototype.pop = function () {
+            return this.items.pop();
+        }
+        Stack.prototype.peek = function () {
+            return this.items[this.items.length-1];
+        }
+        Stack.prototype.clean = function () {
+            return this.items=[];
+        }
+        Stack.prototype.isEmpty = function () {
+            return this.items.length==0;
+        }
+        Stack.prototype.size = function () {
+            return this.items.length;
+        }
+        // 队列
+        var Queue = function () {
+            this.items = [];
+        }
+        Queue.prototype.enqueue = function (value) {
+            return this.items.push(value);
+        }
+        Queue.prototype.dequeue = function () {
+            return this.items.shift();
+        }
+        Queue.prototype.front = function () {
+            return this.items[0];
+        }
+        Queue.prototype.clean = function () {
+            return this.items = [];
+        }
+        Queue.prototype.size = function () {
+            return this.items.length;
+        }
+
+        Queue.prototype.isEmpty = function () {
+            return this.items.length == 0;
+        }
+
+        // 优先队列
+        var QueueElement=function(element,priority)
+        {
+            this.element = element;
+            this.priority = priority;
+        }
+        var PriorityQueue = function () {
+            this.items = [];
+        }
+        PriorityQueue.prototype.enqueue = function (element, priority) {
+            var element = new QueueElement(element, priority),i=0,size=this.size(),items=this.items,item,added=false;
+            for (; i < size;i++)
+            {
+                item=items[i];
+                if (element.priority < item.priority)
+                {
+                    items.splice(i, 0, element);
+                    added = true;
+                    break;
+                }
+            }
+            if (!added)
+            {
+                items.push(element);
+            }
+        }
+        PriorityQueue.prototype.dequeue = function () {
+            return this.items.shift();
+        }
+        PriorityQueue.prototype.front = function () {
+            return this.items[0];
+        }
+        PriorityQueue.prototype.clean = function () {
+            return this.items = [];
+        }
+        PriorityQueue.prototype.size = function () {
+            return this.items.length;
+        }
+        PriorityQueue.prototype.isEmpty = function () {
+            return this.items.length == 0;
+        }
+        // 链表
+        var LinkedNode = function (element)
+        {
+            this.element = null;
+            this.next = null;
+        }
+        var LinkedList=function()
+        {
+            var head=null,length=0;
+            this.append = function (element)
+            {
+                var node = new LinkedNode(element),current=head;
+                if(head==null)
+                {
+                    head = node;
+                } else {
+                    while (current && current.next)
+                    {
+                        current = current.next;
+                    }
+                    current.next = node;
+                }
+                length++;
+            }
+            this.getHead=function()
+            {
+                return head;
+            }
+            this.size=function()
+            {
+                return length;
+            }
+            this.isEmpty = function () {
+                return length==0;
+            }
+            this.indexOf = function (element) {
+                var current = head,result=-1,index=0;
+                while(current)
+                {
+                    if(current.element===element)
+                    {
+                        result = index;
+                        break;
+                    }
+                    current = current.next;
+                    index++;
+                }
+                return result;
+            }
+            this.remove = function (element) {
+                var index=this.indexOf(element);
+                return this.removeAt(index);
+            }
+            this.removeAt=function(position)
+            {
+                var current = head, index = 0, previous;
+                if (position < length && length > 0) {
+                    if (position == 0) {
+                        head = current.next;
+                    } else {
+                        //0 1 2 3
+                        while (index++ < position) {
+                            previous = current;
+                            current = current.next;
+                        }
+                        previous.next = current.next;
+                    }
+                    length--;
+                    return current.element;
+                } else {
+                    return null;
+                }
+            }
+            this.insert = function (position,element) {
+                var node = new LinkedNode(element), current=head,index=0,previous;
+                if (position <= length && position >= 0) {
+                    if (position == 0) {
+                        head = node;
+                        node.next = current;
+                    } else {
+                        while (index++ < position) {
+                            previous = current;
+                            current = previous.next;
+                        }
+                        previous.next = node;
+                        node.next = current;
+                    }
+                    length++;
+                }
+            }
+        }
+       
+
+        // 双向链表
+        var DoublyLinkedNode = function (element) {
+            this.element = null;
+            this.next = null;
+            this.prev = null;
+        }
+        var DoublyLinkedList=function()
+        {
+            var head = null,tail=null, length = 0;
+            this.append = function (element) {
+                var node = new DoublyLinkedNode(element), current = head;
+                if (head == null) {
+                    head = node;
+                } else {
+                    while (current && current.next) {
+                        current = current.next;
+                    }
+                    current.next = node;
+                    node.prev = current;
+                }
+                tail = node;
+                length++;
+            }
+            this.getHead = function () {
+                return head;
+            }
+            this.getTail= function () {
+                return tail;
+            }
+            this.size = function () {
+                return length;
+            }
+            this.isEmpty = function () {
+                return length == 0;
+            }
+            this.indexOf = function (element) {
+                var current = head, result = -1, index = 0;
+                while (current) {
+                    if (current.element === element) {
+                        result = index;
+                        break;
+                    }
+                    current = current.next;
+                    index++;
+                }
+                return result;
+            }
+            this.remove = function (element) {
+                var index = this.indexOf(element);
+                return this.removeAt(index);
+            }
+            this.removeAt = function (position) {
+                var current = head, index = 0, previous;
+                if (position < length && length > 0) {
+                    if (position == 0) {
+                        head = current.next;
+                    } else {
+                        //0 1 2 3
+                        while (index++ < position) {
+                            previous = current;
+                            current = current.next;
+                        }
+                        previous.next = current.next;
+                        current.next.prev = previous;
+                    }
+                    length--;
+                    return current.element;
+                } else {
+                    return null;
+                }
+            }
+            this.insert = function (position, element) {
+                var node = new DoublyLinkedNode(element), current = head, index = 0, previous;
+                if (position <= length && position >= 0) {
+                    if (position == 0) {
+                        if (!head) {
+                            head = node;
+                            tail = node;
+                        } else {
+                            head = node;
+                            node.next = current;
+                            current.prev = node;
+                        }
+                    } else {
+                        while (index++ < position) {
+                            previous = current;
+                            current = previous.next;
+                        }
+                        previous.next = node;
+                        node.next = current;
+                        node.prev = previous;
+                        current.prev = node;
+                    }
+                    length++;
+                }
+            }
+        }
+
+        // 集合
+        var Set=function()
+        {
+            this.items = {};
+        }
+        Set.prototype.has = function (value) {
+            return this.items.hasOwnProperty(value);
+        }
+        Set.prototype.add=function(value)
+        {
+            if(!this.has(value))
+            {
+                this.items[value] = value;
+            }
+        }
+
+        Set.prototype.size = function () {
+            return this.keys().length;
+        }
+        Set.prototype.remove = function (value) {
+            if (this.has(value)) {
+                delete this.items[value];
+                return true;
+            }
+            return false;
+        }
+        Set.prototype.clean = function (value) {
+            this.items = {};
+        }
+        Set.prototype.keys = function () {
+            return Object.keys(this.items);
+        }
+        Set.prototype.values = function () {
+            return this.keys();
+        }
+        Set.prototype.forEach = function (callback) {
+            var values = this.values();
+            return values.forEach(callback);
+        }
+        // 并集
+        Set.prototype.union=function(otherSet)
+        {
+            var unionSet = new Set();
+            this.forEach(function (v) {
+                unionSet.add(v);
+            });
+            otherSet.forEach(function (v) {
+                unionSet.add(v);
+            });
+            return unionSet;
+        }
+        // 交集
+        Set.prototype.intersection = function (otherSet) {
+            var intersectionSet = new Set(), that = this;
+            that.forEach(function (v) {
+                if (otherSet.has(v)) {
+                    intersectionSet.add(v);
+                }
+            });        
+            return intersectionSet;
+        }
+        // 差集
+        Set.prototype.difference = function (otherSet) {
+            var differenceSet = new Set(), that = this;
+            that.forEach(function (v) {
+                if (!otherSet.has(v)) {
+                    intersectionSet.add(v);
+                }
+            });
+            return differenceSet;
+        }
+        // 差集
+        Set.prototype.subset = function (otherSet) {
+            var differenceSet = new Set(), that = this;
+            if (that.size() != otherSet.size())
+            {
+                return false;
+            }
+            return that.values().every(function (v) {
+                return otherSet.has(v);
+            });
+        }
+        // 字典
+        var Dictionary=function()
+        {
+            this.items = {};
+        }
+        Dictionary.prototype.has = function (key) {
+            return this.items.hasOwnProperty(key);
+        }
+
+        Dictionary.prototype.set = function (key,value) {
+                this.items[key] = value;
+        }
+        Dictionary.prototype.get = function (key) {
+            if (this.has(key)) {
+                return this.items[key];
+            }
+            return null;
+        }
+
+        Dictionary.prototype.size = function () {
+            return this.keys().length;
+        }
+        Dictionary.prototype.remove = function (key) {
+            if (this.has(key)) {
+                delete this.items[key];
+                return true;
+            }
+            return false;
+        }
+        Dictionary.prototype.clean = function () {
+            this.items = {};
+        }
+        Dictionary.prototype.keys = function () {
+            return Object.keys(this.items);
+        }
+        // 散列表
+        var HashTable=function()
+        {
+            this.table = [];
+
+
+        }
+        HashTable.prototype.loseloseHashCode=function(key)
+        {
+            var hash = 5381;
+            for (var i = 0, len = key.length; i < len;i++)
+            {
+                hash =hash*33* key[i].charCodeAt(0);
+            }
+            return hash%1031;
+        }
+        HashTable.prototype.put = function (key, value) {
+            var position = this.loseloseHashCode(key);
+            console. log( position + ' - ' + key);
+            this.table[position] = value;
+        }
+        HashTable.prototype.get = function (key) {
+            return this.table[this.loseloseHashCode(key)];
+        }
+        HashTable.prototype.remove = function (key, value) {
+            this.table[key] = undefined;
+        }
+
+
+
+
+        // 二叉树搜索
+        var BinarySearchTree=function()
+        {
+
+            var Node=function(key)
+            {
+                this.key = key;
+                this.left = null;
+                this.right = null;
+
+            }
+
+        }
+        // 
+        function ArrayList(){ 
+            var array = [], count = 0; //{1}
+            this. insert = function( item){
+                //{2}
+                array. push( item); 
+            }; 
+            this.toString= function(){
+                //{3} 
+                return array.join();
+            };
+            this.getArray = function () {
+                //{3} 
+                return array;
+            };
+            this.getCount = function () {
+                //{3} 
+                return count;
+            };
+            var swap=function(index,index2)
+            {
+                var v = array[index2];
+                array[index2] = array[index];
+                array[index] = v;
+            }
+            //190
+            this.bubbleSort = function () {
+                var i, j, len = array.length, v;
+                for (i = 0; i < len - 1; i++) {
+                    for (j = i + 1; j < len; j++) {
+                        if (array[i] > array[j]) {
+                            swap(i, j);
+                        }
+                        count++;
+                    }
+                }
+            }
+           
+            // 380
+            this.bubbleSort2 = function () {
+                var i, j, len = array.length, v;
+                for (i = 0; i < len; i++) {
+                    for (j = 0; j < len-1; j++) {
+                        if (array[j] > array[j+1]) {
+                            swap(j, j + 1);
+                        }
+                        count++;
+                    }
+                }
+            }
+            // 190
+            this.bubbleSort3= function () {
+                var i, j, len = array.length, v;
+                for (i = 0; i < len; i++) {
+                    for (j = 0; j < len - 1-i; j++) {
+                        if (array[j] > array[j + 1]) {
+                            swap(j, j + 1);
+                        }
+                        count++;
+                    }
+                }
+            }
+            // 选择排序 190
+            this.selectionSort=function()
+            {
+                var i, j, len = array.length, v,min;
+                for (i = 0; i < len - 1; i++) {
+                    min = i;
+                    for (j = i+1; j < len; j++) {
+                        if (array[min] > array[j]) {
+                            // swap(i, j);
+                            min = j;
+                        }
+                        count++;
+                    }
+                    if(i!=min)
+                    {
+                        swap(i, min);
+                        console.log("冒泡排序:" + array.toString());
+                 
+                    }
+                }
+            }
+            // 插入排序 175
+            this.insertionSort = function(){ 
+                var length = array. length, j, temp; 
+                for (var i= 1; i< length; i++){ 
+                    //{2}
+                    j = i; 
+                    //{3}
+                    temp = array[ i];
+                    //{4}
+                    while (j> 0 && array[ j- 1] > temp){ 
+                        //{5}
+                        array[ j] = array[ j- 1]; 
+                        //{6} 
+                        j--;
+                        count++;
+                    }
+                    array[ j] = temp; 
+                    //{7} 
+                }
+            };
+            this.insertionSort2 = function () {
+                var length = array.length, j, temp;
+                for (var i = 1; i < length; i++) {
+                    //{2}
+                    j = i+1;
+                    //{3}
+                    temp = array[i];
+                    //{4}
+                    while (j < length && array[j] < temp) {
+                        //{5}
+                        array[i] = array[j];
+                        array[j] = temp;
+
+                        //{6} 
+                        j++;
+                        count++;
+                    }
+
+                    //{7} 
+                }
+
+            };
+            // 归并排序
+            var merge=function(left,right)
+            {
+                var mergeArray = [],l=0,r=0,len=left.length,rlen=right.length;
+                while(l<len&&r<rlen)
+                {
+                    if(left[l]<right[r])
+                    {
+                        mergeArray.push(left[l++]);
+                    }else
+                    {
+                        mergeArray.push(right[r++]);
+                    }
+                    count++;
+                }
+                while(l<len)
+                {
+                    mergeArray.push(left[l++]);
+                }
+                while (r < rlen) {
+                    mergeArray.push(right[r++]);
+                }
+                return mergeArray;
+            }
+            var mergeSortRect=function(array)
+            {
+                var l, r, len = array.length, s;
+                if(len==1)
+                {
+                    return array;
+                }
+                s = Math.floor(len / 2);
+                l = array.slice(0, s);
+                r = array.slice(s, len);
+                return merge(mergeSortRect(l), mergeSortRect(r));
+            }
+            this.mergeSort=function()
+            {
+                array=mergeSortRect(array);
+            }
+            //  快速排序
+            this.quickSort=function()
+            {
+                quick(array, 0, array.length - 1);
+            }
+            var swapQuickStort = function (array, index, index2)
+            {
+                var v = array[index2];
+                array[index2] = array[index];
+                array[index] = v;
+            }
+            var partition = function (array, left, right)
+            {
+                var pivot = array[ Math. floor(( right + left) / 2)], //{8} 
+                    i = left, //{9} 
+                    j = right; //{10}
+                while (i <= j) { //{11}
+                    while (array[i] < pivot) { //{12}
+                        i++;
+                    }
+                    while (array[j] > pivot) { //{13} 
+                        j--;
+                    }
+                    if (i <= j) { //{14} 
+                        swapQuickStort(array, i, j); //{15}
+                        i++; j--;
+                    }
+                }
+                return i;
+            }
+            var quick = function (array, left, right) {
+                var index; //{1} 
+                if (array.length > 1) { //{2} 
+                    index = partition(array, left, right); //{3} 
+                    if (left < index - 1) { //{4} 
+                        quick(array, left, index - 1); //{5} } 
+                        if (index < right) { //{6} 
+                            quick(array, index, right); //{7} 
+                        }
+                    }
+                }
+            }
+
+            // 二分搜索
+            this.sortIndex=function(value)
+            {
+                var i = 0, end = array.length - 1,mid,element;
+                while(i<=end)
+                {
+                    mid = Math.floor((i + end) / 2);
+                    element = array[mid];
+                    if(element<value)
+                    {
+                        i =mid+1;
+                    } else if (element > value) {
+                        end=mid - 1;
+                    } else {
+                        return mid;
+                    }
+                }
+                return -1;
+            }
+            this.sortIndex2 = function (value) {
+                var i = 0, end = array.length - 1, mid, element;
+                while (end>=i) {
+                    if (array[i]==value) {
+                        return i;
+                    }
+                    if (array[end] == value) {
+                        return end;
+                    }
+                    i++;
+                    end--;
+                }
+                return -1;
+            }
+           
+
+        }
+
+        var array = new ArrayList();
+        for (var i = 20; i > 0;i--)
+        {
+           array.insert(i);
+        }
+        //var count = 0;
+        //array.getArray().sort(function (a, b) {
+        //    count++;
+        //    return a-b;
+        //});
+        //console.log("冒泡排序次数:"+count);
+        //console.log("冒泡排序次数:" + array.toString());
+
+        console.time("冒泡排序");
+        // 冒泡排序
+        console.log('开始前:'+array.toString());
+        array.mergeSort();
+        console.log('开始后:' + array.toString());
+        console.log('运算次数:' + array.getCount());
+        console.timeEnd("冒泡排序");
+
+
+        function fibonacci(num) {
+            if (num === 1 || num === 2) {
+                return 1;
+            }
+            return fibonacci(num - 1) + fibonacci(num - 2);
+        }
+
+        // 6           //5
+        // 5 4        // 4 3
+        //4 3 3 2     // 3 2 2 1
+        //3 2 2 1 2 1 2  //2 1 2 2 1
+        //2 1 2 2 1 2 1 2  // 2 1 2 2 1
+
+        
+
+
+    </script>
+</body>
+</html>
+

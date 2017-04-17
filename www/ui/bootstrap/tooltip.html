@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="../../../scripts/lib/jquery/jquery-3.1.js"></script>
+
+    <link href="../../../scripts/ui/bootstrap/bootstrap-3.3.7.css" rel="stylesheet" />
+    <script src="../../../scripts/ui/bootstrap/bootstrap-3.3.7.js"></script>
+</head>
+<body>
+
+
+<div style="margin-top:200px">
+   
+
+    <input  type="tel"  maxlength="11"  id="tel"/>
+</div>
+
+    <button id="btnTest">测试</button>
+
+  
+
+    <script>
+
+        function tooltip(selector,title,duration)
+        {
+            var element=$(selector);
+            element.tooltip({
+                title: title,
+                trigger: ''
+            });
+            element.tooltip('show');
+            setTimeout(function(){
+                element.tooltip('destroy');
+            },duration||2000);
+        }
+
+        $('#tel').tooltip({
+            title: "请输入空",
+            trigger: '',
+            viewport: {
+                selector: '#tel',
+                padding: 0
+            }
+        });
+                   
+        $('#btnTest').on('click', function () {
+
+
+            tooltip('#tel','请输入');
+        });
+
+                    
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+
+  <style>
+        .container
+    {
+         width:800px;
+         height:2000px;
+         border:solid 1px red;  
+         padding:20px;
+    }
+        #scrollContent{
+             width:100%;
+             height:100%;
+                     border:0px;  
+                     overflow:hidden;
+        }
+        .content
+        {
+            width:100%;
+            height:30px;
+        }
+        #scrollContent .content:nth-child(2n+1)
+        {
+            background-color:#d3d2d2;
+        }
+        #scrollbar
+        {
+            position:absolute;
+            background-color:blue;
+            top:0px;
+            right:0px;
+            height:30px;
+            width:20px;
+        }
+        #scrollContent2
+        {
+             width:600px;
+             height:600px;
+                     border:solid 3px blue;  
+                     position:relative;
+        }
+  </style>
+</head>
+<body>
+    <div sty></div>
+    <div id="container" class="container">
+        <div id="scrollContent2">
+
+
+
+            <div id="scrollbar"></div>
+            <div id="scrollContent">
+
+
+            </div>
+        </div>
+
+    </div>
+    <script>
+        var data = [];
+        for (let i = 0; i < 100;i++)
+        {
+            data.push(String(i).repeat(15));
+        }
+        var frames = document.createDocumentFragment();
+        data.forEach(function (d) {
+            var div = document.createElement('div');
+            div.className = 'content';
+            div.innerHTML = d;
+            frames.appendChild(div);
+        });
+        var scrollContent = document.getElementById('scrollContent');
+        var scrollbar = document.getElementById('scrollbar');
+        scrollContent.appendChild(frames);
+        function getHeight()
+        {
+
+        }
+        function setHiehgt(element,height)
+        {
+            element.style.height = height + 'px';
+        }
+        var height = scrollContent.clientHeight, scrollHeight = scrollContent.scrollHeight, barHeight;
+        barHeight = height / scrollHeight * height;
+        var sHeight = scrollHeight - height, sHeight2=height-barHeight;
+        setHiehgt(scrollbar, barHeight);
+
+        document.getElementById('scrollContent').addEventListener('wheel', function (e) {
+            console.log('deltaY :' + e.deltaY + ",deltaX:" + e.deltaX + ",deltaZ:" + e.deltaZ + ",detail:" + e.detail + ",deltaMode:" + e.deltaMode + ",wheelDelta:" + e.wheelDelta);
+      
+            var delta = -e.wheelDelta/120;
+            var offsetTop = scrollbar.offsetTop;
+            var scrollTop = scrollContent.scrollTop;
+
+          
+           var  delta1 = delta*10/100 * sHeight2;
+           var delta2 = delta*10/100 * sHeight;
+           delta1 += offsetTop;
+           delta2 += scrollTop;
+            delta1 = Math.min(Math.max(delta1, 0), sHeight2);
+            delta2 = Math.min(Math.max(delta2, 0), sHeight);
+            console.log("delta1:" + delta1);
+            scrollbar.style.top = delta1 + "px";
+            scrollContent.scrollTop = delta2;
+            e.preventDefault();
+        }, false);
+
+        //document.getElementById('container').addEventListener('click', function (e) {
+
+        //    alert('bbbbb');
+        //    e.preventDefault();
+        //});
+    </script>
+</body>
+</html>

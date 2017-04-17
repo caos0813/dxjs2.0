@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+
+ <style>
+        #container{
+                border:solid 1px blue;
+                width:400px;
+                height:400px;
+      }
+         #container.enter
+        {
+                 border:solid 1px red;
+      
+        }
+         .drag
+         {
+             width:150px;
+             height:150px;
+             background-color:blue;
+             margin-left:100px;
+         }
+          .draging
+         {
+
+             opacity:0.3;
+             position:absolute;
+  
+         }
+ </style>
+</head>
+<body>
+    <div draggable="true" id="dDrag" class="drag">
+        移动
+    </div>
+    <div id="container">
+
+    </div>
+
+    <script>
+        var eldDrag = document.getElementById('dDrag'), dragtarget, eventData = {};
+        //selectstart
+        //eldDrag.addEventListener('selectstart', function (e) {
+        //    e.preventDefault();
+        //});
+        eldDrag.addEventListener('dragstart', function (e) {
+            console.log('dragstart:, dropEffect: '+ e.dataTransfer.dropEffect);
+            e.dataTransfer.effectAllowed = "link";
+            e.dataTransfer.setData("element", e.target.id);
+        });
+        eldDrag.addEventListener('drag', function (e) {
+
+         //   console.log('drag');
+ 
+        });
+        eldDrag.addEventListener('dragend', function (e) {
+            console.log('dragend');
+        });
+        //eldDrag.addEventListener('dragenter', function (e) {
+        //    console.log('ondragenter');
+        //});
+        //eldDrag.addEventListener('dragleave', function (e) {
+        //    console.log('ondragleave');
+        //});
+        //eldDrag.addEventListener('dragover', function (e) {
+        //    console.log('ondragover');
+        //});
+        //eldDrag.addEventListener('drop', function () {
+        //    console.log('drop222222222');
+        //    alert('aaaa');
+        //});
+
+        document.getElementById('container').addEventListener('dragenter', function (e) {
+           // console.log('container-oragenter');
+      
+            document.getElementById('container').classList.add('enter');
+
+        });
+        document.getElementById('container').addEventListener('dragleave', function () {
+           console.log('container-dragleave');
+            document.getElementById('container').classList.remove('enter');
+
+        });
+        document.getElementById('container').addEventListener('drag', function (e) {
+            console.log('container-drag');
+            e.preventDefault();
+            //  document.getelementbyid('container').classlist.remove('enter');
+        });
+        document.getElementById('container').addEventListener('dragover', function (e) {
+          //  e.dataTransfer.dropEffect = 'link';
+            console.log('container-dragover:, dropEffect: ' + e.dataTransfer.dropEffect);
+            e.preventDefault();
+          //  document.getelementbyid('container').classlist.remove('enter');
+        });
+        document.getElementById('container').addEventListener('drop', function (e) {
+            console.log('container-drop');
+            e.target.appendChild(document.getElementById(e.dataTransfer.getData('element')));
+            //  document.getElementById('container').classList.remove('enter');
+        },false);
+    </script>
+
+</body>
+</html>

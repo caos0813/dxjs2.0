@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="../../scripts/lib/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7pkVtuYGfvf6B35xL7BI9sGe"></script>
+    <style type="text/css">
+        body, html, #allmap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        .css_div {
+            background-color: #fff;
+            border: solid 1px #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div id="allmap"></div>
+    <script>
+                var map = new BMap.Map("allmap", { enableMapClick:false});    // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+  //  map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+    map.centerAndZoom('上海', 11);           // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    var  styleJson= [
+                      {
+                          "featureType": "water",
+                          "elementType": "all",
+                          "stylers": {
+                              "color": "#044161"
+                          }
+                      },
+                      {
+                          "featureType": "land",
+                          "elementType": "all",
+                          "stylers": {
+                              "color": "#004981"
+                          }
+                      },
+                      {
+                          "featureType": "boundary",
+                          "elementType": "geometry",
+                          "stylers": {
+                              "color": "#064f85"
+                          }
+                      },
+                      {
+                          "featureType": "railway",
+                          "elementType": "all",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "highway",
+                          "elementType": "geometry",
+                          "stylers": {
+                              "color": "#004981"
+                          }
+                      },
+                      {
+                          "featureType": "highway",
+                          "elementType": "geometry.fill",
+                          "stylers": {
+                              "color": "#005b96",
+                              "lightness": 1
+                          }
+                      },
+                      {
+                          "featureType": "highway",
+                          "elementType": "labels",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "arterial",
+                          "elementType": "geometry",
+                          "stylers": {
+                              "color": "#004981"
+                          }
+                      },
+                      {
+                          "featureType": "arterial",
+                          "elementType": "geometry.fill",
+                          "stylers": {
+                              "color": "#00508b"
+                          }
+                      },
+                      {
+                          "featureType": "poi",
+                          "elementType": "all",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "green",
+                          "elementType": "all",
+                          "stylers": {
+                              "color": "#056197",
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "subway",
+                          "elementType": "all",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "manmade",
+                          "elementType": "all",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "local",
+                          "elementType": "all",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "arterial",
+                          "elementType": "labels",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "boundary",
+                          "elementType": "geometry.fill",
+                          "stylers": {
+                              "color": "#029fd4"
+                          }
+                      },
+                      {
+                          "featureType": "building",
+                          "elementType": "all",
+                          "stylers": {
+                              "color": "#1a5787"
+                          }
+                      },
+                      {
+                          "featureType": "label",
+                          "elementType": "all",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      }
+    ];
+    map.setMapStyle({
+        styleJson: styleJson
+    });
+    var bdary = new BMap.Boundary();
+
+    var boundaries = '121.81968, 30.756286;121.998823, 30.812345;121.990238, 31.037402;121.948909, 31.136517;121.924129, 31.183184;121.870011, 31.252812;121.588392, 31.405595;121.5637, 31.410432;121.541211, 31.408492;121.514271, 31.384116;121.511247, 31.370236;121.518646, 31.360795;121.53446, 31.351498;121.557947, 31.343707;121.56578, 31.336819;121.568478, 31.307475;121.575302, 31.284096;121.565259, 31.271212;121.543316, 31.256171;121.514087, 31.252538;121.501044, 31.247354;121.500882, 31.240395;121.513765, 31.228522;121.516619, 31.219565;121.502553, 31.199436;121.480667, 31.193095;121.472056, 31.185304;121.476066, 31.165902;121.463475, 31.151544;121.476792, 31.129464;121.469732, 31.114723;121.48171, 31.117973;121.483902, 31.115083;121.488194, 31.116364;121.48489, 31.123305;121.494359, 31.130396;121.499608, 31.125008;121.505953, 31.126991;121.508397, 31.120485;121.519368, 31.127641;121.522523, 31.121221;121.541303, 31.124437;121.544388, 31.119506;121.548942, 31.121908;121.554117, 31.115539;121.556145, 31.118986;121.56457, 31.119217;121.56898, 31.104593;121.574221, 31.09916;121.558168, 31.096284;121.55499, 31.092675;121.556802, 31.088857;121.562878, 31.08711;121.568007, 31.090028;121.58238, 31.086321;121.560838, 31.077285;121.559063, 31.073484;121.563105, 31.073083;121.554307, 31.069459;121.554364, 31.062727;121.546579, 31.058558;121.547625, 31.051882;121.560565, 31.056689;121.567581, 31.05037;121.564831, 31.047464;121.566757, 31.036173;121.562478, 31.032798;121.564386, 31.030622;121.558787, 31.029429;121.55911, 31.025806;121.564483, 31.026187;121.567835, 31.030504;121.571755, 31.02755;121.578953, 31.032809;121.580429, 31.0248;121.573044, 31.018389;121.577362, 31.01189;121.574325, 31.007304;121.576686, 31.004594;121.601958, 31.008338;121.618597, 31.007438;121.627225, 30.998288;121.669588, 30.999001;121.713413, 30.991735;121.738468, 30.973147;121.743319, 30.964355;121.763856, 30.955141;121.770596, 30.947588;121.768004, 30.944231;121.772299, 30.942349;121.774388, 30.944337;121.779549, 30.939177;121.778979, 30.935268;121.785153, 30.936342;121.787722, 30.921788;121.785436, 30.901511;121.783351, 30.886705;121.779733, 30.886236;121.774719, 30.86979;121.770237, 30.824789;121.803821, 30.751736;121.81968, 30.756286';
+
+    var ply = new BMap.Polygon(boundaries, { strokeWeight: 2, strokeColor: "red" }); //建立多边形覆盖物
+
+    map.addOverlay(ply);  //添加覆盖物
+
+    //bdary.get("上海市浦东区", function (rs) {       //获取行政区域
+    //    map.clearOverlays();        //清除地图覆盖物       
+    //    var count = rs.boundaries.length; //行政区域的点有多少个
+    //    if (count === 0) {
+    //        alert('未能获取当前输入行政区域');
+    //        return;
+    //    }
+    //    console.log("aaa:" + count);
+    //    var pointArray = [];
+    //    var ply = new BMap.Polygon(rs.boundaries[0], { strokeWeight: 2, strokeColor: "#0750a9"}); //建立多边形覆盖物
+    //    console.log(rs.boundaries[0]);
+    //        map.addOverlay(ply);  //添加覆盖物
+
+    //});
+    </script>
+    <style>
+       .fd{
+           background-color:#072a56
+       }
+    </style>
+</body>
+</html>

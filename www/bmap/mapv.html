@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/lib/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7pkVtuYGfvf6B35xL7BI9sGe"></script>
+    <script src="../../scripts/map/bmap/Mapv.min.js"></script>
+    <script src="Mapv.js"></script>
+	<meta charset="utf-8" />
+
+    <style>
+        html,body
+        {
+            width:100%;
+            height:100%;
+
+        }
+        #map
+        {
+            width:100%;
+            height:100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+
+    <script>
+
+        function initMap(bmap)
+        {
+            var zoomControl = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_ZOOM }); //右上角
+            bmap.addControl(zoomControl);
+            bmap.enableScrollWheelZoom(); // 启用滚轮放大缩小
+            bmap.setMapStyle({
+                styleJson: [
+                            {
+                                "featureType": "road",
+                                "elementType": "all",
+                                "stylers": {
+                                    "visibility": "off"
+                                }
+                            },
+                      {
+                          "featureType": "poi",
+                          "elementType": "labels",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "water",
+                          "elementType": "geometry",
+                          "stylers": {
+                              "color": "#000000",
+                              "visibility": "on"
+                          }
+                      },
+                      {
+                          "featureType": "label",
+                          "elementType": "labels",
+                          "stylers": {
+                              "visibility": "off"
+                          }
+                      },
+                      {
+                          "featureType": "land",
+                          "elementType": "all",
+                          "stylers": {
+                              "color": "#ffffff",
+                              "visibility": "on"
+                          }
+                      },
+                      {
+                          "featureType": "railway",
+                          "elementType": "geometry.stroke",
+                          "stylers": {
+                              "color": "#000000",
+                              "weight": "0.9",
+                              "visibility": "on"
+                          }
+                      },
+                      {
+                          "featureType": "arterial",
+                          "elementType": "geometry.stroke",
+                          "stylers": {
+                              "color": "#444444",
+                              "weight": "0.1",
+                              "visibility": "on"
+                          }
+                      }
+                ]
+            });
+        }
+            
+        $.getJSON('data.json',function(mapdata){
+            var map = document.getElementById('map'), customerWorkLocateList = parseData(mapdata.retBody.customerWorkLocateList);
+
+            var bmap = new BMap.Map('map');
+
+            initMap(bmap);
+            bmap.centerAndZoom(new BMap.Point(121.473913, 31.238034), 10); // 初始化地图,设置中心点坐标和地图级别
+
+            // 第一步创建mapv示例
+
+            var mapv = new Mapv({
+                drawTypeControl: true,
+                map: bmap  // 百度地图的map实例
+            });
+
+            //var dataSet = new Mapv.DataSet(customerWorkLocateList);
+            //var options = {
+            //    fillStyle: 'rgba(55, 50, 250, 0.6)',
+            //    shadowColor: 'rgba(55, 50, 250, 0.5)',
+            //    shadowBlur: 10,
+            //    methods: {
+            //        click: function (item) {
+            //        }
+            //    },
+            //    size: 50,
+            //    draw: 'bubble',
+            //    max: 100 ,// 数值最大值范围
+            //    maxSize: 10, // 显示的圆最大半径大小
+
+            //}
+            //var mapvLayer = new Mapv.baiduMapLayer(bmap, dataSet, options);
+        
+
+
+            var layer = new Mapv.Layer({
+                mapv: mapv, // 对应的mapv实例
+                zIndex: 1, // 图层层级
+                dataType: 'point', // 数据类型，点类型
+                data: customerWorkLocateList,
+                drawType: 'cluster', // 展示形式
+                drawOptions: { // 绘制参数
+                   size: 10000, // 网格大小
+                    unit: 'm', // 单位
+                    fillStyle: 'rgb(31,162,136)', // 填充颜色
+                    strokeStyle: 'rgba(255,255,255,1)', // 边框颜色
+                    label: { // 是否显示文字标签
+                        show: true,
+                    }
+                }
+            });
+
+            function parseData(d) {
+                var data = [];
+                data = $.map(d, function (m) {
+                    var lng = m[0], lat = m[1];
+                    //return {
+                    //    geometry: {
+                    //        type: 'Point',
+                    //        coordinates: [lng,lat]
+                    //    },
+                    //    count: 43
+                    //};
+                    return {
+                        text:"43",
+                        lng: m[0],
+                        lat: m[1],
+                        count:1
+                    };
+                });
+                return data;
+            }
+         //   layer.setData(customerWorkLocateList);
+        });
+   
+    </script>
+</body>
+</html>

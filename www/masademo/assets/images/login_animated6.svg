@@ -1,0 +1,33 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-594 326 250 250" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#244f7f;stroke-miterlimit:10;}
+</style>
+<g class="p">
+	<path width="213.5" height="3.8" d="M-579 449.1 L-365.5 449.1 L-365.5 452.90000000000003 L-579 452.90000000000003 Z"></path>
+	<path width="3.5" height="212.4" d="M-581.7 344.8 L-578.2 344.8 L-578.2 557.2 L-581.7 557.2 Z"></path>
+	<path d="M-579.9,329.1L-587.3,344.8L-572.5,344.8Z"></path>
+	<path d="M-579.9,572.9L-572.5,557.2L-587.3,557.2Z"></path>
+	<path d="M-350.7,451L-366.4,443.6L-366.4,458.4Z"></path>
+</g>
+<path class="st0 pgGHIxAQ_0" d="M-569.3,451c1.7-84,22.1-91,27.2-90.8c5.8,0.3,23.4,12.8,27.3,90.8c3,61.4,15.7,61.6,18.3,61.4
+	c5.6-0.5,14.4-7.1,18.4-61.4c4.1-55.7,15.4-78.7,23.6-75.6c13.2,5,21.5,51.2,22.5,75.6c1.3,32.3,9.8,41.5,15,41.7
+	c8,0.3,14-23.3,15.5-41.7c3.2-37.9,13.6-43.4,16.4-43.8c2-0.3,15.1,0,16.4,45.7"></path>
+<style>
+	.p{fill:#244f7f;opacity:0; animation: fadein .2s ease-in 7s forwards;}
+	.pgGHIxAQ_0 { stroke-dasharray: 691 693; stroke-dashoffset: 692; animation: pgGHIxAQ_draw 1s ease-in 7.3s forwards; }
+	@keyframes fadein{
+		0% { opacity: 0; }
+		100% { opacity: 1; }
+	}
+	@keyframes pgGHIxAQ_draw {
+		100% { stroke-dashoffset: 0; }
+	}
+	@keyframes pgGHIxAQ_fade {
+		0% { stroke-opacity: 1; }
+		92.3076923076923% { stroke-opacity: 1; }
+		100% { stroke-opacity: 0; }
+	}
+</style>
+</svg>

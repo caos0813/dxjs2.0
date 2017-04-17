@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/lib/zepto/zepto.js"></script>
+    <script src="../../scripts/mobile/SUI-Mobile-dev/dist/js/sm.min.js"></script>
+    <link href="../../scripts/mobile/SUI-Mobile-dev/dist/css/sm.min.css" rel="stylesheet" />
+	<meta charset="utf-8" />
+</head>
+<body>
+    <span class="icon icon-refresh" id="spanRefreshMac"></span>
+
+    <div class="list-block">
+        <ul>
+            <!-- Text inputs -->
+
+   
+            <li class="align-top">
+                <div class="item-content">
+                  
+                    <div class="item-inner">
+       
+                        <div class="item-input">
+                            <textarea></textarea>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            </ul>
+            </div>
+            <script>
+
+                $("#spanRefreshMac").on("click", function () {
+                    var element = $("#spanRefreshMac");
+                    element.css({
+                        'transform': 'rotate(360deg)',
+                        'transition': 'transform 2s ease'
+                    });
+                    element.on("animationstart", function (e) {
+
+                        console.log("animationstart");
+                    })
+                    element.on("animationiteration", function (e) {
+
+                        console.log("animationiteration");
+                    })
+                    element.on("transitionend", function (e) {
+
+                        console.log("transitionend");
+                    })
+                    element.on("webkitAnimationEnd", function (e) {
+
+                        console.log("webkitAnimationEnd");
+                    })
+
+                });
+            </script>
+</body>
+</html>

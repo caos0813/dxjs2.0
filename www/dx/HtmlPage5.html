@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="all.css" rel="stylesheet" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="masa.js"></script>
+
+    <meta charset="utf-8" />
+
+    <style>
+        .people-placeholder 
+        {
+            color:#00ff21;
+            position:absolute
+        }
+    </style>
+</head>
+<body>
+    <input  type="button" id="btnOpen" value="打开"/>
+<div style="width:300px">
+   
+    <input type="text" value="" id="txtUsers2">
+</div>
+
+
+        <div class="people-box" style="display:none">
+            <div class="people-item">张三三</div>
+            <div class="people-item">张三三</div>
+            <div class="people-item">张三三</div>
+            <div class="people-item">张三三</div>
+            <input type="text" value="范德萨" id="txtUsers">
+            <div class="people-placeholder" style="top: 33px; left: 320px;">
+                <ul>
+                    <li>1</li>
+                    <li>1</li>
+                    <li>1</li>
+                    <li>1</li>
+                    <li>1</li>
+                    <li>1</li>
+                    <li>1</li>
+                </ul>
+            </div>
+        </div>
+
+        <script>
+
+            window.mmIndex = 44;
+            document.getElementById('btnOpen').addEventListener('click', function () {
+               window.newwind= window.open('HtmlPage6.html', '_blank ');
+            });
+
+            //$('#btnDialog').on('click', function () {
+            //    Masa.ui.confirm('操作提示', '<p>该报告有一个未发布版本，是否继续操作</p><span class="check-box"><label><input type="checkbox" value="-1">删除已发布版本和副本</label></span>', function () {
+
+            //        alert(this.element.find(':checkbox')[0].checked);
+
+            //    }, function () {
+
+
+            //    });
+            //});
+
+            var list = [
+           { id: 1, parentId: null, name: "父级", red: false },
+           { id: 2, parentId: null, name: "父级2" },
+            { id: 3, parentId: null, name: "父级3" },
+                { id: 4, parentId: 1, expand: true, name: "父级-子节点1" },
+               { id: 5, parentId: 1, name: "父级-子节点2" },
+                { id: 6, parentId: 4, name: "父级-子节点1-子节点1" },
+                   { id: 7, parentId: 4, name: "父级-子节点1-子节点2" },
+                { id: 8, parentId: 3, name: "父级3-子节点1" }
+            ];
+ 
+          var aa=  Masa.ui.createWidget("AutoCompleteBox", '#txtUsers2', {
+                source: {
+                    data: list
+                },
+                offset: [0, 1],
+                dataValueField: "name", // 服务器请求过滤字段
+                dataTextField: "name", //
+                emptyMessage: '不能为空',
+                onRender: function () {
+                    var that = this;
+                    this.wrapper.append('<div class="autocompletetree"></div><div class="autocompleteempty" style="display:none"></div>');
+                    this.tree = Masa.ui.createWidget("TreeView", this.wrapper.children('.autocompletetree'), {
+                        dataSource: {
+                            textField: this.options.dataTextField,
+                            parentId: this.options.parentId,
+                            primaryKey: this.options.primaryKey,
+                            data: []
+                        },
+                        autoBind: false
+                    });
+
+                    this.tree.on('onSelect', function (e,itemdata) {
+                        that.addValue(itemdata);
+                        that.setPosition();
+                    });
+                    this._template = function (d) {
+                        if (d.length > 0) {
+                            this.wrapper.children('.autocompletetree').show();
+                            this.wrapper.children('.autocompleteempty').hide();
+                            this.tree.dataSource.done(d, null);
+                            this.show();
+                        } else {
+                            if (this.options.emptyMessage != '') {
+                                this.wrapper.children('.autocompletetree').hide();
+                                this.wrapper.children('.autocompleteempty').show().html(this.options.emptyMessage);
+                                this.show();
+                            } else {
+                                this.hide();
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+</body>
+</html>

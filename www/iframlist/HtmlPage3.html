@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div class="pagecontent">
+
+        <div>
+
+            
+        </div>
+    </div>
+
+    <canvas id="canvas" ></canvas>
+    <script>
+
+        var points = [{ x: 10, y: 50 }, { x: 100, y: 50 }, { x: 100, y: 70 }];
+
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "red";
+   
+
+        var bX=100,bY=100;
+        ctx.moveTo(bX,bY);
+        for (var i = 0; i < 1;i++)
+        {
+            ctx.lineTo(bX + points[i].x, bY + points[i].y);
+        }
+        ctx.stroke();
+    </script>
+</body>
+</html>

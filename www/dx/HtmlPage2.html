@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="all.css" rel="stylesheet" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="masa.js"></script>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div id="ppp">
+
+        <span>afdasfda</span>
+
+    </div>
+    <div id="grid"></div>
+    <div id="pager"></div>
+
+
+
+    <!--<ul>
+        <li class="btn-first-page"><a href="javascript:;" class="disabled" data-id="home">首页</a></li>
+        <li><a href="javascript:;"  data-id="previous">上一页</a></li>
+        <li><span><b id="currentPage" v-bind:title="currentPage">第{{currentPage}}</b>页</span></li>
+        <li><a href="javascript:;" id="nextPage">下一页</a></li>
+        <li class="btn-last-page"><a href="javascript:;">末页</a></li>
+    </ul>-->
+
+
+    <script>
+
+
+
+        /**
+        //  dataSource: null, // 数据源
+                        columns: null, // grid 显示的字段
+                        pager: null,  //分页组件 可自定义
+                        tableClass: "table", // 默认grid 样式
+                        emptyMsg: "没有任何记录", // grid 没有数据记录显示 ，支持html
+                        errorMsg: "请求数据失败", // grid 请求数据显失败示 ，支持html
+                        autoBind: true
+            分页组件 参数{Object }
+            pager{
+            parseTotal: function (d) {
+                return d.totalCount;
+            },
+            pageIndexField: "pageIndex",
+            pageSizeField: "pageSize",
+            }
+        */
+        var _grid = Masa.ui.createWidget("Grid", '#grid', {
+            dataSource: {
+                transport: {
+                    name:"*",
+                    url: "http://172.18.84.65:8808/masa/a/mda/md/deal/project-list"
+                }
+            },
+            pager: true, 
+            columns: [
+                { title: '名称', field: "name" },
+                { title: "年龄", field: "age", width: "30%", format: '<span style="color:red"><%-age%></span>' },
+                    {
+                        title: "操作", commands: [{
+                            name: "detail",
+                            command:function(d)
+                            {
+                                alert(d.name);
+                            }
+                        }]
+                    }
+
+            ]
+        });
+
+
+
+
+        //var _pager = Masa.ui.createWidget("Pager", '#pager', {
+        //    pageSize: 10,
+        //    totalCount: 30
+        //});
+   
+    </script>
+</body>
+</html>

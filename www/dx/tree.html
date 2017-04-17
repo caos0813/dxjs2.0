@@ -1,0 +1,670 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="masa.js"></script>
+
+
+    <style>
+
+        .treeview-icons {
+            background-image: url('../../images/treeview-sprite.png');
+           width:16px;
+            height:16px;
+            display:inline-block;
+             vertical-align:middle;
+             cursor:pointer;
+        }
+
+        .treeview
+        {
+              border-width: 0;
+              background: none;
+              overflow: auto;
+              white-space: nowrap;
+        }
+
+        .treeview-lines
+        {
+         
+        }
+          .treeview-group
+        {
+            margin: 0;
+            padding: 0;
+            background: 0 0;
+            list-style-type: none;
+            position: relative;
+        }
+
+         .treeview-item{
+           margin:0px;
+           padding:0px 0px 0px 16px;
+        }
+           .treeview-texts
+           {
+               display:inline-block;
+               font-size:14px;
+               font-family:'Microsoft YaHei';
+               cursor:default;
+               vertical-align:middle;
+           }
+         .treeview-expand>.treeview-line>.treeview-icons-status
+           {
+                         margin-left:-16px;
+               background-position: 0px -48px;
+           }
+         .treeview-collapse>.treeview-line>.treeview-icons-status
+           {
+                         margin-left:-16px;
+                 background-position:0px -32px;
+           }
+           .treeview-icons-file
+           {
+               vertical-align: top;
+                 background-position:0px 0px;
+           }
+           .treeview-icons-filered
+           {
+               vertical-align: top;
+                 background-position:0px -16px;
+           }
+         .treeview-collapse>.treeview-group
+         {
+             display:none;
+         }
+         .treeview-over
+         {
+             background-color:#fae7d9;
+         }
+         .treeview-selected
+         {
+               color:#fff;
+               background-color:#ff6a00;
+         }
+                
+         #tree
+         {
+             border:solid 1px red;
+         }
+         #tree2
+         {
+             margin-top:20px;
+              border:solid 1px blue;
+              height:500px;
+         }
+            .enter{
+                border-bottom:solid 1px red;
+            }
+            .drag-move-target{
+                position:absolute;
+                z-index:99;
+                display:block;
+                width:auto;
+                height:auto;
+
+            }
+    </style>
+</head>
+<body>
+    <div id="tree"></div>
+    <div id="tree2" >
+
+    </div>
+    <div class="treeview" style="display:none">
+        <ul class="treeview-lines treeview-group">
+            <li class="treeview-item treeview-expand ">
+                <div class="treeview-line">
+                    <span class="treeview-icons treeview-icons-status"></span><span class="treeview-texts">父节点1
+                   </span>
+                </div>        
+                <ul class="treeview-group">
+                    <li class="treeview-item">
+                        <div class="treeview-line">
+                            <span class="treeview-texts">子节点1
+                            </span>
+                        </div>
+                    </li>
+                    <li class="treeview-item">
+                        <div class="treeview-line">
+                            <span class="treeview-texts">子节点2
+                            </span>
+                        </div>
+                    </li>
+                </ul>        
+            </li>   
+            
+            <li class="treeview-item treeview-collapse">
+                <div class="treeview-line">
+                    <span class="treeview-icons treeview-icons-status"></span><span class="treeview-texts">父节点2
+                    </span>
+                </div>
+                <ul class="treeview-group">
+                    <li class="treeview-item">
+                        <div class="treeview-line">
+                            <span class="treeview-texts">子节点2
+                            </span>
+                        </div>
+                    </li>
+                    <li class="treeview-item">
+                        <div class="treeview-line">
+                            <span class="treeview-texts">
+                                子节点2
+                            </span>
+                        </div>
+                    </li>
+             </ul>
+            </li>     
+        </ul>
+    </div>
+
+    <script>
+        //
+       
+
+        var list=[
+            { id: 1, parentId: null, name: "父级",red:false },
+            { id: 2, parentId:null, name: "父级2" },
+             { id: 3, parentId: null, name: "父级3" },
+                 { id: 4, parentId: 1,expand:false, name: "父级-子节点1" },
+                { id: 5, parentId: 1, name: "父级-子节点2" },
+                 { id: 6, parentId: 4, name: "父级-子节点1-子节点1" },
+                    { id: 7, parentId: 4, name: "父级-子节点1-子节点2" },
+                 { id: 8, parentId: 3, name: "父级3-子节点1" }
+        ];
+
+        var url = 'http://192.168.12.73:8888/masa/a/report/module-info';
+     
+        var data = [
+              {
+                  "moduleId": 1,
+                  "moduleName": "图表组件",
+                  "moduleTitle": "",
+                  "frontContent": "",
+                  "tailContent": "",
+                  "moduleUrl": "",
+                  "moduleParams": "",
+                  "moduleType": 0,
+                  "parentModuleId": -1,
+                  "orderNum": 1
+              },
+                {
+                    "moduleId": 2,
+                    "moduleName": "其它组件",
+                    "moduleTitle": "",
+                    "frontContent": "",
+                    "tailContent": "",
+                    "moduleUrl": "",
+                    "moduleParams": "",
+                    "moduleType": 0,
+                    "parentModuleId": -1,
+                    "orderNum": 1
+                },
+                {
+                    "moduleId": 3,
+                    "moduleName": "市场动态分析",
+                    "moduleTitle": "市场动态分析",
+                    "frontContent": "",
+                    "tailContent": "",
+                    "moduleUrl": "",
+                    "moduleParams": "",
+                    "moduleType": 3,
+                    "parentModuleId": 1,
+                    "orderNum": 1
+                },
+                  {
+                      "moduleId": 4,
+                      "moduleName": "标题",
+                      "moduleTitle": "标题",
+                      "frontContent": "",
+                      "tailContent": "",
+                      "moduleUrl": "",
+                      "moduleParams": "",
+                      "moduleType": 1,
+                      "parentModuleId": 2,
+                      "orderNum": 1
+                  },
+                   {
+                       "moduleId": 5,
+                       "moduleName": "标题+文本",
+                       "moduleTitle": "标题+文本",
+                       "frontContent": "",
+                       "tailContent": "",
+                       "moduleUrl": "",
+                       "moduleParams": "",
+                       "moduleType": 2,
+                       "parentModuleId": 2,
+                       "orderNum": 1
+                   }
+        ];
+
+        var _TreeDataSource = new Masa.TreeDataSource({
+            data:data,
+            primaryKey: "moduleId",
+            parentId: "parentModuleId",
+            textField: "moduleName",
+        });
+      
+        function getNumberNo(item)
+        {
+            var str = [];
+            do {
+                str.unshift(item.index + 1);
+            } while (item.parent && (item = item.parent));
+            return str.join('.');
+        }
+     var _treeview=   Masa.ui.createWidget("TreeView", '#tree', {
+         dataSource: _TreeDataSource,
+         enabledExpand: true,
+         enableOver:false
+     });
+     _treeview.on('onSelect', function (e,d) {
+            // alert(d.name);
+     });
+    
+
+     var list2 = [
+ { id: 1, parentId: null, name: "b-父级" },
+ { id: 2, parentId: null, name: "b-父级2" },
+  { id: 3, parentId: null, name: "b-父级3" },
+      { id: 4, parentId: 1, expand: false, name: "b-父级-子节点1" },
+     { id: 5, parentId: 1, name: "b-父级-子节点2" },
+      { id: 6, parentId: 4, name: "b-父级-子节点1-子节点1" },
+         { id: 7, parentId: 4, name: "b-父级-子节点1-子节点2" },
+      { id: 8, parentId: 3, name: "b-父级3-子节点1" }
+     ];
+     var url2 = 'http://192.168.12.73:8888/masa/a/report/report-info?reportId=1';
+     var _TreeDataSource2 = new Masa.TreeDataSource({
+         data:[],
+
+         primaryKey: "contentId",
+         parentId: "parentContentId",
+         textField: "directoryTitle",
+     });
+     var _treeview2 = Masa.ui.createWidget("TreeView", '#tree2', {
+         dataSource: _TreeDataSource2,
+         template: function (item) {
+
+             return '<span class="treeview-icons treeview-icons-file"></span>' + getNumberNo(item)+'、' + item.text;
+         },
+         enabledExpand: true,
+         enableOver: false
+     });
+
+
+    
+
+
+     var itemdata;
+
+     var _Drag = Masa.ui.createWidget('Drag', '#tree', {
+         dragFilter: ".treeview-texts",
+         dropTarget: "#tree2",
+     //    dropFilter: '.treeview-texts',
+         onDragStart: function (e,data) {
+             itemdata = _treeview.findItemDataByElement(data.dragTarget);
+             if (_treeview.hasChildById(itemdata.moduleId))
+             {
+                 e.preventDefault();
+                 return;
+             }
+             _Drag2.enabledDrag(false);
+
+         },
+         onDragEnd: function (e) {
+             _Drag2.enabledDrag(true);
+     
+         },
+         onDragOver: function (e, data)
+         {
+
+             var element = $(data.dropTarget).closest('.treeview-texts');
+             if (element.length <= 0)
+             {
+                 return;
+             }
+             element.removeClass('drop-append drop-before drop-after');
+             var position = data.position;
+             if (position == 'append') {
+                 element.addClass('drop-append');
+             } else if (position == 'before') {
+                 element.addClass('drop-before');
+             } else if (position == 'after') {
+                 element.addClass('drop-after');
+             }
+         },
+         onDrop: function (e, data) {
+
+             var element = $(data.dropTarget).closest('.treeview-texts'), position = data.position, dragTarget = $(data.dragTarget), itemdata = _treeview.findItemDataByElement(dragTarget);
+
+             var newData = {
+                 "contentId": 2,
+                 "directoryNum": "1.1",
+                 "directoryTitle": itemdata.moduleTitle,
+                 "frontContent": "2 423粉色",
+                 "tailContent": "三四十",
+                 "orgDrawing": "/da/a2.jpg",
+                 "thumbnail": "/dd/56.jpg",
+                 "parentContentId": -1,
+                 "contentRemark": "未写结论",
+                 "orderNum": 2,
+                 "moduleUrl": "/dd/getss",
+                 "moduleParams": "e=3&dd=3",
+                 "moduleType": itemdata.moduleType
+             };
+             if (_treeview2.dataSource.getData().length <= 0) {
+
+                 _treeview2.addRootNodeByData(newData);
+                 return;
+             }
+             if (element.length <= 0) {
+
+                 return;
+             }
+             _treeview2.insertNodeByData(element, newData, position);
+             element.removeClass('drop-append drop-before drop-after');
+         },
+         onDragEnter: function (e) {
+         },
+         onDragLeave: function (e, data) {
+             if (isDragSort) {
+                 return;
+             }
+             var element = $(data.dropTarget).closest('.treeview-texts');
+             if (element.length <= 0) {
+                 return;
+             }
+             element.removeClass('drop-append drop-before drop-after');
+         }
+        });
+
+     var isDragSort = false;
+
+
+        
+     Masa.ui.extendWidget('Drag2', {
+         options: {
+             dropTarget: null,
+             dropFilter: null,
+             dragFilter: null
+         },
+         events: ['onDragStart', 'onDragEnd', 'onDragOver', 'onDrag', 'onDrop', 'onDragEnter', 'onDragLeave'],
+         initialize: function (element, options) {
+             _.bindAll(this, '_handlerEvents', '_mousedownHandler', '_mouseupHandler', '_mousemoveHandler', '_handlerEvents2');
+             this.__super__.initialize.call(this, options);
+             var that = this;
+             options = that.options;
+             that.dragTarget = $(element);
+             that.dropTarget = options.dropTarget ? $(options.dropTarget) : null;
+             that.enabledDrag(true);
+             that._doc = $(document);
+             that._initEvents();
+         },
+         _initEvents: function () {
+             this.delegateEvents(this.dragTarget, "mousedown", this.options.dragFilter, this._mousedownHandler);
+             //this.delegateEvents(this.dragTarget, "dragstart", this.options.dragFilter, this._handlerEvents);
+             //this.delegateEvents(this.dragTarget, "dragend", this.options.dragFilter, this._handlerEvents);
+             //this.delegateEvents(this.dragTarget, "drag", this.options.dragFilter, this._handlerEvents);
+             //if (this.dropTarget) {
+               //  this.delegateEvents(this.dropTarget, "mousemove", this.options.dropFilter, this._handlerEvents2);
+             //    this.delegateEvents(this.dropTarget, "dragleave", this.options.dropFilter, this._handlerEvents);
+             //    this.delegateEvents(this.dropTarget, "dragover", this.options.dropFilter, this._handlerEvents);
+             //    this.delegateEvents(this.dropTarget, "drop", this.options.dropFilter, this._handlerEvents);
+             //}
+         },
+         _handlerEvents2:function(e)
+         {
+             console.log('_handlerEvents2:' + e.target.textContent);
+         },
+         enabledDrag: function (enabled) {
+             this.isEnabledDrag = enabled;
+         },
+         createMoveTarget:function(element)
+         {
+             var div = $('<div class="drag-move-target">');
+             div.append(element).appendTo(document.body);
+             return div;
+         },
+         _mousedownHandler: function (e) {
+             e.preventDefault();
+             var that = this;
+             var element = $(e.currentTarget), offset = element.offset();
+             that._eventData = {
+                 startX: e.pageX - offset.left,
+                 startY: e.pageY - offset.top,
+                 dragTarget: element[0],
+                 moveTarget: that.createMoveTarget(element[0].cloneNode(true))
+             };
+             that._eventData.moveTarget.css({
+                 left: offset.left,
+                 top: offset.top
+             });
+             e.currentTarget.setCapture();
+             this.delegateEvents(this._doc, "mousemove.dragdoc", this._mousemoveHandler);
+             this.delegateEvents(this._doc, "mouseup.dragdoc", this._mouseupHandler);
+
+         },
+         _mousemoveHandler:function(e)
+         {
+             var currentT = document.elementFromPoint(e.pageX, e.pageY);
+             if (!currentT)
+             {
+                 return;
+             }
+
+             var that = this, _eventData = that._eventData, dropTarget, element = $(currentT), left = e.pageX - _eventData.startX, top = e.pageY - _eventData.startY;
+
+             _eventData.moveTarget.css({
+                 left: left,
+                 top:top
+             });
+             if (that.dropTarget && !that.options.dropFilter )
+             {
+                 dropTarget = element.closest(that.dropTarget);
+             }else if (that.dropTarget && that.options.dropFilter)
+             {
+                 dropTarget = element.closest(that.options.dropFilter);
+             }
+             if (dropTarget.length > 0 && currentT.parentNode == this._eventData.moveTarget[0])
+             {
+                 console.log('moveTarget:' + currentT.textContent);
+                 var that = this, position = that.getPosition(dropTarget, e);
+                 if (position == '' || that.preElement == element && that.prePosition == position) {
+                     return;
+                 }
+                 that.preElement = element;
+                 that.prePosition = position;
+                 that.isDropTaget=true;
+                 this.trigger('onDragOver', e, {
+                     dragTarget: _eventData.dragTarget,
+                     moveTarget: _eventData.moveTarget,
+                     dropTarget: dropTarget[0],
+                     position: position
+                 });
+             }else{
+                 that.isDropTaget=null;
+
+             }
+         },
+         _mouseupHandler:function(e)
+         {
+             var that = this;
+             that._eventData.moveTarget.remove();
+             if (that.isDropTaget)
+             {
+               that.isDropTaget = false;
+               that.trigger('onDrop', e, that._eventData);
+             }
+             that.trigger('onDragEnd', e, that._eventData);
+             that.undelegateEvents(that._doc, 'dragdoc');
+             that._eventData = null;
+         },
+         _dragstartHandler: function (e) {
+             var that = this;
+             that._eventData = {
+                 dragTarget: e.currentTarget
+             };
+             that.trigger('onDragStart', e, that._eventData);
+         },
+         _dragendHandler: function (e) {
+             var that = this;
+             that.trigger('onDragEnd', e, that._eventData);
+             that._eventData = null;
+         },
+         _dragHandler: function (e) {
+             var that = this;
+             that.trigger('onDrag', e, that._eventData);
+         },
+         _dragenterHandler: function (e) {
+             var that = this;
+             that.trigger('onDragEnter', e, {
+                 dragTarget: that._eventData.dragTarget,
+                 dropTarget: e.currentTarget
+             });
+         },
+         _getCurrentDropTarget: function (e) {
+             if (!this.options.dropFilter) {
+                 return e.target;
+             } else {
+                 return e.currentTarget;
+             }
+         },
+         _dragleaveHandler: function (e) {
+             var that = this, dropTarget;
+             that.trigger('onDragLeave', e, {
+                 dragTarget: that._eventData.dragTarget,
+                 dropTarget: that._getCurrentDropTarget(e)
+             });
+         },
+         _dragoverHandler: function (e) {
+             e.preventDefault();
+             var that = this, element = that._getCurrentDropTarget(e), position = that.getPosition(element, e);
+             if (position == '' || that.preElement == element && that.prePosition == position) {
+                 return;
+             }
+
+             that.preElement = element;
+             that.prePosition = position;
+             this.trigger('onDragOver', e, {
+                 dragTarget: that._eventData.dragTarget,
+                 dropTarget: element,
+                 position: position
+             });
+
+         },
+         _dropHandler: function (e) {
+             var that = this;
+             that.trigger('onDrop', e, {
+                 dragTarget: that._eventData.dragTarget,
+                 dropTarget: that._getCurrentDropTarget(e),
+                 position: that.prePosition
+             });
+         },
+         _handlerEvents: function (e) {
+             var type = e.type, handler = '_' + type + "Handler";
+             if (!this.isEnabledDrag) {
+                 return;
+             }
+             if (this[handler]) {
+                 this[handler](e);
+             }
+         },
+         getPosition: function (element, e) {
+             element = $(element);
+             var that = this, height = element.outerHeight(), width = element.outerWidth(), offset = element.offset(), oX = offset.left, oY = offset.top, position = '', x = e.pageX, y = e.pageY;
+             var maxY = height / 2 + oY;
+             var maxX = width * 0.6 + oX;
+             if (x > (maxX + 10)) {
+                 position = 'append';
+             }
+             else if (y < maxY && x < maxX) {
+                 position = 'before';
+             } else if (y > maxY && x < maxX) {
+                 position = 'after';
+             }
+             return position;
+         }
+
+     });
+
+ 
+  
+     var _Drag2 = Masa.ui.createWidget('Drag', '#tree2', {
+         dragFilter: ".treeview-texts",
+         dropTarget: '#tree2',
+         dropFilter: '.treeview-texts',
+         onDragStart: function (e, data) {
+             isDragSort = true;
+             var itemdata = _treeview2.findItemDataByElement(data.dragTarget)
+             if (itemdata && _treeview2.dataSource.hasChild(itemdata.contentId))
+             {
+                 e.preventDefault();
+                 return;
+             }
+
+             _Drag.enabledDrag(false);
+         },
+         onDragEnd: function (e,data) {
+             _Drag.enabledDrag(true);
+             console.log('bbbbbbb:onDragEnd');
+         },
+         onDragOver: function (e, data) {
+
+             var element = $(data.dropTarget);
+
+             element.removeClass('drop-append drop-before drop-after');
+             var position = data.position;
+             if (position == 'append') {
+                 element.addClass('drop-append');
+             } else if (position == 'before') {
+                 element.addClass('drop-before');
+             } else if (position == 'after') {
+                 element.addClass('drop-after');
+             }
+         },
+         onDrop: function (e, data) {
+             setTimeout(function () {
+                 _Drag.enabledDrag(true);
+             }, 50);
+             if (data.dragTarget == data.dropTarget)
+             {
+                 return;
+             }
+             var element = $(data.dropTarget), position = data.position, dragTarget = $(data.dragTarget), itemdata = _treeview2.findItemDataByElement(dragTarget);
+             _treeview2.dataSource.removeDataByUid(itemdata._uid);
+             _treeview2.insertNodeByData(element, itemdata, position);
+
+         },
+         onDragEnter: function (e) {
+         },
+         onDragLeave: function (e, data) {
+             var element = $(data.dropTarget);
+             element.removeClass('drop-append drop-before drop-after');
+         }
+     });
+    </script>
+    <style>
+        .drop-append{
+            border:solid 1px blue;
+        }
+           .drop-after{
+            border-bottom:solid 1px blue;
+        }
+              .drop-before{
+            border-top:solid 1px blue;
+            vertical-align:middle
+        }
+              .drag-move{
+                  background-color:rgba(18, 18, 242, 0.50);
+              }
+    </style>
+</body>
+</html>

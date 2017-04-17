@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <link href="all.css" rel="stylesheet" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="masa.js"></script>
+    <meta charset="utf-8" />
+
+    <style>
+
+        body{
+            background-color:#060234;
+        }
+    </style>
+</head>
+<body>
+
+     
+    <div id="content">
+                <div>
+                   {{title}}
+                </div>
+        {{list.name}}
+    </div>
+    <div id="pager2"></div>
+    <div id="grid"></div>
+    <div id="pager"></div>
+    <script>
+        
+        var localSource = Masa.DataSource({
+            data: [{name:""}]
+
+        });
+        var remoteSource = Masa.DataSource({
+       
+                transport: {
+                    type: "post",
+                    name: "*",
+                    url: "http://172.18.84.65:8808/masa/a/mda/md/supply/supply-statis-adv",
+                    data: function () {
+
+                        return {
+                            cityId: 1,
+                            startDate: "2016-09-20",
+                            endDate: "2016-12-19",
+                            pageNo: 1,
+                            pageSize: 20
+                        };
+                    },
+                    parseData:function(d)
+                    {
+                        return d.data;
+                    }
+                }
+            
+
+        });
+      //  remoteSource.then(function (d) {
+
+        // //   alert(d.data.length);
+
+        //}, function () { });
+
+
+        //var pager = Masa.ui.createWidget('Pager', '#pager', {
+        //    dataSource: remoteSource,
+        //    pageSize: 5,
+        //    parseTotal: function (d) {
+        //        return d.totalCount;
+        //    },
+        //    pageIndexField: "pageNo",
+        //    pageSizeField: "pageSize",
+        //    pagerClass: "pagination"
+        //});
+
+
+        var grid = Masa.ui.createWidget('Grid', '#grid', {
+            dataSource: remoteSource,
+            columns: [{ title: "项目名称", format: '<span style="color:<%=projectName=="七宝万新国际中心"?"red":"blue"%>"><%=projectName%></span>' }, { title: "id", field: "projectId", headStyles: { color: "red" }, styles: {color:"blue"}}, {
+                width:"150px",
+                title: "操作",
+                commands: [{
+                    name: "detail",
+                    format:'<a href="#"  data-command="detail" title="查看">查看详细</a>',
+                    command:function(e)
+                    {
+                        alert(e.projectName);
+                    }
+                }, {
+                    name: "down",
+                    format: '|<a href="#"  data-command="down" title="查看">下载</a>',
+                    command: function (e) {
+                        alert(e.projectName);
+                    }
+                }]
+            }],
+            pager: {
+                element: "#pager2,#pager",
+                pageSize: 5,
+                parseTotal: function (d) {
+                    return d.totalCount;
+                },
+                pageIndexField: "pageNo",
+                pageSizeField: "pageSize",
+                pagerClass: "pagination"
+            },
+            tableClass: "table",
+            emptyMsg: "没有任何记录",
+            errorMsg: "请求数据失败",
+            autoBind: true
+        });
+
+
+     
+        //var model = new Masa.Model({
+        //    data: {
+        //        age: {age:43}
+        //    },
+        //    name: "123",
+        //    date:""
+        //});
+        //model.on(Masa.Model.geEventKey(Masa.Model.EVENTS.CHANGE, "date"), function (name,v) {
+        //    this.set(name, v.toUTCString(), true);
+        //});
+        //model.on(Masa.Model.geEventKey(Masa.Model.EVENTS.ADD, "newdate"), function (name, v) {
+        //    alert(name);
+        //});
+        //// model.set('name', '44',true);
+        //model.add("newdate", 'fdfd');
+
+
+        //console.log(model.get('date'));
+    </script>
+</body>
+</html>

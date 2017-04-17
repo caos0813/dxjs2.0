@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <script>
+        //  (function(){var e={};function f(j,i,g){if(!Array.isArray(i)){g=i;i=[]}var h={dependencies:a(j,i),factory:g};if(i.indexOf("exports")!==-1){h.exports={}}e[j]=h}function a(i,h){i=i||"";var g=i.split("/");g.pop();return h.map(function(l){if(l[0]==="."){var k=l.split("/");var j=g.slice(0);k.forEach(function(m){if(m===".."){j.pop()}else{if(m!=="."){j.push(m)}}});return j.join("/")}else{return l}})}function d(i,h,g){return i.map(function(k){if(k==="exports"){return g}if(k==="require"){return function(m,l){b(a(h,m),l)}}var j=e[k];if(!j){throw new Error("Undefined dependency: "+k)}if(!j.resolved){j.resolved=c(j.dependencies,j.factory,k,j.exports);if(typeof j.resolved==="undefined"){j.resolved=j.exports}}return j.resolved})}function c(j,h,i,g){var k=d(j,i,g);if(h&&h.apply){return h.apply(null,k)}else{return h}}function b(h,g){if(!Array.isArray(h)){h=[h]}c(h,g)}exMind.define=f;exMind.require=b})();
+        var defined = {};
+        define = function (id, dependencies, factory) {
+            if (!Array.isArray(dependencies)) {
+                factory = dependencies;
+                dependencies = [];
+            }
+
+            var mod = {
+                dependencies: normalize(id, dependencies),
+                factory: factory
+            };
+
+            if (dependencies.indexOf('exports') !== -1) {
+                mod.exports = {};
+            }
+
+            defined[id] = mod;
+        };
+
+        function normalize(id, dependencies) {
+            id = id || "";
+            var parent = id.split('/');
+            parent.pop();
+            return dependencies.map(function (dep) {
+                if (dep[0] === '.') {
+                    var parts = dep.split('/');
+                    var current = parent.slice(0);
+                    parts.forEach(function (part) {
+                        if (part === '..') {
+                            current.pop();
+                        } else if (part !== '.') {
+                            current.push(part);
+                        }
+                    });
+                    return current.join('/');
+                } else {
+                    return dep;
+                }
+            });
+        }
+
+        function resolve(dependencies, parent, exports) {
+            return dependencies.map(function (depName) {
+                if (depName === 'exports') {
+                    return exports;
+                }
+
+                if (depName === 'require') {
+                    return function (dependencies, factory) {
+                        require(normalize(parent, dependencies), factory);
+                    };
+                }
+
+                var dep = defined[depName];
+                if (!dep) {
+                    throw new Error("Undefined dependency: " + depName);
+                }
+
+                if (!dep.resolved) {
+                    dep.resolved = load(dep.dependencies, dep.factory, depName, dep.exports);
+                    if (typeof dep.resolved === "undefined") {
+                        dep.resolved = dep.exports;
+                    }
+                }
+
+                return dep.resolved;
+            });
+        }
+
+        function load(dependencies, factory, parent, exports) {
+            var deps = resolve(dependencies, parent, exports);
+            if (factory && factory.apply) {
+                return factory.apply(null, deps);
+            } else {
+                return factory;
+            }
+        }
+        require = function (dependencies, factory) { //jshint ignore:line
+            if (!Array.isArray(dependencies)) {
+                dependencies = [dependencies];
+            }
+            load(dependencies, factory);
+        };
+        //define("dx/Core", ['exports'], function (exports) {
+
+        //    exports.getName = function () {
+        //        return 'aaa';
+        //    }
+        //});
+        //define("dx/Request", ['./Core'], function (c) {
+
+        //    return '你的姓名:' + c.getName();
+        //});
+        //require("dx/Request", function (r) {
+        //    console.log(r);
+        //})
+
+        define('dx', function () {
+            return {age:43};
+        });
+        define('dx/core',['dx'], function (dx) {
+            dx.name = '李飞三';
+            return dx;
+        });
+        define('dx/view', ['dx'], function (dx) {
+            dx.data = '3443';
+            return dx;
+        });
+        define('dx/start', ['./core','./view'], function (dx) {
+            return dx;
+        });
+        require('dx/start', function () {
+
+        });
+    </script>
+</body>
+</html>

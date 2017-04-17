@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+
+
+   <style>
+       .container
+       {
+           border:solid 1px red;
+           position:absolute;
+           left:100px;
+           top:50px;
+           width:300px;
+           height:200px;
+       }
+   </style>
+</head>
+<body>
+
+    <div class="container" id="container">
+
+
+    </div>
+
+
+    <script>
+
+     
+        var data = [{id:1,parent:-1}],i=2;
+        for (; i < 50;i++)
+        {
+            data.push({ id: i, parent: 1 });
+            for (var k=0; k < 50; k++) {
+                data.push({ id: i+''+k, parent: i });
+
+
+                for (var j = 0; j < 10; j++) {
+                    data.push({ id: j + '' + k+''+i, parent: i+''+k });
+                }
+            }
+        }
+
+        var resultIndex = 0;
+        function deleteArrayDeepById(id, data)
+        {
+            var i=0,len=data.length,result=[];
+            for (; i < len;i++)
+            {
+                if(data[i].parent == id)
+                {
+                    result.push(data[i].id);
+                    result = result.concat(deleteArrayDeepById(data[i].id, data));
+                }
+                resultIndex++;
+            }
+
+            return result;
+        }
+
+
+      
+        //function sum(x, y) {
+        //    if (y > 0) {
+        //        return sum(x + 1, y - 1);
+        //    } else {
+        //        return x;
+        //    }
+        //}
+
+ 
+        //Array.prototype.reduce = function (callback /*, initialValue*/) {
+        //    'use strict';
+        //    if (this === null) {
+        //        throw new TypeError('Array.prototype.reduce called on null or undefined');
+        //    }
+        //    if (typeof callback !== 'function') {
+        //        throw new TypeError(callback + ' is not a function');
+        //    }
+        //    var t = Object(this), len = t.length >>> 0, k = 0, value;
+        //    if (arguments.length == 2) {
+        //        value = arguments[1];
+        //    } else {
+        //        while (k < len && !(k in t)) {
+        //            k++;
+        //        }
+        //        if (k >= len) {
+        //            throw new TypeError('Reduce of empty array with no initial value');
+        //        }
+        //        value = t[k++];
+        //    }
+        //    for (; k < len; k++) {
+        //        if (k in t) {
+        //            value = callback(value, t[k], k, t);
+        //        }
+        //    }
+        //    return value;
+        //};
+
+        var sum = tailRecursion(function (x, y) {
+            console.log('x:'+x);
+            if (y > 0) {
+                return sum(x + 1, y - 1);
+            } else {
+                return x;
+            }
+
+        });
+
+
+        var resultIndex4 = 0;
+
+        function tailRecursion(f) {
+            var value;
+            var active = false;
+            var accumulated = [];
+            return function accumulator() {
+                accumulated.push(arguments);
+                if (!active) {
+                    active = true;
+                    while (accumulated.length) {
+                        value = f.apply(this, accumulated.shift());
+                    }
+                    active = false;
+                    return value;
+                }
+            };
+        }
+        function recursionArray(id,data,IdField,ParentField) {
+            var childs = [], currentData=data, recursionData, index = 0, len;
+            var recursionFilter = tailRecursion(function (id) {
+                recursionData = currentData.slice();
+                currentData = [];
+                recursionData.forEach(function (d, i) {
+                    if (d[IdField] == id) {
+                        index++;
+                        childs.push(d);
+                    } else if (d[ParentField] == id) {
+                        childs.push(d);
+                    } else {
+                        currentData.push(d);
+                    }
+                });
+                len = childs.length;
+                for (; index < len; index++) {
+                    recursionFilter(childs[index][IdField]);
+                }    
+            });
+            recursionFilter(id,data);
+            return {
+                relationList: childs,
+                remainingList: currentData
+            };
+        }
+       // var result4 = recursionArray(1, data.slice(), "id", "parent");
+
+        var resultIndex3 = 0;
+        var delData2 = function (id, data) {
+            var childs = [], currentData = [];
+            data.forEach(function (d, i) {
+                if (d.id == id) {
+                }
+                else if (d.parent == id) {
+                    childs.push(d.id);
+                } else {
+                    currentData.push(d);
+                }
+           
+            });
+            while (childs.length) {
+                currentData = delData2(childs.shift(), currentData);
+            }
+            return currentData;
+        }
+        var resultIndex2 = 0;
+        var delData = tailRecursion(function (id,data) {
+           
+            var childs = [],currentData=[],index=-1;
+            data.forEach(function (d,i) {
+
+                if(d.id==id)
+                {
+                     index=i;
+                }
+               else if(d.parent == id)
+                {
+                   childs.push(d.id);
+               }
+                resultIndex2++;
+            });
+            if(index>-1)
+            {
+                data.splice(index,1);
+            }        
+            while (childs.length) {
+                delData(childs.shift(),data);
+            }
+            return data;
+        });
+        console.log("树形结构数据维度四级，数组长度：" + data.length);
+
+        //  var result = deleteArrayDeepById(1, data.slice());
+  
+        console.log("result:运行失败，内存溢出" );
+        var result2 = delData(1, data.slice());
+        console.log("result2:" + resultIndex2);
+        var result3 = delData2(1, data.slice());
+        console.log("result3:" + resultIndex3);
+
+        var result4 = recursionArray(1,data.slice(),"id","parent");
+        console.log("result4:" + resultIndex4);
+    </script>
+
+
+</body>
+</html>

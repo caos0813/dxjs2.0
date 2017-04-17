@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <!-- 在 触 屏 一定 记得 禁止 缩放， 否则 touch 事件 会很 混乱， 难以 管理 --> 
+    <meta name=" viewport" content="width=device-width,initial-scale=1,maximum-scale= 1,user-scalable=no">
+
+    <style>
+
+        #touchtest
+        {
+            width:400px;
+            height:500px;
+            border:solid 1px red;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="touchtest">
+
+
+    </div>
+
+
+
+    <script>
+
+        var TouchType = {
+            'tap': "tap",
+            'longTap': "longTap",
+            'slide': "slide",
+            'slideLeft': "slideLeft",
+            'slideRight': "slideRight"
+        };
+        var TouchEvents = {
+            on:function(element,type,handler)
+            {
+
+                var isMove = false, eventData = {
+                    down: false,
+                    move: false,
+                    startX: 0,
+                    startY: 0
+                    
+                };
+
+               // element.addEventListener('pointerdown', function () {
+               //     alert('fd');
+               //});
+
+                element.addEventListener("touchstart", function (e) {
+                    var touches = e.touches[0];
+                    eventData.down = true;
+                    eventData.startX = touches.pageX;
+                    eventData.startY = touches.pageY;
+                    e.preventDefault();
+                });
+                element.addEventListener("touchmove", function (e) {
+                    eventData.move = true;
+                    e.preventDefault();
+                });
+                element.addEventListener("touchend", function (e) {
+                    e.preventDefault();
+                    var touches = e.changedTouches[0];
+                    var endX = touches.pageX, endY = touches.pageY, slide = endX - eventData.startX, slide2 = endY - eventData.startY;
+                    if(eventData.down)
+                    {
+                        if(!eventData.move&&type==TouchType.tap)
+                        {
+                            handler(e);
+                        } else if ((type == TouchType.slideLeft || type == TouchType.slideRight) && eventData.move && (eventData.startY > (endY - 10) || eventData.startY < (endY + 10)) && Math.abs(slide) > 50)
+                        {
+                            if (type == TouchType.slideLeft && slide < 0)
+                            {
+                                handler(e);
+                            } else if (type == TouchType.slideRight && slide > 0) {
+                                handler(e);
+                            } 
+                        } else if (type == TouchType.slide && eventData.move && (eventData.startX > (endX - 10) || eventData.startX < (endX + 10)) && Math.abs(slide2) > 50) {
+                                handler(e);
+                        }
+                    }
+                    eventData.down = false;
+                    eventData.move = false;
+                });
+            }
+        };
+        TouchEvents.on(document.getElementById('touchtest'), TouchType.tap, function () {
+            console.log('tap');
+        });
+
+        TouchEvents.on(document.getElementById('touchtest'), TouchType.slideLeft, function () {
+            console.log('slideLeft');
+        });
+        TouchEvents.on(document.getElementById('touchtest'), TouchType.slideRight, function () {
+            console.log('slideRight');
+        });
+        TouchEvents.on(document.getElementById('touchtest'), TouchType.slide, function () {
+            console.log('slide');
+        });
+    </script>
+
+
+
+
+</body>
+</html>

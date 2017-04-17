@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>首页</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+    <button id="btnOpen">打开</button>
+    <div id="log"></div>
+    <script>
+        window.addEventListener('hashchange', function (e) {
+
+            document.getElementById('log').innerHTML += '<div>hashchange</div>';
+
+        });
+        window.addEventListener('popstate', function (e) {
+   
+            document.getElementById('log').innerHTML += '<div>'+document.location.href +',state:'+JSON.stringify(e.state)+'</div>';
+
+        });
+        document.getElementById("btnOpen").addEventListener("click", function () {
+            history.pushState({name:"详情a"},"","/detail");
+        });
+        history.pushState({ name: "第一页" }, "", "?page=1");
+        history.pushState({ name: "第二页" }, "", "?page=2");
+        history.replaceState({ name: "第三页" }, "", "?page=3");
+    </script>
+</body>
+</html>

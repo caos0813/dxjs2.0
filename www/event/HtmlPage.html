@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+ 
+    <meta charset="utf-8" />
+
+
+    <style>
+        html {
+            border: solid 4px red;
+        }
+
+        body {
+            border: solid 4px blue;
+        }
+
+        #pppp {
+            border: solid 4px red;
+            position: absolute;
+            left: 4000px;
+            top: 200px;
+            width: 300px;
+            height: 300px;
+
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pppp"></div>
+
+
+    <script>
+        document.addEventListener('mousedown', function (e) {
+
+            console.log('bbbbbbbb');
+
+        });
+        document.getElementById('pppp').addEventListener('mousedown', function (e) {
+
+            console.log('222222222');
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
+        document.getElementById('pppp').addEventListener('mousedown', function (e) {
+
+            console.log('11111111111');
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
+ 
+            document.addEventListener('mousemove', function (e) {
+
+             //   console.log("aapageX:" + e.pageX + ",offsetX:" + e.offsetX + ",screenX:" + e.screenX + ",clientX:" + e.clientX + ",X:" + e.x);
+               
+            });
+        /***
+                clientX:相对可视区域
+                pageX: 相对整个文档
+                screen:相对屏幕
+                offsetX:相对元素
+        **/
+            document.getElementById('pppp').addEventListener('mousemove', function (e) {
+
+                console.log("pageX:"+e.pageX+",offsetX:"+e.offsetX+",screenX:"+e.screenX+",clientX:"+e.clientX+",X:"+e.x);
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            });
+
+
+    </script>
+</body>
+</html>

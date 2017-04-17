@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="../../scripts/map/ol/ol-debug.css" rel="stylesheet" />
+    <script src="../../scripts/map/ol/ol-debug.js"></script>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <div id="map" style="width: 100%"></div>
+    <script>
+      // 创建地图
+        var map=  new ol.Map({
+            // 设置地图图层
+            layers: [
+              // 创建一个使用Open Street Map地图源的瓦片图层
+              new ol.layer.Tile({source: new ol.source.OSM()})
+            ],
+            // 设置显示地图的视图
+            view: new ol.View({
+                center: [121.56, 31.02],    // 定义地图显示中心于经度0度，纬度0度处
+              zoom: 4            // 并且定义地图显示层级为2
+            }),
+            // 让id为map的div作为地图的容器
+            target: 'map'
+        });
+    </script>
+</body>
+</html>

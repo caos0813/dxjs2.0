@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/lib/jquery/jquery-3.1.js"></script>
+    <script src="../../scripts/es6/promise/es6-promise.js"></script>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+
+    <script>
+
+
+   
+
+        var _promise = new ES6Promise(function (resolve, reject) {
+
+            resolve(2);
+          
+        });
+
+        _promise.then(function () {
+
+            console.log('成功');
+            return new Promise(function (resolve) {
+
+                setTimeout(function () {
+
+                    resolve(4);
+                }, 1000)
+            });
+        }).then(function () {
+            throw new Error('fd');
+            console.log('成功2');
+        }).catch(function () {
+            console.log('异常');
+        });
+
+        var state = "Pending";//Resolved Rejected fulfilled rejected pending
+
+
+        function initDXPromise(promise)
+        {
+
+        }
+
+        function EventEmitter()
+        {
+
+        }
+
+
+        var Callbacks=function(menory)
+        {
+
+        }
+
+
+        function DXPromise(resolver)
+        {
+            var that = this;
+            this.state = undefined;
+            try
+            {
+                resolver(function () {
+
+
+                }, function () {
+
+                });
+            }catch(e)
+            {
+
+            }
+        }
+        DXPromise.prototype.then=function(success,fail)
+        {
+
+        }
+        DXPromise.prototype.catch=function(error)
+        {
+
+        }
+        //方法用于将多个Promise实例，包装成一个新的Promise实例。
+        DXPromise.all=function()
+        {
+
+        }
+        //Promise.race方法同样是将多个Promise实例，包装成一个新的Promise实例。
+        DXPromise.race=function()
+        {
+
+        }
+        //有时需要将现有对象转为Promise对象，Promise.resolve方法就起到这个作用。
+        DXPromise.resolve = function () {
+
+        }
+        //Promise.reject(reason)方法也会返回一个新的 Promise 实例，该实例的状态
+        DXPromise.reject = function (reason)
+        {
+
+        }
+
+
+    </script>
+</body>
+</html>

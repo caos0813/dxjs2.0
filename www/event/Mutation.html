@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+
+    <div id="container">
+
+    </div>
+
+    <script>
+
+        var elCon = document.getElementById('container');
+
+
+        var observer =new  MutationObserver(function (e) {
+
+           
+        });
+
+        observer.observe(document.getElementById('container'), {
+            attributes: true, childList: true, characterData: true
+        })
+        window.addEventListener('beforeunload', function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+        //    e.returnValue = 'fdsafdsa';
+            return 'aaaaaa';
+        }, false);
+        //window.addEventListener("beforeunload", function (e) {
+        //    var confirmationMessage = "\o/";
+
+        //    (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
+        //    return confirmationMessage;                                //Webkit, Safari, Chrome etc.
+        //});
+    </script>
+</body>
+</html>

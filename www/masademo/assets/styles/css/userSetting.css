@@ -1,0 +1,120 @@
+.clearfix:before,
+.clearfix:after {
+  content: '';
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clear:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.text-left {
+  text-align: left!important;
+}
+.text-right {
+  text-align: right!important;
+}
+.text-center {
+  text-align: center!important;
+}
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+.text-align-both {
+  text-align: justify;
+  text-align: end;
+  /* 对于除了IE之外的浏览器用尾对齐覆盖之前的两端对齐方式 */
+  text-align-last: justify;
+  text-justify: distribute;
+}
+.benan-name {
+  padding: 7px 10px;
+  background: #121a35;
+  color: #999;
+  font-size: 12px;
+}
+.benan-name strong {
+  margin-right: 5px;
+  color: #0283ec;
+  font-weight: 400;
+}
+.benan-name span {
+  margin-left: 5px;
+  color: #999;
+}
+.a-box .a-box-title .a-box-title-tool > i.close-ty {
+  color: #999;
+}
+.a-box .table {
+  border-top: none;
+  box-shadow: none;
+}
+.a-box .table th,
+.a-box .table td {
+  padding: 7px 5px;
+  font-size: 12px;
+  background: #06112a;
+}
+.a-box .table tr:nth-child(2n+1) td {
+  background: #121a35;
+}
+.a-box.benan .a-box-title {
+  background: #5e30ae;
+}
+.a-box.benan .table {
+  border-top: none;
+  box-shadow: none;
+}
+.a-box.benan .table th,
+.a-box.benan .table td {
+  padding: 7px 5px;
+  font-size: 12px;
+  background: #06112a;
+}
+.a-box.benan .table tr:nth-child(2n+1) td {
+  background: #121a35;
+}
+.a-box.benan .table tbody tr {
+  cursor: pointer;
+}
+.a-box.benan .table tbody tr td i {
+  color: #5e30ae;
+}
+.a-box.my-jp {
+  border-top: none;
+  box-shadow: none;
+}
+.a-box.my-jp .a-box-title {
+  background: #2a48a6;
+}
+.a-box.my-jp th,
+.a-box.my-jp td {
+  padding: 7px 5px;
+  font-size: 12px;
+  background: #06112a;
+}
+.a-box.my-jp tr:nth-child(2n+1) td {
+  background: #121a35;
+}
+.a-box.tuijian-jp {
+  border-top: none;
+  box-shadow: none;
+}
+.a-box.tuijian-jp .a-box-title {
+  background: #047778;
+}
+.a-box.tuijian-jp th,
+.a-box.tuijian-jp td {
+  padding: 7px 5px;
+  font-size: 12px;
+  background: #06112a;
+}
+.a-box.tuijian-jp tr:nth-child(2n+1) td {
+  background: #121a35;
+}

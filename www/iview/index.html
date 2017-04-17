@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>iview example</title>
+    <script src="lib/vue.min.js"></script>
+    <link href="lib/iview.css" rel="stylesheet" />
+    <script src="lib/iview.js"></script>
+</head>
+<body>
+    <div id="app">
+        <i-button >Click me!</i-button>
+        <Modal title="Welcome">欢迎使用 iView</Modal>
+
+        <i-Select style="width:200px">
+            <i-Option value="beijing" label="北京市">
+                <span>北京</span>
+                <span style="float:right;color:#ccc">Beiing</span>
+            </i-Option>
+            <i-Option value="shanghai" label="上海市">
+                <span>上海</span>
+                <span style="float:right;color:#ccc">ShangHai</span>
+            </i-Option>
+            <i-Option value="shenzhen" label="深圳市">
+                <span>深圳</span>
+                <span style="float:right;color:#ccc">ShenZhen</span>
+            </i-Option>
+        </i-Select>
+        <i-menu active-name="1-2" width="auto" open-names="['1']">
+            <submenu name="1">
+                <template slot="title">
+                    <Icon type="ios-navigate"></Icon>
+                    导航一
+                </template>
+                <menu-item name="1-1">选项 1</menu-item>
+                <Menu-item name="1-2">选项 2</Menu-item>
+                <Menu-item name="1-3">选项 3</Menu-item>
+            </submenu>
+            <Submenu name="2">
+                <template slot="title">
+                    <Icon type="ios-keypad"></Icon>
+                    导航二
+                </template>
+                <Menu-item name="2-1">选项 1</Menu-item>
+                <Menu-item name="2-2">选项 2</Menu-item>
+            </Submenu>
+            <Submenu name="3">
+                <template slot="title">
+                    <Icon type="ios-analytics"></Icon>
+                    导航三
+                </template>
+                <Menu-item name="3-1">选项 1</Menu-item>
+                <Menu-item name="3-2">选项 2</Menu-item>
+            </Submenu>
+        </i-menu>
+    </div>
+    <script>
+       
+   var a= new Vue({
+        el: '#app',
+        data: {
+            
+        },
+        methods: {
+        
+        }
+    })
+    </script>
+</body>
+</html>

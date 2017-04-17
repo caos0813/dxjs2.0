@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="all.css" rel="stylesheet" />
+    <script>
+        var require = function () { }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="vue.min.js"></script>
+    <script src="lodash.min.js"></script>
+    <script src="masa.js"></script>
+	<meta charset="utf-8" />
+    <style>
+        body {
+        background-color:#1f2746;
+      
+        }
+    </style>
+</head>
+<body>
+    <div id="range" style="width:800px;margin-left:200px;"></div>
+    <div class="search-content no-serach-btn"><input type="text" id="txtName" placeholder="请输入项目名称或备案名称"><button class="btn">搜索</button></div>
+    <script>
+      
+        /**多刻度范围滑动器
+        @params
+                    lineHeight: 5,
+                    splitWidth: 18,
+                    lineTop: '1px',
+                    step: 1,
+                    width: 400,
+                    splits: [],  // 分割线数据集 
+                    lineFillStyle: "#0094ff",
+                    lineFillStyleGray: "#cac7c7"
+        */
+        var _rangeSlider = Masa.ui.createWidget("RangeSlider", "#range", {
+            step: 1,
+            splits: [
+                { value: 60, title: "60平", offset: [-10, 0] },
+                { value: 80, title: "80平", offset: [-10, 0] },
+                { value: 100, title: "100平", offset: [-10, 0] },
+                { value: 150, title: "150平", offset: [-10, 0] },
+                { value: 200, title: "200平", offset: [-10, 0] },
+                { value: 250, title: "250平", offset: [-10, 0] },
+                { value: 300, title: "300平", offset: [-10, 0], width: '80px' }
+            ],
+            onRangeChange: function (e) {
+                console.log("onRangeChange:" + e.selectValue + ",value:" + e.value);
+
+            },
+            onRangeMove: function (e) {
+                console.log("onRangeMove:" + e.selectValue);
+            }
+        });
+        /*
+        自动补全
+        @params{
+                          template: '<div class="auto-complete-container"></div>',  // 默认模板，可自定义模板，可扩展
+                        container: "<ul>",   // 容易 ,可自定义扩展
+                        content:"",  // 容器选择器 ,默认为空 ，使用container 作为容器。可扩展
+                        itemTemplate: '<li><%=obj[$field]%><li>', // 数据项模板，可自定义 可扩展，
+                        errorMessage:'', // 当搜索请求错误显示信息
+                        emptyMessage: '', // 当数据为空显示信息
+                        serverFilter:true, // 是否开启 服务器过滤模式，如果为false ，可配合静态数据集过滤
+                        offset:[0,0], // 自动补全层，偏离位置 ，width*height
+                        dataValueField: "value", // 服务器请求过滤字段
+                        dataTextField: "text", // 
+                        source: null // 数据源 详情查看 masa.DataSource 数据源对象
+        }
+       **/
+        var data = [
+                          {
+                              title: "万科城aaaaaaaaaa",
+                              name:"科技园43"
+                          },
+                            {
+                                title: "千科城aaaaaaaaaa",
+                                name: "科技园43"
+                            }
+        ];
+
+       var autoComplete= Masa.ui.createWidget("AutoComplete", "#txtName", {
+           itemTemplate: '<li><p><strong><%=id%></strong><span><%=name%></span></p><div class="btn-add-compare">'
+               + '<button class="btn disabled"></button></div></li>',
+           container: '<div><input type="text" /><ul></ul></div>',   // 容易 ,可自定义扩展
+           content: "ul",
+            source: {
+                transport: {
+                    name: "*",
+                    type:"get",
+                    url: "http://172.18.84.65:8808/masa/a/sys/dict/plate"
+                }
+            },
+            dataValueField: "districtId",
+            emptyMessage: '<span style="color:red">没有你查询的项目</span>',
+            serverFilter:true // 
+       });
+       autoComplete.wrapper.on("click", "button", function () {
+
+       });
+    </script>
+</body>
+</html>

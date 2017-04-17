@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link href="../../scripts/ui/element-ui/index.css" rel="stylesheet" />
+    <script src="../../scripts/mvvm/vue/vue-2.1.10.js"></script>
+    <script src="../../scripts/ui/element-ui/index.js"></script>
+
+	<meta charset="utf-8" />
+</head>
+<body>
+   <div id="divTest">
+       <el-switch v-model="value1"
+                  on-text=""
+                  off-text="">
+       </el-switch>
+       <el-switch v-model="value2"
+                  on-color="#13ce66"
+                  off-color="#ff4949">       </el-switch>
+
+   </div>
+    <script>
+        var view=new Vue({
+            el:"#divTest",
+            data:{
+                value1:true,
+                value2:false
+            }
+        });
+        var loading= ELEMENT.Loading.service({
+            target:document.body,
+            text:"加载中"
+        })
+
+
+    </script>
+</body>
+</html>

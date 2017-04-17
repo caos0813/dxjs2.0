@@ -1,0 +1,311 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="../../scripts/lib/jquery/jquery-3.1.js"></script>
+</head>
+<body>
+
+    <script>
+
+        var extend=function(target,source)
+        {
+            for (var name in source)
+           {
+                target[name] = source[name];
+            }
+            return target;
+        }
+
+        var Deferred = function (initPromise)
+        {
+            var doneCallback = Callbacks('once memory');
+            var failCallback = Callbacks('once memory');
+            var
+                deferred = {},
+                promise = {
+                promise:function(obj)
+                {
+                    return obj ? extend(obj, promise) : promise;
+                },
+                then:function(done,fail)
+                {
+                    fail = fail || function () { };
+                    return Deferred(function (newPromise) {
+
+                        deferred.done(function(){
+                        
+                            var result=done.apply(this,arguments);
+                            if(result.promise)
+                            {
+                                result.done(newPromise.resolve);
+                                result.fail(newPromise.reject);
+                            }
+                        });
+                        deferred.fail(fail);
+                    });
+                },
+                always:function(done,fail)
+                {
+                    deferred.done(done).fail(fail);
+                }
+             };
+            promise.promise(deferred);
+            deferred.resolve = doneCallback.fire;
+            deferred.resolveWith = doneCallback.fireWith;
+            deferred.reject = failCallback.fire;
+            defaultStatus.rejectWith = failCallback.fireWith;
+            deferred.done = doneCallback.add;
+            deferred.fail = failCallback.add;
+            if (initPromise) {
+                initPromise(deferred);
+            }
+            return deferred;
+        }
+        var Callbacks = (function () {
+            var createOptions=function(options)
+            {
+                var objs={},name;
+                for(name in options)
+                {
+                    objs[options[name]] = true;
+                }
+                return objs;
+            }
+            return function(flags)
+            {
+                var
+                    options = createOptions(flags.split(' ')),
+                    list = [],
+                    locked,
+                    fired,
+                    memory,
+                    firing=false,
+                    firingIndex=-1,
+                    queue= [];
+
+                var fire=function()
+                {
+                    locked = options.once;
+                    fired = firing = true;
+                    var i = firingIndex+1, len = list.length, handler, result;
+                    memory = queue.shift();
+                    for (; i < len;i++)
+                    {
+                        handler = list[i];
+                        result = handler.apply(memory[0], memory[1]);
+                        if (options.stopOnFalse && result===false)
+                        {
+                            memory = false;
+                            break;
+                        }
+                    }
+                    if (!options.memory) {
+                        memory = false;
+                    }
+                    firing = false;
+                    firingIndex = -1;
+                    if (locked) {
+                        if (memory) {
+                            list = [];
+                        } else {
+                            list = "";
+                        }
+                    }
+                }
+                var self = {
+                    add:function(callback)
+                    {
+                        if (list) {
+
+                            if (memory && !firing) {
+                                firingIndex = list.length - 1;
+                                queue.push(memory);
+                            }
+                            if (!options.unique||!self.has(callback))
+                            {
+                                list.push(callback);
+                            }
+                            if (memory&& !firing)
+                            {
+                                fire();
+                            }
+                        }
+                        return this;
+                    },
+                    remove: function (callback)
+                    {
+                        
+                        var index;
+                        while ((index = list.indexOf(callback))>-1)
+                        {
+                              list.splice(index,1);
+                        }
+                        return this;
+                    },
+                    fire:function()
+                    {
+                      return  self.fireWith(this, arguments);                    
+                    },
+                    fireWith:function(context,args)
+                    {
+                        if (!locked) {
+                            args = args || [];
+                            args = [context, args.slice ? args.slice() : args];
+                            queue.push(args);
+                            if (!firing) {
+                                fire();
+                            }
+                        }
+                        return this;
+                    },
+                    empty:function()
+                    {
+                        if (list) {
+                            list = [];
+                        }
+                    },
+                    has: function (callback)
+                    {
+                        return list.indexOf(callback) != -1;
+                    },
+                    lock:function()
+                    {
+                        locked = queue = [];
+                        if (!memory && !firing) {
+                            list = memory = "";
+                        }
+                        return this;
+                    },
+                    locked:function()
+                    {
+                        return !!locked;
+                    },
+                    disabled:function()
+                    {
+                        return !list;
+                    },
+                    disable:function()
+                    {
+                        locked = queue = [];
+                        list = memory = "";
+                        return this;
+                    }
+                };
+                return self;
+            }
+        }());
+
+
+        /**
+            once: 确保这个回调列表只执行一次(像一个递延 Deferred). 
+            memory: 保持以前的值和将添加到这个列表的后面的最新的值立即执行调用任何回调 (像一个递延 Deferred). 
+            unique: 确保一次只能添加一个回调(所以有没有在列表中的重复). 
+            stopOnFalse: 当一个回调返回false 时中断调用 
+            默认情况下，回调列表将像事件的回调列表中可以多次触发。
+
+        */
+
+
+        //var Callbacks=function(flags)
+        //{
+        //    flags = flags || "";
+        //    this.state=0;
+        //    this.once = flags.indexOf('once')!=-1?true:false;
+        //    this.memory = flags.indexOf('memory') != -1 ? true : false;
+        //    this.unique = flags.indexOf('unique') != -1 ? true : false;
+        //    this.stopOnFalse = flags.indexOf('stopOnFalse') != -1 ? true : false;
+        //    this.list = [];
+        //    this._hArgs = [];
+        //    this._hContext = null;
+        //}
+        //Callbacks.prototype.add=function(callback)
+        //{
+        //    if (this.unique && this.list.indexOf(callback) != -1)
+        //    {
+        //        return;
+        //    }
+        //    if (this.memory&&this.state==1)
+        //    {
+        //        callback.apply(this, this._hArgs);
+        //        return;
+        //    }
+        //    this.list.push(callback);
+        //}
+        //Callbacks.prototype.remove = function (callback) {
+        //    var index = this.list.indexOf(callback);
+        //    if(index!=-1)
+        //    {
+        //        this.list.splice(index, 1);
+        //    }
+        //}
+        //Callbacks.prototype._fire = function (context, args) {
+        //    var list = this.list, i = 0,len = list.length, callback, result;
+        //    this._hArgs = args;
+        //    this._hContext = context;
+        //    for (; i < len;i++)
+        //    {
+        //        callback = list[i];
+        //        result = callback.apply(context || this, args);
+        //        if (this.stopOnFalse&&result===false)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    this.state = 1;
+        //    return this;
+        //}
+        //Callbacks.prototype.fireWith = function (context, args) {
+        //    if (this.once && this.state == 1) {
+        //        return this;
+        //    }
+        //   return this._fire(context, args);
+           
+        //}
+        //Callbacks.prototype.fire= function () {
+        //    return this.fireWith(this, arguments);
+        //}
+
+        function aaa(name)
+        {
+            console.log('aaaaaaaaaaaaaa:' + name);
+        }
+        function bbb(name) {
+            console.log('bbbbbbbbbbbb:'+name);
+        }
+        var callback = Callbacks('once memory');
+
+        callback.add(aaa);
+        callback.add(bbb);
+      //  callback.fire('李三');
+      //  callback.fire('李三34');
+
+        var callback2 = $.Callbacks('memory');
+        callback2.add(aaa);
+        callback2.add(bbb);
+      //  callback2.fire('fd');
+        callback2.lock();
+
+        var _Deferred = Deferred();
+
+
+        _Deferred.then(function (name) {
+            console.log('我是:'+name);
+            return Deferred(function (newdeferred) {
+
+                console.log('朋友找我借钱，我没有钱，我要去银行取，所以叫他在这等我三秒');
+                setTimeout(function () {
+                    newdeferred.resolve('100块');
+                },3000);
+
+            });
+        }).done(function (name) {
+
+            console.log('我借了'+name+'给他');
+        });
+   
+    </script>
+</body>
+</html>

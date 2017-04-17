@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+    <button id="btnOpen">打开</button>
+    <div class="window" style="height:3000px;width:3000px" id="log"></div>
+
+    
+    <script>
+
+        
+        // 窗口高度 window.innerHeight ie9
+        console.log(window.innerHeight);
+        console.log(window.outerHeight);
+        console.log(document.documentElement.scrollHeight);
+
+        document.querySelector('#btnOpen').addEventListener('click', function () {
+            var newwin = window.open('', '_blank', 'width=300px,height=300px');
+
+        });
+
+    </script>
+
+</body>
+</html>

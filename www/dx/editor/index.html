@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+
+    <textarea id="editor"></textarea>
+
+    <script>
+
+
+        var OBJECT_CORE = {}, FUNCToString = Function.prototype.toString, getPrototype = Object.getPrototypeOf, hasOwn = OBJECT_CORE.hasOwnProperty, OBJString = Function.prototype.toString.call(Object);
+
+        var Class = {
+            create:function(proto)
+            {
+                var subClass=function()
+                {
+                    this.initialize.apply(this, arguments);
+                }
+                subClass.inherit = Class.inherit;
+              //  subClass.
+                return subClass;
+            },
+            inherit:function(parent)
+            {
+                var that = this, options = Object.create(parent.prototype);
+                Class.extend(that.prototype, options);
+                return this;
+            },
+            isArray:function(value)
+            {
+                return Array.isArray(value);
+            },
+            isPlainObject:function(value)
+            {
+                if(OBJECT_CORE.toString.call(value)!=="[object Object]")
+                {
+                    return false;
+                }
+                var proto = getPrototype(value);
+                if(!proto)
+                {
+                    return true;
+                }
+                var constor = hasOwn.call(proto,"constructor") && proto.constructor
+                return typeof constor == "function" && FUNCToString.call(constor) == OBJString;
+            },
+            extend:function()
+            {
+                var i = 1, src, name, copy, len = arguments.length, target = arguments[0], source, deep = false;
+                if (typeof target == "boolean")
+                {
+                    deep = target;
+                    target = arguments[1];
+                    i = 2;
+                }
+                for (; i < len; i++) {
+                    source = arguments[i];
+                    if (typeof source == "object") {
+                        for (name in source) {
+                            copy = source[name];
+                            src = target[name];
+                            if (deep &&Class.isPlainObject(copy))
+                            {
+                                copy = Class.extend(deep, {}, src, copy);
+                            } else if(deep&&Class.isArray(copy)){
+                                copy = Class.extend(deep, [], src, copy);
+                            }
+                            target[name] = copy;
+                        }
+                    }
+                }
+                return target;
+            }
+
+        };
+
+        var Observer=function()
+        {
+
+        }
+
+        var EditorTools=function()
+        {
+        
+        }
+        var Editor=function()
+        {
+
+        }
+
+
+
+    </script>
+</body>
+</html>

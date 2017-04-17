@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../scripts/mvvm/vue/vue.js"></script>
+    <link href="../../styles/css/bootstarp/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../scripts/lib/jquery/jquery-3.1.min.js"></script>
+    <script src="../../scripts/ui/bootstrap/bootstrap.js"></script>
+
+
+	<meta charset="utf-8" />
+
+    <style>
+
+  .dx-selectpanel
+  {
+    font-family: verdana,Microsoft YaHei,Tahoma,sans-serif;
+    padding:5px;
+    border:2px solid #eee;
+    background-color:#f5f5f5;
+    width:500px;
+    position:absolute;
+    z-index:80;
+  }
+
+   .dx-sp-tab
+   {
+
+   }
+   .sp-selected
+   {
+       background-color:#56b4f8;
+       color:#fff;
+   }
+    .dx-selectpanel-tab
+    {
+        border-bottom:solid 3px #56b4f8;
+        position:relative;
+        height:35px;
+    }
+        .dx-selectpanel-tab a {
+             display:inline-block;
+            text-align:center;
+            height:35px;
+            line-height:35px;
+            padding:0px 25px;
+           
+            text-decoration:none;
+            font-size:16px;
+                  cursor:default;
+        }
+            .dx-selectpanel-content{
+                margin-top:10px;
+            }
+    .dx-selectpanel-content a
+    {
+         display:inline-block;
+            text-align:center;
+           
+            text-decoration:none;
+               padding:10px 25px;
+           
+             color: #666;
+            font-size:13px;
+           cursor:pointer;
+
+    }
+       .dx-selectpanel-close{
+           position:absolute;
+           right:10px;
+                    cursor:default;
+                    top:10px;
+       }
+          .dx-selectpanel-close:hover::after, .dx-selectpanel-close:hover::before{
+       background-color:#94cef8;
+       }
+               .dx-selectpanel-close::before, .dx-selectpanel-close::after{
+                          position:absolute;
+        top:0px;
+        left:0px;
+        content:'';
+        display:block;
+        border:0px!important;
+        width:2px;
+        height:15px;
+                      background-color:#56b4f8;
+               }
+        .dx-selectpanel-close::before
+    {
+          
+       transform:rotate(35deg);
+
+    }
+    .dx-selectpanel-close::after
+    {
+      transform:rotate(-35deg);
+         
+    }
+
+    /* 必需 */
+.amselectpanel-transition {
+    transform-origin:50% 0;
+       -webkit-transform-origin:50% 0;
+}
+ .amselectpanel-enter {
+
+            animation:amselectpanelover 1s ease;
+            -webkit-animation:amselectpanelover 1s ease;
+ }
+ @keyframes amselectpanelover{
+            from
+            {
+                transform:scale(0);
+                -webkit-transform:scale(0);
+            }
+              to
+            {
+                transform:scale(1);
+               -webkit-transform:scale(1);
+            }
+   }
+        @keyframes amselectpanelout {
+            from {
+                transform: scale(1);
+               -webkit-transform:scale(1);
+            }
+
+            to {
+                transform: scale(0);
+                 -webkit-transform:scale(0);
+            }
+        }
+.amselectpanel-leave {
+            animation:amselectpanelout 1s ease;
+            -webkit-animation:amselectpanelout 1s ease;
+}
+.dx-selectpanel-btn
+{
+    border:0px!important;
+    background-color:#56b4f8;
+    color:#fff;
+    width:80px;
+    
+    float:right;
+    text-align:center;
+}
+.dx-selectpanel-footer
+{
+  margin-top: 10px;
+    padding: 10px 0px 0px;
+    border-top: solid 1px #e7eaed;
+}
+.dx-selectpanel-footer>span{
+ 
+    font-size:12px;
+}
+.dx-selectpanel-footer .dx-selectpanel-t2{
+ 
+   color:#56b4f8;
+}
+.dx-selectpanel-footer .dx-selectpanel-t2>span{
+ 
+ background-color:#ff6a00;
+}
+    </style>
+</head>
+<body>
+
+    <button id="btnOpen" type="button" style="margin-left:300px;margin-top:200px">点击</button>
+    <div id="selectpanel"></div>
+
+    <script type="text/template" id="tempList">
+        
+        <div class="dx-selectpanel"  v-show="isShow" transition="amselectpanel">
+            
+            <div class="dx-selectpanel-tab">
+                <a  v-for="item in tabs" :class="{'sp-selected':selectedIndex==$index}" @click="onChangeTab($index)" >{{item.name}}</a>
+                <span class="dx-selectpanel-close" @click="close"></span>
+            </div>
+            <div class="dx-selectpanel-content">
+                <div v-for="(parentindex,item) in tabs" :style="{'display':selectedIndex==parentindex?'':'none'}">
+                        <a v-for="m in item.data"  :class="{'sp-selected':item.selectedIndex==$index}" @click="onChange(parentindex,$index)">{{m.text}}</a>
+                </div>
+      
+            </div>
+            <div  class="dx-selectpanel-footer">
+                <span> 当前选择:</span><span class="dx-selectpanel-t2" >{{selectalltext}}</span> <button type="button" v-show="showBtn" class="dx-selectpanel-btn" @click="onComfirm">确认</button>
+            </div>
+        </div>
+         
+    </script>
+    <script>
+
+        Vue.component('listmenu', Masa.Vue.extend({
+            props: ['item', 'index', 'selectedIndex'],
+            data: function () {
+                return { colors: ['bg-plum', 'bg-blue', 'bg-red', 'bg-green'] }
+            },
+            methods: {
+                getColor: function (index) {
+                    var len = this.colors.length, i = Math.floor(index / 2) % len;
+                    return this.colors[i] + (index == this.selectedIndex ? ' active' : '');
+                }
+            },
+            template: '<div class="col-lg-6 col-md-6 col-sm-6" ><listmenuchild :item="item" :class="getColor(index)"></listmenuchild></div>',
+        }));
+        Vue.component('listmenuchild', Masa.Vue.extend({
+            props: ['item'],
+            template: '<div class="item-btn" ><div class="desc">{{item.labelTypeName}}</div><div class="sec-desc">{{item.labelName}}</div></div>',
+        }));
+
+
+        var selectPanel = Vue.extend({
+            data: function () {
+                return { isShow: false, tabs: [], selectedIndex: 0 ,selectalltext:"",showBtn:false,currentIndex:-1};
+            },
+            watch: {
+                'isShow':function(val)
+                {
+                    if(val)
+                    {
+                        this.currentIndex = -1;
+                        this.selectalltext = '';
+                        this.selectedIndex = 0;
+                        this.clearSelected();
+                    }
+                }
+            },
+            methods: {
+                onComfirm:function()
+                {
+                    this.close();
+                    this.$emit('onComfirm', this.tabs[this.tabs.length - 1].data[this.currentIndex]);
+                },
+                close: function () {
+                    this.isShow = false;
+                },
+                onChangeTab: function (index) {
+                    this.selectedIndex = index;
+                },
+                bindData: function (index, data) {
+                    this.tabs[index].data = data;
+                },
+                clearSelected: function () {
+                    var tabCount = this.tabs.length;
+
+                    for (var i = 1; i < tabCount; i++) {
+                        this.tabs[i].selectedIndex = -1;
+                        this.tabs[i].data = [];
+                    }
+                    if (tabCount > 0)
+                    {
+                        this.tabs[0].selectedIndex = -1;
+                    }
+                    this.showBtn = false;
+                },
+                onChange: function (panretindex, itemindex) {
+                    var index = panretindex + 1, tabCount = this.tabs.length, tabItem = this.tabs[panretindex];
+                    if (index < tabCount) {
+                        this.selectedIndex = index;
+                    }
+                    if (index >= tabCount) {
+                        this.showBtn = true;
+                    } else {
+                        this.showBtn = false;
+                    }
+                    tabItem.selectedIndex = itemindex;
+                    for (var i = index; i < tabCount; i++) {
+                        this.tabs[i].selectedIndex = -1;
+                        this.tabs[i].data = [];
+                    }
+                    var text = "";
+                    for (var i = 0; i < tabCount; i++) {
+                        if(this.tabs[i].selectedIndex!=-1)
+                        {
+                            text +='—'+this.tabs[i].data[this.tabs[i].selectedIndex].text;
+                        }
+                    }
+                    this.currentIndex = index;
+                    this.selectalltext = text.substr(1);
+                    this.$emit('onChange', panretindex, tabItem.data[itemindex]);
+                },
+                open: function (selector, soffset) {
+                    soffset = soffset || { left: 0, top: 0 };
+                    var that = this;
+                    this.isShow = true;
+                    this.$nextTick(function () {
+                        var element = $(selector), offset = element.offset(), container = $(that.$el), w = container.outerWidth(), styles;
+                        styles = {
+                            top: offset.top + element.outerHeight() + soffset.top,
+                            left: offset.left - ((w - element.outerWidth()) / 2) + soffset.left
+                        };
+                        if (styles.left < 0) {
+                            styles.left = 10;
+                        }
+                        container.css(styles);
+                    });
+
+                }
+            },
+            template: '<div class="dx-selectpanel"  v-show="isShow" transition="amselectpanel"><div class="dx-selectpanel-tab"><a  v-for="item in tabs" :class="{\'sp-selected\':selectedIndex==$index}" @click="onChangeTab($index)" >{{item.name}}</a><span class="dx-selectpanel-close" @click="close"></span></div><div class="dx-selectpanel-content"><div v-for="(parentindex,item) in tabs" :style="{\'display\':selectedIndex==parentindex?\'\':\'none\'}"><a v-for="m in item.data"  :class="{\'sp-selected\':item.selectedIndex==$index}" @click="onChange(parentindex,$index)">{{m.text}}</a></div></div><div  class="dx-selectpanel-footer"><span> 当前选择:</span><span class="dx-selectpanel-t2" >{{selectalltext}}</span><button type="button" v-show="showBtn" class="dx-selectpanel-btn" @click="onComfirm">确认</button></div></div>'
+        });
+
+        var _panel = new selectPanel({ el: "#selectpanel", data: { tabs: [{ name: "区域", data: [{ text: "fda", value: "fd" }, { text: "fda", value: "fd" }], selectedIndex: -1 }, { name: "案场", data: [], selectedIndex: -1 }, { name: "区域", data: [{ text: "fda", value: "fd" }], selectedIndex: -1 }] } });
+
+        _panel.$on("onChange", function (panretindex,item) {
+            if(panretindex==0)
+            {
+                this.bindData(1, [{ text: "aaaaaaaaaa", value: "bbbbbbbbbbbbb" }, { text: "fdaf", value: "ddddddd" }])
+            } if (panretindex == 1) {
+                this.bindData(2, [{ text: "cccccc", value: "bbbbbbbbbbbbb" }, { text: "tttttt", value: "ddddddd" }])
+            }
+        });
+        $("#btnOpen").on("click",function(){
+            _panel.open(this);
+        })
+    </script>
+</body>
+</html>

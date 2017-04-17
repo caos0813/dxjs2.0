@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Basic Example with JSX</title>
+
+    <link href="../../scripts/mvvm/react/react-15.3.1/examples/shared/css/base.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div id="example">
+
+    </div>
+
+    <script src="../../scripts/data/redux.js"></script>
+  
+
+    <script >
+        
+
+
+        var actions={
+            login:function(username='李三',password='123')
+            {
+                return {
+                    type:"login",
+                    data:{
+                        username,
+                        password
+                    }
+                };
+            }
+        
+        
+        };
+
+        function reducerLogin(state={success:false,msg:''},action)
+            {
+                switch(action.type)
+                {
+                    case "login":
+                        if(action.success)
+                        {
+                            Object.assign(state,{
+                                success:true,
+                                msg:"登录成功"
+                            });
+                        }else{
+                           Object.assign(state,{
+                                success:false,
+                                msg:"登录失败"
+                            });
+                        }
+                        break;
+                    case"getLoginData":
+                        if(state.success)
+                        {
+                            state=state.msg;
+                        }else{
+                            state=state.msg;
+                        }
+                        break;
+                }
+                return state;
+            }
+
+        function reducerA(state='',action)
+        {
+            switch(action.type)
+            {
+                case "A":
+                    state = action.value;
+                    break;
+            }
+            return state;
+        }
+        function reducerB(state='', action)
+        {
+            switch (action.type) {
+                case "B":
+                    state = action.value;
+                    break;
+            }
+            return state;
+        }
+        var reducers = Redux.combineReducers({
+            login:reducerLogin,
+            a: reducerA,
+            b: reducerB
+        });
+       
+        var store = Redux.createStore(reducers,Redux.applyMiddleware(
+               function(middlewareAPI)
+               {
+                   return function(next)
+                   {
+                       return function(action){                              
+                 
+                           next(action);
+                               
+                       }
+                   }
+               }
+            ,
+                 function(middlewareAPI)
+                 {
+                     return function(dispatch)
+                          {
+                              return function(action){                              
+                                 
+                                  console.log(action.type);
+                                  if(action.type=='login')
+                                  {                                 
+                                      setTimeout(function(){
+                     
+                                          dispatch({type:action.type,success:true});
+                                      },3000);
+                                  }
+
+                              }
+                          }
+                 },
+                 function(middlewareAPI)
+                 {
+                     return function(dispatch)
+                     {
+                         return function(action){                              
+                                 
+                             console.log(action.type+"112");
+
+                             dispatch(action);
+                            
+                         }
+                     }
+                 }
+        ));
+    
+        store.subscribe(function () {
+            console.log(store.getState());
+        });
+
+        var actionDispatch=Redux.bindActionCreators({
+            getLoginData:function()
+            {
+
+                return {
+                    type:"getLoginData"
+                };
+            },
+            login:function(username='李三',password='123')
+                {
+                    return {
+                        type:"login",
+                        data:{
+                            username,
+                            password
+                         }
+                    };
+                }
+        
+            },store.dispatch);
+            //    store.dispatch(actions.login());
+
+           
+
+        var pppp=[function A(value){
+                
+            return value;
+        },function B(value){
+            return value;
+        },,function C(value){
+            return value;
+        }].reduce((a, b) => (...args) => a(b(...args)))
+
+
+        var pppp2=[function A(value){
+                
+            return value;
+        },function B(value){
+            return value;
+        },,function C(value){
+            return value;
+        }].reduce(function(a,b){
+        
+            return function(...args)
+            {
+                return a(b.apply(null,args));
+            }
+        });
+
+
+    </script>
+
+
+</body>
+</html>

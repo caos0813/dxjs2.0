@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+</head>
+<body>
+
+  
+    <script>
+        //dependencies
+        var defineds = {};
+
+        var define = function (id, dependencies,factory)
+        {
+            if (!factory)
+            {
+                factory = dependencies;
+                dependencies = [];
+            }
+            var md = {
+                dependencies: normalize(id, dependencies),
+                factory: factory,
+                exports: {}
+            };
+            defineds[id] = md;
+        }
+        function normalize(id, dependencies)
+        {
+            var parent = id.split('/');
+            parent.pop();
+            return dependencies.map(function (d) {
+                if(d[0]==".")
+                {
+                    var paths = d.split('/');
+                    var current = parent.slice(0);
+                    paths.forEach(function (p) {
+                        if(p=="..")
+                        {
+                            current.pop();
+                        }else if(p!='.')
+                        {
+                            current.push(p);
+                        }
+                    });
+                    return current.join('/');
+                } else {
+                    return d;
+                }
+            });
+        }
+        function resolve(dependencies, exports)
+        {
+            return dependencies.map(function (id) {
+                var md = defineds[id];
+                if (!md.resolved) {
+                    md.resolved = load(md.dependencies, md.factory, md.exports);
+                    if (md.resolved===undefined)
+                    {
+                        md.resolved = md.exports;
+                    }
+                }
+                return md.resolved;
+            });
+        }
+        function load(dependencies, factory, exports)
+        {
+            var resolved = resolve(dependencies, exports);
+            if (factory && factory.apply) {
+                return factory.apply(this, resolved);
+            } else {
+                return factory;
+            }
+        }
+        var require = function (dependencies,factory)
+        {
+            if (!Array.isArray(dependencies))
+            {
+                dependencies = [dependencies];
+            }
+            load(dependencies, factory);
+        }
+
+        define("dx/Core", function (exports) {
+            exports.getName = function () {
+                return 'aaa';
+            }
+        });
+        define("dx/Request", ['./Core'], function (c) {
+            return '你的姓名:' + c.getName();
+        });
+        require("dx/Request", function (r) {
+            console.log(r);
+        })
+   
+    </script>
+
+
+</body>
+</html>
