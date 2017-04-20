@@ -53,7 +53,11 @@
 
 
     <script>
-
+        /**
+        (function() {
+with(this){return _c('div',{attrs:{"id":"container"}},[_c('button',{on:{"click":nextPage}},[_v("下一页")]),_v(" "),_c('dx-page',[_c('template',{slot:"header"},[_v("标题")]),_v(" "),_c('div',{slot:"content"},[_v("\n                       内容\n                   ")]),_v(" "),_c('div',{slot:"footer"},[_v("\n                       页脚\n                   ")])],2),_v(" "),_c(currentView,{tag:"components",attrs:{"title":title},scopedSlots:_u([["header",function(props){return [_v("\n                    "+_s(props.title)+"\n                ")]}]])},[_c('div',{slot:"content"},[_v("\n                    内容2\n                ")]),_v(" "),_c('div',{slot:"footer"},[_v("\n                    页脚2\n                ")])])],1)}
+})
+        */
         var componentPage = {
             template: '#componentPage',
             data:function()
@@ -66,7 +70,7 @@
             }
 
         };
-
+        Vue.component('my-component', componentPage);
         var componentPage2 = {
             data: function () {
                 return {};

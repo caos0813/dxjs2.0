@@ -9,5 +9,88 @@
 </head>
 <body>
 
+
+    <script>
+
+        // 全局变量写法
+ 
+        var Yg = {};
+        // UI 
+        Yg.ui = {
+            alert: function () { },
+            modal: function () { },
+            grid: function () { }
+        };
+        // 工具类
+        Yg.util = {
+            each:function(){ },
+            map: function () { },
+            filter: function () { }
+        }
+        // 字符串格式化
+        Yg.strings.format = function () { }
+        // 日期格式化
+        Yg.dates.format = function () { }
+        
+
+
+        // 命名空间
+        // UI
+        registerNamespace('Yg.ui', {
+            alert: function () { },
+            modal: function () { },
+            grid: function () { }
+        });
+        // 工具类
+        registerNamespace('Yg.util', {
+            each: function () { },
+            map: function () { },
+            filter: function () { }
+        });
+        // 字符串格式化
+        registerNamespace('Yg.strings.format', function () {
+        });
+        // 日期格式化
+        registerNamespace('Yg.dates.format', function () {
+        });
+
+
+
+        /**
+    * 公共事件
+    * @returns {} 
+    */
+        var getPageControl = function (context) {
+            var obj = {};
+            obj.Id = {};
+            obj.Name = {};
+            obj.Class = {};
+            $('*[id]', context).each(function () {//$('*[name],*[id]')
+                var idName = $(this).attr("id");
+                obj.Id[idName] = $(this);
+            });
+            $('*[name]', context).each(function () {
+                var name = $(this).attr("name");
+                if (obj.Name[name] == undefined) { obj.Name[name] = []; }
+                obj.Name[name].push($(this));
+            });
+            $('*[Class]', context).each(function () {
+                var _class = $(this).attr("class");
+                if (obj.Class[_class] == undefined) { obj.Class[_class] = []; }
+                obj.Class[_class].push($(this));
+            });
+            //  Message.target = obj.Id.errorMsg;
+            return obj;
+        }
+
+
+        pageControl.Id.AutoAllocateStock
+        pageControl.Class['select-4'] // 如果
+        
+
+        $('#AutoAllocateStock')
+        $('#select-4')
+    </script>
+
 </body>
 </html>
