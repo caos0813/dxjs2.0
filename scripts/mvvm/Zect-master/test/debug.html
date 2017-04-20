@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        .selected {color: red}
+        [z-else] {display: none}
+    </style>
+</head>
+<body>
+<div id="app">
+    <z-if is="{status == 0}">
+        <h3>1</h3>
+    <br z-else="{status == 1}">
+        <h3>2</h3>
+    <br z-else="{status == 2}">
+        <h3>3</h3>
+    </z-if>
+</div>
+<script type="text/javascript" src="../dist/zect.js"></script>
+<script type="text/javascript">
+    var app = new Zect({
+        el: '#app',
+        data: function () {
+        	return {
+                status: 0
+            }
+        },
+        ready: function () {
+            setTimeout(function () {
+                this.$data.status = 1
+            }.bind(this), 1000)
+            setTimeout(function () {
+                this.$data.status = 2
+            }.bind(this), 2000)
+            setTimeout(function () {
+                this.$data.status = 0
+            }.bind(this), 3000)
+        }
+    })
+</script>
+</body>
+</html>
